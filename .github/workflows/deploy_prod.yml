@@ -1,3 +1,5 @@
+name: Deploy to production
+
 on:
   push:
     branches:
@@ -11,6 +13,7 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 16
+      - run: yarn
       - run: yarn build
       - run: yarn export
       - run: npm install -g surge
