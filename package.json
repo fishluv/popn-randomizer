@@ -7,8 +7,8 @@
     "start": "next start",
     "lint": "next lint",
     "export": "next export",
-    "deploy:dev": "surge ./out https://chinatsu-dev.surge.sh",
-    "deploy": "surge ./out https://chinatsu.surge.sh",
+    "deploy:dev": "surge ./out https://popran-dev.surge.sh",
+    "deploy": "surge ./out https://popran.surge.sh",
     "storybook": "start-storybook -p 6006",
     "build-storybook": "build-storybook"
   },
@@ -39,6 +39,7 @@
     "sass": "^1.45.2",
     "sass-loader": "^10.1.1",
     "style-loader": "^2.0.0",
+    "surge": "^0.23.1",
     "typescript": "4.4.4"
   }
 }

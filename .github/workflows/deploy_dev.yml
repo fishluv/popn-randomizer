@@ -1,9 +1,9 @@
-name: Deploy to prod
+name: Deploy to dev
 
 on:
   push:
     branches:
-      - main
+      - dev-*
 
 jobs:
   deploy:
@@ -16,4 +16,4 @@ jobs:
       - run: yarn
       - run: yarn build
       - run: yarn export
-      - run: yarn deploy --token ${{ secrets.SURGE_TOKEN }}
+      - run: yarn deploy:dev --token ${{ secrets.SURGE_TOKEN }}
