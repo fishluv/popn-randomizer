@@ -16,4 +16,4 @@ jobs:
       - run: yarn
       - run: yarn build
       - run: yarn export
-      - run: yarn deploy -- --token ${{ secrets.SURGE_TOKEN }}
+      - run: yarn deploy --token ${{ secrets.SURGE_TOKEN }}
