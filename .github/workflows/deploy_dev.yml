@@ -17,5 +17,4 @@ jobs:
       - run: yarn
       - run: yarn build
       - run: yarn export
-      - run: npm install -g surge
-      - run: surge ./out https://popran-dev.surge.sh --token ${{ secrets.SURGE_TOKEN }}
+      - run: yarn deploy:dev -- --token ${{ secrets.SURGE_TOKEN }}
