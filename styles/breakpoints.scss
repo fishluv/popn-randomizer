@@ -1,0 +1,23 @@
+@mixin bk-medium {
+  @media (min-width: 608px) {
+    @content;
+  }
+}
+
+@mixin bk-large {
+  @media (min-width: 928px) {
+    @content;
+  }
+}
+
+@mixin bk-x-large {
+  @media (min-width: 1408px) {
+    @content;
+  }
+}
+
+@mixin bk-xx-large {
+  @media (min-width: 1888px) {
+    @content;
+  }
+}

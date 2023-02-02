@@ -1,0 +1,204 @@
+@import "../styles/breakpoints";
+@import "../styles/colors";
+@import "../styles/components";
+
+@mixin text-giant {
+  color: white;
+  font-family: 'Changa One', 'M PLUS 1', 'Arial', sans-serif;
+  font-size: 2.25rem;
+  font-weight: 900;
+  line-height: 1;
+  text-transform: uppercase;
+}
+@mixin text-info {
+  color: black;
+  font-family: 'M PLUS 1', 'Arial', sans-serif;
+  font-size: 0.75rem;
+}
+
+.diffLevel {
+  @include pill;
+  @include diff-bg-colors(bright);
+  @include diff-border-colors(dark);
+  color: white;
+}
+
+.sranLevel {
+  @include pill;
+}
+
+.holdsPill {
+  @include pill;
+  border-color: #2C8DD4;
+  background-color: #DD2200;
+  color: white;
+  padding: 0 0.25rem;
+  font-size: 0.5rem;
+  vertical-align: top;
+}
+
+.ChartCard.normal {
+  width: 300px;
+  font-family: 'M PLUS 1', 'Arial', sans-serif;
+
+  .topInfoContainer {
+    .topInfo {
+      display: inline-block;
+      @include diff-bg-colors(light);
+
+      font-size: 0.875rem;
+      font-weight: bold;
+
+      border: 0 solid black;
+      border-width: 0.25rem 0 0;
+      @include diff-border-colors(bright);
+      border-top-left-radius: 0.25rem;
+      border-top-right-radius: 0.25rem;
+
+      padding: 0.25rem 0.5rem;
+      width: 100%;
+
+      white-space: nowrap;
+
+      .titleGenre {
+        display: inline-block;
+        vertical-align: text-bottom;
+        padding-right: 2px;
+        font-style: italic;
+
+        max-width: calc(90% - 2rem);
+        overflow: hidden;
+        text-overflow: ellipsis;
+
+        &.withSranLevel {
+          max-width: calc(90% - 5rem);
+        }
+      }
+
+      :not(:first-child) {
+        margin-left: 0.375rem;
+      }
+    }
+  }
+
+  .bottomContainer {
+    position: relative;
+    width: 100%;
+    @include diff-bg-colors(x-light);
+
+    .bannerAndBasicInfo {
+      grid-area: left;
+      position: relative;
+      height: 5rem;
+      padding: 0.5rem;
+
+      .banner {
+        z-index: 3;
+        height: 100%;
+        width: 100%;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: 104%;
+        border-radius: 0.25rem;
+      }
+    }
+
+    .folderPill {
+      z-index: 5;
+      position: absolute;
+      right: 0.25rem;
+      bottom: 0.25rem;
+    }
+  }
+
+  .details {
+    @include diff-bg-colors(light);
+
+    font-size: 0.75rem;
+
+    border: 0 solid black;
+    border-width: 0 0 0.25rem;
+    @include diff-border-colors(bright);
+    border-bottom-left-radius: 0.25rem;
+    border-bottom-right-radius: 0.25rem;
+
+    padding: 0.125rem 0.5rem;
+    vertical-align: top;
+
+    display: flex;
+    justify-content: space-between;
+
+    .item {
+      display: inline-block;
+
+      :not(:first-child) {
+        margin-left: 0.125rem;
+      }
+
+      .emoji.mountain {
+        position: relative;
+        top: -1.5px;
+      }
+    }
+  }
+}
+
+.ChartCard.compact {
+  width: 160px;
+  height: 44px;
+  font-family: 'M PLUS 1', 'Arial', sans-serif;
+
+  border: 0 solid black;
+  border-width: 0 0 0.25rem;
+  @include diff-border-colors(bright);
+
+  .bannerTitleGenre {
+    position: relative;
+    width: 100%;
+    height: 100%;
+
+    @include diff-bg-colors(light);
+
+    .titleGenre {
+      position: absolute;
+      font-size: 0.75rem;
+      font-weight: bold;
+      display: inline-block;
+      vertical-align: top;
+      padding: 0.125rem 2px 0 0.375rem;
+    
+      white-space: nowrap;
+      max-width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .banner {
+      position: absolute;
+      z-index: 3;
+      width: 100%;
+      height: 100%;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+
+      &.vetoed {
+        display: none;
+      }
+    }
+
+    .levels {
+      position: absolute;
+      z-index: 5;
+      left: 0;
+      bottom: 0;
+    }
+
+    .folderPill {
+      position: absolute;
+      z-index: 5;
+      bottom: 0;
+      right: 0;
+    }
+  }
+}

@@ -1,0 +1,64 @@
+@import "../styles/colors";
+
+.ChartSet {
+  position: relative;
+  padding: 0.5rem 0;
+  border: 0.25rem solid black;
+  border-width: 0.25rem 0 0;
+  min-width: 320px;
+
+  &.cycle0 {
+    border-color: $ex-bright;
+
+    .triangle {
+      border-right-color: $ex-bright;
+    }
+  }
+
+  &.cycle1 {
+    border-color: $h-bright;
+
+    .triangle {
+      border-right-color: $h-bright;
+    }
+  }
+
+  &.cycle2 {
+    border-color: $n-bright;
+
+    .triangle {
+      border-right-color: $n-bright;
+    }
+  }
+
+  &.cycle3 {
+    border-color: $e-bright;
+
+    .triangle {
+      border-right-color: $e-bright;
+    }
+  }
+
+  .triangle {
+    position: absolute;
+    top: -1rem;
+    left: -1rem;
+    border: 1rem solid black;
+    border-top-color: transparent;
+    border-bottom-color: transparent;
+    border-left-color: transparent;
+    transform: rotate(45deg);
+  }
+
+  .cardsContainer {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+
+    .card {
+      vertical-align: top;
+      margin: 0.5rem;
+    }
+  }
+}

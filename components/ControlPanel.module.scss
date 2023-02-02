@@ -1,0 +1,120 @@
+.ControlPanel {
+  .buttonsAndSummary {
+    display: flex;
+
+    :not(:first-child) {
+      margin-left: 0.5rem;
+    }
+
+    .summary {
+      align-self: center;
+    }
+
+    .clearButton {
+      margin-left: auto;
+    }
+  }
+}
+
+// Stuff in the modal should go below.
+
+.resetButton {
+  position: absolute;
+  right: 1rem;
+}
+
+.drawControl select,
+.levelControls select {
+  width: 2.75rem;
+}
+
+.control {
+  margin-bottom: 0.5rem;
+
+  label {
+    margin-bottom: 0; /* Override browser default. */
+  }
+
+  > :not(:first-child) {
+    margin-left: 0.5rem;
+  }
+
+  input[type="radio"] {
+    margin-left: 0.75rem;
+  }
+
+  input[type="radio"] + label {
+    margin-left: 0.25rem;
+  }
+
+  .levelDownButton {
+    margin-right: -0.5rem;
+    line-height: 1.2;
+  }
+
+  // Make sure this goes after :not(:first-child)
+  .levelUpButton {
+    margin-left: 0;
+    line-height: 1.2;
+  }
+
+  &.includeDiffs .inner {
+    margin-left: 1rem;
+    width: 12rem; // = diffwidth * 2
+
+    .diffContainer {
+      display: inline-block;
+      width: 6rem;
+    }
+
+    label {
+      margin-left: 0.5rem;
+    }
+  }
+
+  &.includeFolders {
+    .noneFoldersButton {
+      line-height: 1.125rem;
+      margin-left: 0.75rem;
+    }
+
+    .inner {
+      margin-top: 0.25rem;
+      margin-left: 1rem;
+      width: 18rem;
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+      height: 24.5rem; // = folderheight * 15
+
+      .folderSelect {
+        height: 1.75rem;
+
+        label {
+          margin-left: 0.5rem;
+        }
+      }
+    }
+  }
+
+  .compactInfo {
+    font-size: 0.75rem;
+    font-style: italic;
+    color: #666;
+  }
+  
+  &.customLink input {
+    width: 100%;
+    max-width: 720px;
+  }
+}
+
+h5.header {
+  margin-top: 1rem;
+}
+
+.aboutIcon {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
