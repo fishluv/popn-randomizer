@@ -1,0 +1,17 @@
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - run: yarn build
+      - run: yarn export
+      - run: npm install -g surge
+      - run: surge ./out https://popran.surge.sh --token ${{ secrets.SURGE_TOKEN }}
