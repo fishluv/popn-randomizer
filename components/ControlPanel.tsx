@@ -673,7 +673,6 @@ export default class ControlPanel extends React.Component<
       holdNotes,
       sranModeEnabled,
       // gameVersion,
-      // livelyPacks,
       preferGenre,
       displayStyle,
       // customLink1Url,

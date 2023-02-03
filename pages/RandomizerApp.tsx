@@ -79,7 +79,6 @@ export default class RandomizerApp extends React.Component<
     setStorageItemIfNull("excludeFloorInfection", false)
     setStorageItemIfNull("excludeBuggedBpms", false)
     setStorageItemIfNull("holdNotes", "include")
-    setStorageItemIfNull("excludeLivelyPacks", false)
     setStorageItemIfNull("gameVersion", "kaimei_0613")
     // Display options
     setStorageItemIfNull("sranModeEnabled", false)
