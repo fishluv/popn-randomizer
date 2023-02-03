@@ -1,15 +1,15 @@
-import { IncludeOption } from "popn-db-js";
+import { IncludeOption } from "popn-db-js"
 
 export function parseIncludeOption(s: string): IncludeOption {
-  const sl = s?.toLowerCase();
+  const sl = s?.toLowerCase()
   switch (sl) {
     case "only":
-      return "only";
+      return "only"
     case "exclude":
-      return "exclude";
+      return "exclude"
     default:
-      return "include";
+      return "include"
   }
 }
 
-export const parseIncludeOptionSafe = parseIncludeOption;
+export const parseIncludeOptionSafe = parseIncludeOption

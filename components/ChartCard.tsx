@@ -1,15 +1,15 @@
-import cx from 'classnames';
-import React from 'react';
-import { ChartDisplayOptions } from './ChartDisplay';
-import styles from './ChartCard.module.scss';
-import { Chart, Difficulty } from 'popn-db-js';
-import FolderPill from './FolderPill';
+import cx from "classnames"
+import React from "react"
+import { ChartDisplayOptions } from "./ChartDisplay"
+import styles from "./ChartCard.module.scss"
+import { Chart, Difficulty } from "popn-db-js"
+import FolderPill from "./FolderPill"
 
 function getSortChar(titleOrGenre: string, sortChar: string) {
   if (titleOrGenre.charAt(0).toLowerCase() !== sortChar.toLowerCase()) {
-    return sortChar;
+    return sortChar
   } else {
-    return null;
+    return null
   }
 }
 
@@ -23,191 +23,152 @@ const difficultyToIndex: Record<Difficulty, string> = {
 */
 
 interface ChartCardProps {
-  extraClass?: string;
-  chartData: Chart;
-  isVetoed?: Boolean;
-  chartDisplayOptions: ChartDisplayOptions;
+  extraClass?: string
+  chartData: Chart
+  isVetoed?: Boolean
+  chartDisplayOptions: ChartDisplayOptions
 }
 
 interface ChartCardState {
-  isVetoed: Boolean;
+  isVetoed: Boolean
 }
 
 /**
  * Chart info
  */
-export default class ChartCard extends React.Component<ChartCardProps, ChartCardState> {
+export default class ChartCard extends React.Component<
+  ChartCardProps,
+  ChartCardState
+> {
   // TODO add veto functionality
   constructor(props: ChartCardProps) {
-    super(props);
+    super(props)
     this.state = {
       isVetoed: props.isVetoed ?? false,
-    };
+    }
   }
 
   onClick = () => {
     this.setState((prevState) => ({
       isVetoed: !prevState.isVetoed,
-    }));
-  };
+    }))
+  }
 
   renderDiffLevel() {
     const {
-      chartData: {
-        difficulty,
-        level,
-      },
-      chartDisplayOptions: {
-        displayStyle,
-      },
-    } = this.props;
+      chartData: { difficulty, level },
+      chartDisplayOptions: { displayStyle },
+    } = this.props
 
-    const className = cx(
-      styles.diffLevel,
-      styles[difficulty],
-      {
-        [styles.compact]: displayStyle === "compact",
-      },
-    )
+    const className = cx(styles.diffLevel, styles[difficulty], {
+      [styles.compact]: displayStyle === "compact",
+    })
 
     return (
-      <span className={className}>{difficulty}&nbsp;{level}</span>
+      <span className={className}>
+        {difficulty}&nbsp;{level}
+      </span>
     )
   }
 
   renderSranLevel() {
     const {
-      chartData: {
-        sranLevel,
-      },
-      chartDisplayOptions: {
-        sranModeEnabled,
-        displayStyle,
-      },
-    } = this.props;
-    const { isVetoed } = this.state;
+      chartData: { sranLevel },
+      chartDisplayOptions: { sranModeEnabled, displayStyle },
+    } = this.props
+    const { isVetoed } = this.state
 
     if (!sranModeEnabled) {
-      return null;
+      return null
     }
 
-    const className = cx(
-      styles.sranLevel,
-      {
-        [styles.compact]: displayStyle === "compact",
-      },
-    );
-    const srlvNorm = sranLevel ? sranLevel.replace('a', '-').replace('b', '+').replace(/^0+/, '') : '—'
+    const className = cx(styles.sranLevel, {
+      [styles.compact]: displayStyle === "compact",
+    })
+    const srlvNorm = sranLevel
+      ? sranLevel.replace("a", "-").replace("b", "+").replace(/^0+/, "")
+      : "—"
 
-    return (
-      <span className={className}>sr&nbsp;{srlvNorm}</span>
-    );
+    return <span className={className}>sr&nbsp;{srlvNorm}</span>
   }
 
   renderTitleGenre() {
     const {
-      chartDisplayOptions: {
-        sranModeEnabled,
-      },
-    } = this.props;
+      chartDisplayOptions: { sranModeEnabled },
+    } = this.props
 
-    const sortChar = this.getTitleOrGenreSortChar();
+    const sortChar = this.getTitleOrGenreSortChar()
 
-    const className = cx(
-      styles.titleGenre,
-      {
-        [styles.withSranLevel]: sranModeEnabled,
-      },
-    )
+    const className = cx(styles.titleGenre, {
+      [styles.withSranLevel]: sranModeEnabled,
+    })
 
     return (
       <span className={className}>
         {sortChar && `(${sortChar}) `}
         {this.getDisplayTitleOrGenre()}
       </span>
-    );
+    )
   }
 
   renderTitleGenreCompact() {
     const {
-      chartDisplayOptions: {
-        sranModeEnabled,
-      },
-    } = this.props;
+      chartDisplayOptions: { sranModeEnabled },
+    } = this.props
 
-    const sortChar = this.getTitleOrGenreSortChar();
+    const sortChar = this.getTitleOrGenreSortChar()
 
-    const className = cx(
-      styles.titleGenre,
-      {
-        [styles.withSranLevel]: sranModeEnabled,
-      },
-    )
+    const className = cx(styles.titleGenre, {
+      [styles.withSranLevel]: sranModeEnabled,
+    })
 
     return (
       <span className={className} style={this.getBannerBgImageStyle()}>
         {sortChar && `(${sortChar}) `}
         {this.getDisplayTitleOrGenre()}
       </span>
-    );
+    )
   }
 
   getTitleOrGenreSortChar = () => {
     const {
-      chartDisplayOptions: {
-        preferGenre,
-      },
-      chartData: {
-        genre,
-        genreSortChar,
-        title,
-        titleSortChar,
-      }
-    } = this.props;
+      chartDisplayOptions: { preferGenre },
+      chartData: { genre, genreSortChar, title, titleSortChar },
+    } = this.props
 
     if (preferGenre) {
-      return getSortChar(genre, genreSortChar);
+      return getSortChar(genre, genreSortChar)
     } else {
-      return getSortChar(title, titleSortChar);
+      return getSortChar(title, titleSortChar)
     }
-  };
+  }
 
   getDisplayTitleOrGenre() {
     const {
-      chartDisplayOptions: {
-        preferGenre,
-      },
-      chartData: {
-        title,
-        genre,
-        songLabels,
-      }
-    } = this.props;
+      chartDisplayOptions: { preferGenre },
+      chartData: { title, genre, songLabels },
+    } = this.props
 
-    const titleOrGenre = preferGenre ? genre : title;
+    const titleOrGenre = preferGenre ? genre : title
 
-    const isUpper = songLabels.includes('upper');
-    const maybeUpperSuffix = isUpper ? ' (UPPER)' : '';
+    const isUpper = songLabels.includes("upper")
+    const maybeUpperSuffix = isUpper ? " (UPPER)" : ""
 
-    return `${titleOrGenre}${maybeUpperSuffix}`;
+    return `${titleOrGenre}${maybeUpperSuffix}`
   }
 
   getBannerBgImageStyle() {
     const {
-      chartDisplayOptions: {
-        assetsUrl,
-      },
-      chartData: {
-        songId,
-      },
-    } = this.props;
+      chartDisplayOptions: { assetsUrl },
+      chartData: { songId },
+    } = this.props
 
-    const urlWithoutSlash = assetsUrl.replace(/\/$/, '')
-    const paddedId = `000${songId}`.slice(-4);
-    const bannerUrl = `${urlWithoutSlash}/kc_${paddedId}.png`;
+    const urlWithoutSlash = assetsUrl.replace(/\/$/, "")
+    const paddedId = `000${songId}`.slice(-4)
+    const bannerUrl = `${urlWithoutSlash}/kc_${paddedId}.png`
     return {
       backgroundImage: `url("${bannerUrl}")`,
-    };
+    }
   }
 
   /*
@@ -245,74 +206,60 @@ export default class ChartCard extends React.Component<ChartCardProps, ChartCard
 
   formatDuration = () => {
     const {
-      chartData: {
-        duration,
-      },
-    } = this.props;
+      chartData: { duration },
+    } = this.props
 
     if (duration === null) {
-      return '?';
+      return "?"
     }
 
-    const min = Math.floor(duration / 60);
-    const sec = duration % 60;
-    return `${min}:${String(sec).padStart(2, '0')}`;
-  };
+    const min = Math.floor(duration / 60)
+    const sec = duration % 60
+    return `${min}:${String(sec).padStart(2, "0")}`
+  }
 
   formatRating = () => {
     const {
-      chartData: {
-        rating,
-      },
-    } = this.props;
+      chartData: { rating },
+    } = this.props
 
     if (rating === null) {
-      return '?';
+      return "?"
     }
     if (rating === -1) {
-      return '-1.0';
+      return "-1.0"
     }
     if (rating === 0) {
-      return '0.0';
+      return "0.0"
     }
     if (rating === 1) {
-      return '+1.0';
+      return "+1.0"
     }
     if (rating > 0) {
-      return `+${rating}`;
+      return `+${rating}`
     }
-    return rating;
-  };
+    return rating
+  }
 
   renderNormal() {
     const {
       extraClass,
-      chartData: {
-        difficulty,
-        bpm,
-        notes,
-        hasHolds,
-        songFolder,
-      },
-    } = this.props;
+      chartData: { difficulty, bpm, notes, hasHolds, songFolder },
+    } = this.props
 
-    const diffStyle = styles[difficulty];
+    const diffStyle = styles[difficulty]
 
     const rootClassName = cx(
       extraClass,
       styles.ChartCard,
       styles.normal,
       diffStyle,
-    );
+    )
 
-    const bannerAndBasicInfoClassName = cx(
-      styles.bannerAndBasicInfo,
-      diffStyle,
-    );
+    const bannerAndBasicInfoClassName = cx(styles.bannerAndBasicInfo, diffStyle)
 
     return (
       <div className={rootClassName} onClick={this.onClick}>
-
         <div className={cx(diffStyle, styles.topInfoContainer)}>
           <span className={cx(styles.topInfo, diffStyle)}>
             {this.renderDiffLevel()}
@@ -322,7 +269,6 @@ export default class ChartCard extends React.Component<ChartCardProps, ChartCard
         </div>
 
         <div className={cx(styles.bottomContainer, diffStyle)}>
-
           <div className={bannerAndBasicInfoClassName}>
             <div
               className={cx(styles.banner, diffStyle)}
@@ -335,14 +281,12 @@ export default class ChartCard extends React.Component<ChartCardProps, ChartCard
             songFolder={songFolder}
             style="normal"
           />
-
         </div>
 
         <div className={cx(styles.details, diffStyle)}>
-
           <span className={styles.item}>
             <span className={styles.emoji}>🥁</span>
-            <span>{bpm || '?'}</span>
+            <span>{bpm || "?"}</span>
           </span>
 
           <span className={styles.item}>
@@ -352,7 +296,7 @@ export default class ChartCard extends React.Component<ChartCardProps, ChartCard
 
           <span className={styles.item}>
             <span className={styles.emoji}>🎶</span>
-            <span>{notes || '?'}</span>
+            <span>{notes || "?"}</span>
             {hasHolds && <span className={styles.holdsPill}>L</span>}
           </span>
 
@@ -360,49 +304,37 @@ export default class ChartCard extends React.Component<ChartCardProps, ChartCard
             <span className={cx(styles.emoji, styles.mountain)}>⛰</span>
             <span>{this.formatRating()}</span>
           </span>
-
         </div>
-
       </div>
-    );
+    )
   }
 
   renderCompact() {
     const {
       extraClass,
-      chartData: {
-        difficulty,
-        songFolder,
-      },
-    } = this.props;
-    const { isVetoed } = this.state;
+      chartData: { difficulty, songFolder },
+    } = this.props
+    const { isVetoed } = this.state
 
-    const diffStyle = styles[difficulty];
+    const diffStyle = styles[difficulty]
 
     const rootClass = cx(
       extraClass,
       styles.ChartCard,
       styles.compact,
       diffStyle,
-    );
-
-    const bannerClass = cx(
-      styles.banner,
-      {
-        [styles.vetoed]: isVetoed,
-      },
     )
+
+    const bannerClass = cx(styles.banner, {
+      [styles.vetoed]: isVetoed,
+    })
 
     return (
       <div className={rootClass} onClick={this.onClick}>
-
         <div className={cx(diffStyle, styles.bannerTitleGenre)}>
           {this.renderTitleGenre()}
 
-          <div
-            className={bannerClass}
-            style={this.getBannerBgImageStyle()}
-          />
+          <div className={bannerClass} style={this.getBannerBgImageStyle()} />
 
           <div className={styles.levels}>
             {this.renderDiffLevel()}
@@ -415,22 +347,19 @@ export default class ChartCard extends React.Component<ChartCardProps, ChartCard
             style="compact"
           />
         </div>
-
       </div>
-    );
+    )
   }
 
   render() {
     const {
-      chartDisplayOptions: {
-        displayStyle,
-      },
-    } = this.props;
+      chartDisplayOptions: { displayStyle },
+    } = this.props
 
     if (displayStyle === "normal") {
-      return this.renderNormal();
+      return this.renderNormal()
     } else {
-      return this.renderCompact();
+      return this.renderCompact()
     }
   }
 }

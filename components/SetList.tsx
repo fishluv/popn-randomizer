@@ -1,14 +1,14 @@
-import cx from 'classnames';
-import { Chart } from 'popn-db-js';
-import React from 'react';
-import ChartSet from './ChartSet';
-import styles from './SetList.module.scss';
-import { ChartDisplayOptions } from './ChartDisplay';
+import cx from "classnames"
+import { Chart } from "popn-db-js"
+import React from "react"
+import ChartSet from "./ChartSet"
+import styles from "./SetList.module.scss"
+import { ChartDisplayOptions } from "./ChartDisplay"
 
 interface SetListProps {
-  extraClass?: string;
-  chartDataSets: Chart[][];
-  chartDisplayOptions: ChartDisplayOptions;
+  extraClass?: string
+  chartDataSets: Chart[][]
+  chartDisplayOptions: ChartDisplayOptions
 }
 
 export default function SetList({
@@ -17,7 +17,7 @@ export default function SetList({
   chartDisplayOptions,
 }: SetListProps) {
   return (
-    <section className={cx(extraClass, 'SetList')}>
+    <section className={cx(extraClass, "SetList")}>
       {chartDataSets.map((chartDataSet, index) => (
         <ChartSet
           key={index}
@@ -28,5 +28,5 @@ export default function SetList({
         />
       ))}
     </section>
-  );
+  )
 }

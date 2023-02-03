@@ -1,15 +1,15 @@
-import React from 'react';
-import cx from 'classnames';
-import ChartCard from './ChartCard';
-import styles from './ChartSet.module.scss';
-import { ChartDisplayOptions } from './ChartDisplay';
-import { Chart } from 'popn-db-js';
+import React from "react"
+import cx from "classnames"
+import ChartCard from "./ChartCard"
+import styles from "./ChartSet.module.scss"
+import { ChartDisplayOptions } from "./ChartDisplay"
+import { Chart } from "popn-db-js"
 
 interface ChartSetProps {
-  extraClass?: string;
-  index: number;
-  charts: Chart[];
-  chartDisplayOptions: ChartDisplayOptions;
+  extraClass?: string
+  index: number
+  charts: Chart[]
+  chartDisplayOptions: ChartDisplayOptions
 }
 
 export default function ChartSet({
@@ -18,10 +18,10 @@ export default function ChartSet({
   charts,
   chartDisplayOptions,
 }: ChartSetProps) {
-  const cycleClassname = styles[`cycle${index % 4}`];
-  const rootClassname = cx(extraClass, styles.ChartSet, cycleClassname);
+  const cycleClassname = styles[`cycle${index % 4}`]
+  const rootClassname = cx(extraClass, styles.ChartSet, cycleClassname)
 
-  const noCharts = <span>No charts</span>;
+  const noCharts = <span>No charts</span>
 
   const chartCardsMarkup = charts.map((chartData) => (
     <ChartCard
@@ -30,7 +30,7 @@ export default function ChartSet({
       chartData={chartData}
       chartDisplayOptions={chartDisplayOptions}
     />
-  ));
+  ))
 
   return (
     <section className={rootClassname}>
@@ -39,5 +39,5 @@ export default function ChartSet({
         {chartCardsMarkup.length ? chartCardsMarkup : noCharts}
       </div>
     </section>
-  );
+  )
 }

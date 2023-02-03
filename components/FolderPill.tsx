@@ -1,14 +1,14 @@
-import cx from 'classnames';
-import { VersionFolder } from 'popn-db-js';
-import React from 'react';
-import styles from './FolderPill.module.scss';
+import cx from "classnames"
+import { VersionFolder } from "popn-db-js"
+import React from "react"
+import styles from "./FolderPill.module.scss"
 
-export type FolderPillStyle = "normal" | "compact";
+export type FolderPillStyle = "normal" | "compact"
 
 interface FolderPillProps {
-  extraClass?: string;
-  songFolder: VersionFolder;
-  style: FolderPillStyle;
+  extraClass?: string
+  songFolder: VersionFolder
+  style: FolderPillStyle
 }
 
 /**
@@ -16,7 +16,7 @@ interface FolderPillProps {
  */
 export default class FolderPill extends React.Component<FolderPillProps> {
   getFolderDisplayName() {
-    const { songFolder, style } = this.props;
+    const { songFolder, style } = this.props
 
     if (style === "normal") {
       switch (songFolder) {
@@ -94,7 +94,7 @@ export default class FolderPill extends React.Component<FolderPillProps> {
   }
 
   render() {
-    const { extraClass, songFolder, style } = this.props;
+    const { extraClass, songFolder, style } = this.props
 
     const folderClass = /^\d/.test(songFolder) ? `ac${songFolder}` : songFolder
     const rootClassName = cx(
@@ -103,11 +103,9 @@ export default class FolderPill extends React.Component<FolderPillProps> {
       styles[folderClass],
       {
         [styles.compact]: style === "compact",
-      }
-    );
-
-    return (
-      <span className={rootClassName}>{this.getFolderDisplayName()}</span>
+      },
     )
+
+    return <span className={rootClassName}>{this.getFolderDisplayName()}</span>
   }
 }

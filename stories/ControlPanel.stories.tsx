@@ -1,29 +1,31 @@
-import React from 'react';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
+import React from "react"
+import { ComponentStory, ComponentMeta } from "@storybook/react"
 
-import ControlPanel from '../components/ControlPanel';
+import ControlPanel from "../components/ControlPanel"
 
 export default {
-  title: 'Components/ControlPanel',
+  title: "Components/ControlPanel",
   component: ControlPanel,
   args: {
     // TODO It would be nice to control these more easily...
     initialDrawOptions: {
-      gameVersion: '',
+      gameVersion: "",
       count: 0,
     },
     initialDisplayOptions: {
-      assetsUrl: '',
-    }
+      assetsUrl: "",
+    },
   },
-} as ComponentMeta<typeof ControlPanel>;
+} as ComponentMeta<typeof ControlPanel>
 
-const Template: ComponentStory<typeof ControlPanel> = (props) => <ControlPanel {...props} />;
+const Template: ComponentStory<typeof ControlPanel> = (props) => (
+  <ControlPanel {...props} />
+)
 
-export const Default = Template.bind({});
+export const Default = Template.bind({})
 
-export const Collapsed = Template.bind({});
-Collapsed.args = { isCollapsed: true };
+export const Collapsed = Template.bind({})
+Collapsed.args = { isCollapsed: true }
 
-export const MoreControlsOpen = Template.bind({});
-MoreControlsOpen.args = { isMoreControlsOpen: true };
+export const MoreControlsOpen = Template.bind({})
+MoreControlsOpen.args = { isMoreControlsOpen: true }

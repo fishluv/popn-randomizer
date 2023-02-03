@@ -1,12 +1,12 @@
-import React from 'react';
-import { ComponentMeta } from '@storybook/react';
+import React from "react"
+import { ComponentMeta } from "@storybook/react"
 
-import FolderPill from '../components/FolderPill';
-import { VERSION_FOLDERS } from 'popn-db-js';
+import FolderPill from "../components/FolderPill"
+import { VERSION_FOLDERS } from "popn-db-js"
 
 export default {
-  title: 'Components/FolderPill',
-} as ComponentMeta<typeof FolderPill>;
+  title: "Components/FolderPill",
+} as ComponentMeta<typeof FolderPill>
 
 export const Default = () => (
   <div>

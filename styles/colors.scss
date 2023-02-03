@@ -66,7 +66,7 @@ $diff-color-map: (
 );
 
 @function diff-color($diff, $shade) {
-  @return map-get(map-get($diff-color-map, $shade), $diff)
+  @return map-get(map-get($diff-color-map, $shade), $diff);
 }
 
 @mixin diff-border-colors($shade) {

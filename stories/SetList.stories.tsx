@@ -1,10 +1,10 @@
-import React from 'react';
-import { ComponentStory, ComponentMeta } from '@storybook/react';
-import { Chart, Database } from 'popn-db-js'
-import SetList from '../components/SetList';
+import React from "react"
+import { ComponentStory, ComponentMeta } from "@storybook/react"
+import { Chart, Database } from "popn-db-js"
+import SetList from "../components/SetList"
 
 export default {
-  title: 'Components/SetList',
+  title: "Components/SetList",
   component: SetList,
   args: {
     isVetoed: false,
@@ -13,24 +13,29 @@ export default {
       preferGenre: false,
       showChartDetails: false,
       displayStyle: "normal",
-      assetsUrl: 'https://popn-assets.surge.sh',
+      assetsUrl: "https://popn-assets.surge.sh",
       showLinks: false,
-      customLink1Url: '',
-    }
+      customLink1Url: "",
+    },
   },
-} as ComponentMeta<typeof SetList>;
+} as ComponentMeta<typeof SetList>
 
-const Template: ComponentStory<typeof SetList> = (props) => <SetList {...props} />;
+const Template: ComponentStory<typeof SetList> = (props) => (
+  <SetList {...props} />
+)
 function templateFor(chartDataSets: Chart[][]) {
-  const template = Template.bind({});
+  const template = Template.bind({})
   template.args = {
     chartDataSets,
-  };
-  return template;
+  }
+  return template
 }
 
-const absolute = Database.findCharts('0e', '0n', '0h', '0ex');
+const absolute = Database.findCharts("0e", "0n", "0h", "0ex")
 
-export const MoreThanOne = templateFor([absolute as Chart[], absolute as Chart[]]);
-export const One = templateFor([absolute as Chart[]]);
-export const Empty = templateFor([]);
+export const MoreThanOne = templateFor([
+  absolute as Chart[],
+  absolute as Chart[],
+])
+export const One = templateFor([absolute as Chart[]])
+export const Empty = templateFor([])

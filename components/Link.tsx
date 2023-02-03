@@ -1,9 +1,9 @@
-import React from 'react';
+import React from "react"
 
 interface LinkProps {
-  extraClass?: string;
-  href: string;
-  children: React.ReactNode;
+  extraClass?: string
+  href: string
+  children: React.ReactNode
 }
 
 export default function Link({ extraClass, href, children }: LinkProps) {
