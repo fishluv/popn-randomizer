@@ -1,20 +1,6 @@
 @import "../styles/colors";
 @import "../styles/components";
 
-@mixin text-giant {
-  color: white;
-  font-family: 'Changa One', 'M PLUS 1', 'Arial', sans-serif;
-  font-size: 2.25rem;
-  font-weight: 900;
-  line-height: 1;
-  text-transform: uppercase;
-}
-@mixin text-info {
-  color: black;
-  font-family: 'M PLUS 1', 'Arial', sans-serif;
-  font-size: 0.75rem;
-}
-
 .diffLevel {
   @include pill;
   @include diff-bg-colors(bright);
