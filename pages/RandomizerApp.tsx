@@ -22,6 +22,8 @@ import {
 } from "../components/ChartDrawOptions"
 import { parseIncludeOptionSafe } from "../components/parse"
 
+type RandomizerAppProps = Record<string, never>
+
 interface RandomizerAppState {
   isDoneLoading: boolean
   chartDataSets: Chart[][]
@@ -35,10 +37,10 @@ export interface ChartQuerySampleOptions {
 }
 
 export default class RandomizerApp extends React.Component<
-  {},
+  RandomizerAppProps,
   RandomizerAppState
 > {
-  constructor(props: {}) {
+  constructor(props: RandomizerAppProps) {
     super(props)
 
     this.state = {

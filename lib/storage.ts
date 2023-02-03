@@ -7,24 +7,15 @@ function getStorageItem<T>(
   return item === null ? defaultValue : convertFunc(item)
 }
 
-export function getStorageString(
-  key: string,
-  defaultValue: string = "",
-): string {
+export function getStorageString(key: string, defaultValue = ""): string {
   return getStorageItem<string>(key, defaultValue, String)
 }
 
-export function getStorageNumber(
-  key: string,
-  defaultValue: number = 0,
-): number {
+export function getStorageNumber(key: string, defaultValue = 0): number {
   return getStorageItem<number>(key, defaultValue, Number)
 }
 
-export function getStorageBoolean(
-  key: string,
-  defaultValue: boolean = false,
-): boolean {
+export function getStorageBoolean(key: string, defaultValue = false): boolean {
   return getStorageItem<boolean>(key, defaultValue, (val) => val === "true")
 }
 

@@ -2,6 +2,20 @@
   "extends": [
     "next/core-web-vitals",
     "plugin:storybook/recommended",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
     "prettier"
-  ]
+  ],
+  "ignorePatterns": ["/.next", "/build", "/node_modules", "/out"],
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint"],
+  "root": true,
+  "rules": {
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-non-null-assertion": "off",
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      { "varsIgnorePattern": "^_$" }
+    ]
+  }
 }

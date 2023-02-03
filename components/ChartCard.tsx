@@ -2,7 +2,7 @@ import cx from "classnames"
 import React from "react"
 import { ChartDisplayOptions } from "./ChartDisplay"
 import styles from "./ChartCard.module.scss"
-import { Chart, Difficulty } from "popn-db-js"
+import { Chart } from "popn-db-js"
 import FolderPill from "./FolderPill"
 
 function getSortChar(titleOrGenre: string, sortChar: string) {
@@ -25,12 +25,12 @@ const difficultyToIndex: Record<Difficulty, string> = {
 interface ChartCardProps {
   extraClass?: string
   chartData: Chart
-  isVetoed?: Boolean
+  isVetoed?: boolean
   chartDisplayOptions: ChartDisplayOptions
 }
 
 interface ChartCardState {
-  isVetoed: Boolean
+  isVetoed: boolean
 }
 
 /**
@@ -40,7 +40,6 @@ export default class ChartCard extends React.Component<
   ChartCardProps,
   ChartCardState
 > {
-  // TODO add veto functionality
   constructor(props: ChartCardProps) {
     super(props)
     this.state = {
@@ -76,7 +75,6 @@ export default class ChartCard extends React.Component<
       chartData: { sranLevel },
       chartDisplayOptions: { sranModeEnabled, displayStyle },
     } = this.props
-    const { isVetoed } = this.state
 
     if (!sranModeEnabled) {
       return null

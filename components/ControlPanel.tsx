@@ -675,7 +675,6 @@ export default class ControlPanel extends React.Component<
       // gameVersion,
       // livelyPacks,
       preferGenre,
-      showChartDetails,
       displayStyle,
       // customLink1Url,
       isCollapsed,
@@ -961,16 +960,6 @@ export default class ControlPanel extends React.Component<
             <label htmlFor="displayGenreInput">Display genre</label>
           </section>
 
-          {/* <section className={styles.control}>
-            <input
-              id="showChartDetailsInput"
-              type="checkbox"
-              checked={showChartDetails}
-              onChange={this.onInputChange}
-            />
-            <label htmlFor="showChartDetailsInput">Show chart details</label>
-          </section> */}
-
           <section className={cx(styles.control, styles.chartAppearance)}>
             <label>Chart appearance</label>
 
@@ -1007,22 +996,6 @@ export default class ControlPanel extends React.Component<
               onChange={this.onInputChange}
             />
           </section> */}
-
-          {/* {gameVersion === 'lively' && (
-            <>
-              <section className={styles.control}>
-                <label htmlFor="excludeLivelyPacksInput">
-                  Exclude Lively song packs
-                </label>
-                <input
-                  id="excludeLivelyPacksInput"
-                  type="checkbox"
-                  checked={livelyPacks === "exclude"}
-                  onChange={this.onInputChange}
-                />
-              </section>
-            </>
-          )} */}
         </ReactModal>
 
         {/* Show when I come up with UI */}
