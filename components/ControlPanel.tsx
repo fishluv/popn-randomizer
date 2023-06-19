@@ -83,7 +83,6 @@ export default class ControlPanel extends React.Component<
 
     const {
       initialDrawOptions: {
-        // gameVersion,
         count,
         levelMin,
         levelMax,
@@ -97,6 +96,7 @@ export default class ControlPanel extends React.Component<
         floorInfection,
         buggedBpms,
         holdNotes,
+        gameVersion,
       },
       initialDisplayOptions: {
         sranModeEnabled,
@@ -126,7 +126,7 @@ export default class ControlPanel extends React.Component<
       floorInfection: floorInfection ?? "include",
       buggedBpms: buggedBpms ?? "include",
       holdNotes: holdNotes ?? "include",
-      // gameVersion: gameVersion || '',
+      gameVersion: gameVersion || "kaimei_0613",
       // Display options
       sranModeEnabled: sranModeEnabled ?? false,
       preferGenre: preferGenre ?? false,
@@ -196,7 +196,7 @@ export default class ControlPanel extends React.Component<
       newState = this.getNewStateForNewLevelMax(Number(value))
     } else if (id === "gameVersionSelect") {
       newState = {
-        // gameVersion: value,
+        gameVersion: value,
       }
     } else if (id === "sranLevelLowerSelect") {
       newState = this.getNewStateForNewSranLevelMin(value)
@@ -390,6 +390,7 @@ export default class ControlPanel extends React.Component<
       floorInfection,
       buggedBpms,
       holdNotes,
+      gameVersion,
     } = this.state
 
     const querySegments = []
@@ -435,6 +436,7 @@ export default class ControlPanel extends React.Component<
     onDraw({
       count: count!,
       query: querySegments.join(", "),
+      gameVersion: gameVersion!,
     })
   }
 
@@ -649,6 +651,7 @@ export default class ControlPanel extends React.Component<
         floorInfection: "include",
         buggedBpms: "include",
         holdNotes: "include",
+        gameVersion: "kaimei_0613",
         // Display options
         sranModeEnabled: false,
         preferGenre: false,
@@ -672,7 +675,7 @@ export default class ControlPanel extends React.Component<
       buggedBpms,
       holdNotes,
       sranModeEnabled,
-      // gameVersion,
+      gameVersion,
       preferGenre,
       displayStyle,
       // customLink1Url,
@@ -942,7 +945,12 @@ export default class ControlPanel extends React.Component<
 
           <section className={styles.control}>
             <label htmlFor="gameVersionSelect">Game data</label>
-            <select id="gameVersionSelect" value="kaimei_0613" disabled>
+            <select
+              id="gameVersionSelect"
+              value={gameVersion}
+              onChange={this.onSelectChange}
+            >
+              <option value="unilab_0913">UniLab 0913</option>
               <option value="kaimei_0613">Kaimei final</option>
             </select>
           </section>

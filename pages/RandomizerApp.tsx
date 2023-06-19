@@ -1,5 +1,5 @@
 import React from "react"
-import { Chart, Database, parseSranLevel } from "popn-db-js"
+import { Chart, Kaimei, Unilab, parseSranLevel } from "popn-db-js"
 import ControlPanel, { ControlPanelState } from "../components/ControlPanel"
 import SetList from "../components/SetList"
 import {
@@ -34,6 +34,7 @@ interface RandomizerAppState {
 export interface ChartQuerySampleOptions {
   count: number
   query: string
+  gameVersion: string
 }
 
 export default class RandomizerApp extends React.Component<
@@ -121,6 +122,7 @@ export default class RandomizerApp extends React.Component<
         ),
         buggedBpms: parseIncludeOptionSafe(getStorageString("buggedBpms")),
         holdNotes: parseIncludeOptionSafe(getStorageString("holdNotes")),
+        gameVersion: getStorageString("gameVersion"),
       },
     })
   }
@@ -138,7 +140,19 @@ export default class RandomizerApp extends React.Component<
 
   onControlPanelDraw = (querySampleOptions: ChartQuerySampleOptions) => {
     console.log(querySampleOptions)
-    const newChartDataSet = Database.sampleQueriedCharts(querySampleOptions)
+    let database
+    switch (querySampleOptions.gameVersion) {
+      case "unilab_0913":
+        database = Unilab
+        break
+      case "kaimei_0613":
+        database = Kaimei
+        break
+      default:
+        console.error(`Unknown game version ${querySampleOptions.gameVersion}`)
+        database = Kaimei
+    }
+    const newChartDataSet = database.sampleQueriedCharts(querySampleOptions)
 
     this.setState((prevState) => ({
       chartDataSets: [newChartDataSet, ...prevState.chartDataSets],

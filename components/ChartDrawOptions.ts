@@ -46,4 +46,5 @@ export interface ChartDrawOptions {
   floorInfection?: IncludeOption
   buggedBpms?: IncludeOption
   holdNotes?: IncludeOption
+  gameVersion?: string
 }
