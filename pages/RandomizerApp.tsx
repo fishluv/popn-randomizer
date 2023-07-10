@@ -143,6 +143,7 @@ export default class RandomizerApp extends React.Component<
     let database
     switch (querySampleOptions.gameVersion) {
       case "unilab_0913":
+      case "unilab_1220":
         database = Unilab
         break
       case "kaimei_0613":

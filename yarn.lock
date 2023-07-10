@@ -9388,10 +9388,10 @@ polished@^4.0.5:
   dependencies:
     "@babel/runtime" "^7.14.0"
 
-popn-db-js@0.10.0:
-  version "0.10.0"
-  resolved "https://registry.yarnpkg.com/popn-db-js/-/popn-db-js-0.10.0.tgz#777afc88f129a6271ce457d7bde1ab472384baac"
-  integrity sha512-xyfk0mu9GM8OSUDAc8Ad6I50qeKtTV2pIAJp2+dkpMtlOXJC5gloHriWm5a6kj904FksjxiBCD0rEgAx1PVGlA==
+popn-db-js@0.11.0:
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/popn-db-js/-/popn-db-js-0.11.0.tgz#a53b8c9d1f820441b8505211bb9fea8d29f63c90"
+  integrity sha512-v9cXT3dilWD/bk9UM90HHmAhPxccmbXaL708zpHTgmuHlSq8xRg/ZIGFG00rsEyWHwPHZfGgftfuhuyU6g4UPw==
 
 posix-character-classes@^0.1.0:
   version "0.1.1"

@@ -950,7 +950,7 @@ export default class ControlPanel extends React.Component<
               value={gameVersion}
               onChange={this.onSelectChange}
             >
-              <option value="unilab_0913">UniLab 0913</option>
+              <option value="unilab_1220">UniLab 1220</option>
               <option value="kaimei_0613">Kaimei final</option>
             </select>
           </section>
