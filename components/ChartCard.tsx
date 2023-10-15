@@ -13,15 +13,6 @@ function getSortChar(titleOrGenre: string, sortChar: string) {
   }
 }
 
-/*
-const difficultyToIndex: Record<Difficulty, string> = {
-  e: '0',
-  n: '1',
-  h: '2',
-  ex: '3',
-};
-*/
-
 interface ChartCardProps {
   extraClass?: string
   chartData: Chart
@@ -168,39 +159,6 @@ export default class ChartCard extends React.Component<
       backgroundImage: `url("${bannerUrl}")`,
     }
   }
-
-  /*
-  getCustomUrl() {
-    const {
-      chartDisplayOptions: {
-        customLink1Url,
-      },
-      chartData: {
-        difficulty,
-        songId,
-      }
-    } = this.props;
-
-    if (!customLink1Url) {
-      return null;
-    }
-
-    const replacementMap: Record<string, string> = {
-      '%diffIndex%': difficultyToIndex[difficulty],
-      '%songId%': Number(songId).toString(), // Remove leading zeroes. 0 is a valid id.
-    };
-
-    const replacementRegex = new RegExp(
-      Object.keys(replacementMap).join('|'),
-      'g',
-    );
-
-    return customLink1Url.replace(
-      replacementRegex,
-      (match) => replacementMap[match],
-    );
-  }
-  */
 
   formatDuration = () => {
     const {
