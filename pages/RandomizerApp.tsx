@@ -1,4 +1,5 @@
 import React from "react"
+import { Toaster } from "react-hot-toast"
 import { Chart, Kaimei, Unilab, parseSranLevel } from "popn-db-js"
 import ControlPanel, { ControlPanelState } from "../components/ControlPanel"
 import SetList from "../components/SetList"
@@ -208,6 +209,7 @@ export default class RandomizerApp extends React.Component<
               chartDataSets={chartDataSets}
               chartDisplayOptions={chartDisplayOptions}
             />
+            <Toaster position="bottom-center" />
           </>
         )}
       </section>

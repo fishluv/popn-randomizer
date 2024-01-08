@@ -50,6 +50,17 @@
     transform: rotate(45deg);
   }
 
+  .copyButton {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 2rem;
+    height: 1.75rem;
+    line-height: 0.8;
+    border: 2px solid #bbb;
+    border-width: 0 0 2px 2px;
+  }
+
   .cardsContainer {
     display: flex;
     flex-direction: row;
