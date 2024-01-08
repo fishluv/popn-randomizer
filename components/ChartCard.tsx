@@ -203,6 +203,8 @@ export default class ChartCard extends React.Component<
       chartData: { difficulty, bpm, notes, hasHolds, songFolder },
     } = this.props
 
+    const { isVetoed } = this.state
+
     const diffStyle = styles[difficulty]
 
     const rootClassName = cx(
@@ -210,6 +212,9 @@ export default class ChartCard extends React.Component<
       styles.ChartCard,
       styles.normal,
       diffStyle,
+      {
+        [styles.vetoed]: isVetoed,
+      },
     )
 
     const bannerAndBasicInfoClassName = cx(styles.bannerAndBasicInfo, diffStyle)
