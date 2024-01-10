@@ -173,10 +173,14 @@ select {
     }
   }
 
-  .compactInfo {
-    font-size: 0.75rem;
-    font-style: italic;
-    color: #666;
+  &.chartAppearance {
+    display: block;
+
+    .compactInfo {
+      font-size: 0.75rem;
+      font-style: italic;
+      color: #666;
+    }
   }
 
   &.customLink input {
