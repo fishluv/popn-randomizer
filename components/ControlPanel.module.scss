@@ -46,6 +46,14 @@ select {
     background: $ex-bright;
     color: white;
   }
+
+  &.kaimei {
+    background: #f1d0d7;
+  }
+
+  &.unilab {
+    background: #cceefd;
+  }
 }
 
 .drawControl select,

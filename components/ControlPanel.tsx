@@ -949,6 +949,7 @@ export default class ControlPanel extends React.Component<
             <label htmlFor="gameVersionSelect">Game data</label>
             <select
               id="gameVersionSelect"
+              className={gameVersion ? styles[gameVersion.split("_")[0]] : ""}
               value={gameVersion}
               onChange={this.onSelectChange}
             >
