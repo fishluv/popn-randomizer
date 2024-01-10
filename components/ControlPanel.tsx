@@ -914,6 +914,7 @@ export default class ControlPanel extends React.Component<
             <label htmlFor="holdNotesSelect">Long pop-kuns</label>
             <select
               id="holdNotesSelect"
+              className={holdNotes ? styles[holdNotes] : ""}
               value={holdNotes}
               onChange={this.onSelectChange}
             >

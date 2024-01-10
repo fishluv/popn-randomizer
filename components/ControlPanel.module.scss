@@ -54,6 +54,18 @@ select {
   &.unilab {
     background: #cceefd;
   }
+
+  &.include {
+    background: $n-light;
+  }
+
+  &.exclude {
+    background: $h-light;
+  }
+
+  &.only {
+    background: $ex-light;
+  }
 }
 
 .drawControl select,
