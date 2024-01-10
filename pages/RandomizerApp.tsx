@@ -38,6 +38,55 @@ export interface ChartQuerySampleOptions {
   gameVersion: string
 }
 
+function deserializeChartSets(
+  chartSetsJson: string,
+  gameVersion: string,
+): Chart[][] {
+  const database = getDatabase(gameVersion)
+
+  try {
+    const parsed = JSON.parse(chartSetsJson)
+    if (!Array.isArray(parsed)) {
+      return []
+    }
+
+    // Max is 20 sets and 10 charts per set.
+    const sets: string[][] = parsed.filter(Array.isArray).slice(0, 20)
+
+    return sets.map((set) => {
+      const chartIds = set.filter((s) => typeof s === "string").slice(0, 10)
+      const charts = database.findCharts(...chartIds)
+      return charts.filter((c) => c !== null) as Chart[]
+    })
+  } catch (e) {
+    console.error(`Error deserializing chart sets: ${e}`)
+    setStorageItem("drawnChartSets", "[]")
+    console.info("Reset chart sets.")
+    return []
+  }
+}
+
+function serializeChartSets(chartSets: Chart[][]): string {
+  const chartIdSets: string[][] = chartSets.map((set) =>
+    set.map((chart) => chart.id),
+  )
+  return JSON.stringify(chartIdSets)
+}
+
+function getDatabase(gameVersion: string) {
+  switch (gameVersion) {
+    case "unilab_0913":
+    case "unilab_1220":
+    case "unilab_0905":
+      return Unilab
+    case "kaimei_0613":
+      return Kaimei
+    default:
+      console.error(`Unknown game version ${gameVersion}`)
+      return Kaimei
+  }
+}
+
 export default class RandomizerApp extends React.Component<
   RandomizerAppProps,
   RandomizerAppState
@@ -88,9 +137,17 @@ export default class RandomizerApp extends React.Component<
     setStorageItemIfNull("showChartDetails", false)
     setStorageItemIfNull("displayStyle", "normal")
     setStorageItemIfNull("customLink1Url", "")
+    // State
+    setStorageItemIfNull("drawnChartSets", "[]")
+
+    const gameVersion = getStorageString("gameVersion")
 
     this.setState({
       isDoneLoading: true,
+      chartDataSets: deserializeChartSets(
+        getStorageString("drawnChartSets"),
+        gameVersion,
+      ),
       chartDisplayOptions: {
         sranModeEnabled: getStorageBoolean("sranModeEnabled"),
         preferGenre: getStorageBoolean("preferGenre"),
@@ -123,7 +180,7 @@ export default class RandomizerApp extends React.Component<
         ),
         buggedBpms: parseIncludeOptionSafe(getStorageString("buggedBpms")),
         holdNotes: parseIncludeOptionSafe(getStorageString("holdNotes")),
-        gameVersion: getStorageString("gameVersion"),
+        gameVersion,
       },
     })
   }
@@ -134,35 +191,29 @@ export default class RandomizerApp extends React.Component<
 
   handleUnload = (event: BeforeUnloadEvent) => {
     const { chartDataSets } = this.state
-    if (chartDataSets.length) {
-      event.returnValue = "Are you sure you want to leave?"
+    // Max 20 sets.
+    if (chartDataSets.length > 20) {
+      event.preventDefault()
     }
   }
 
   onControlPanelDraw = (querySampleOptions: ChartQuerySampleOptions) => {
     console.log(querySampleOptions)
-    let database
-    switch (querySampleOptions.gameVersion) {
-      case "unilab_0913":
-      case "unilab_1220":
-      case "unilab_0905":
-        database = Unilab
-        break
-      case "kaimei_0613":
-        database = Kaimei
-        break
-      default:
-        console.error(`Unknown game version ${querySampleOptions.gameVersion}`)
-        database = Kaimei
-    }
+    const database = getDatabase(querySampleOptions.gameVersion)
     const newChartDataSet = database.sampleQueriedCharts(querySampleOptions)
 
-    this.setState((prevState) => ({
-      chartDataSets: [newChartDataSet, ...prevState.chartDataSets],
-    }))
+    this.setState((prevState) => {
+      const newChartSets = [newChartDataSet, ...prevState.chartDataSets]
+
+      setStorageItem("drawnChartSets", serializeChartSets(newChartSets))
+      return {
+        chartDataSets: newChartSets,
+      }
+    })
   }
 
   onControlPanelClear = () => {
+    setStorageItem("drawnChartSets", "[]")
     this.setState({
       chartDataSets: [],
     })
