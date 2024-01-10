@@ -535,6 +535,7 @@ export default class ControlPanel extends React.Component<
           </button>
           <select
             id="levelLowerSelect"
+            className={styles[`level${Math.floor(levelMin! / 10)}x`]}
             value={levelMin}
             onChange={this.onSelectChange}
           >
@@ -565,6 +566,7 @@ export default class ControlPanel extends React.Component<
           </button>
           <select
             id="levelUpperSelect"
+            className={styles[`level${Math.floor(levelMax! / 10)}x`]}
             value={levelMax}
             onChange={this.onSelectChange}
           >
