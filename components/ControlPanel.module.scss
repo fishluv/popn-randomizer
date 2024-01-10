@@ -47,6 +47,31 @@ select {
     color: white;
   }
 
+  &.sranleveleasy {
+    background: $e-bright;
+    color: white;
+  }
+
+  &.sranlevelmid {
+    background: $n-bright;
+    color: white;
+  }
+
+  &.sranlevelhard {
+    background: $h-bright;
+    color: white;
+  }
+
+  &.sranlevelveryhard {
+    background: $ex-bright;
+    color: white;
+  }
+
+  &.sranlevelmax {
+    background: $ex-x-dark;
+    color: white;
+  }
+
   &.kaimei {
     background: #f1d0d7;
   }

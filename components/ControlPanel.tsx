@@ -52,6 +52,23 @@ function sranLevelPlusOne(sranLv: SranLevel): string {
   return SRAN_LEVELS[newIndex]
 }
 
+function sranLevelCategory(sranLv?: SranLevel): string {
+  const num = parseInt(sranLv ?? "0")
+  if (num >= 19) {
+    return "max"
+  } else if (num >= 15) {
+    return "veryhard"
+  } else if (num >= 11) {
+    return "hard"
+  } else if (num >= 7) {
+    return "mid"
+  } else if (num >= 3) {
+    return "easy"
+  } else {
+    return "veryeasy"
+  }
+}
+
 const DRAW_COUNT_MIN = 1
 const DRAW_COUNT_MAX = 10
 const DRAW_COUNTS = range(DRAW_COUNT_MIN, DRAW_COUNT_MAX + 1)
@@ -468,6 +485,7 @@ export default class ControlPanel extends React.Component<
             </button>
             <select
               id="sranLevelLowerSelect"
+              className={styles[`sranlevel${sranLevelCategory(sranLevelMin)}`]}
               value={sranLevelMin!}
               onChange={this.onSelectChange}
             >
@@ -498,6 +516,7 @@ export default class ControlPanel extends React.Component<
             </button>
             <select
               id="sranLevelUpperSelect"
+              className={styles[`sranlevel${sranLevelCategory(sranLevelMax)}`]}
               value={sranLevelMax!}
               onChange={this.onSelectChange}
             >
