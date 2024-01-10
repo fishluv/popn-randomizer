@@ -20,6 +20,8 @@ import {
 } from "./ChartDrawOptions"
 import { parseIncludeOption, parseIncludeOptionSafe } from "./parse"
 import FolderPill from "./FolderPill"
+import { FaChevronDown, FaChevronUp, FaTrash } from "react-icons/fa"
+import { VscTriangleLeft, VscTriangleRight } from "react-icons/vsc"
 
 function range(start: number, stop: number) {
   let realStart: number
@@ -481,7 +483,7 @@ export default class ControlPanel extends React.Component<
               type="button"
               onClick={this.onLevelButtonClick}
             >
-              ◀
+              <VscTriangleLeft />
             </button>
             <select
               id="sranLevelLowerSelect"
@@ -501,7 +503,7 @@ export default class ControlPanel extends React.Component<
               type="button"
               onClick={this.onLevelButtonClick}
             >
-              ▶
+              <VscTriangleRight />
             </button>
 
             <label htmlFor="sranLevelUpperSelect">to</label>
@@ -512,7 +514,7 @@ export default class ControlPanel extends React.Component<
               type="button"
               onClick={this.onLevelButtonClick}
             >
-              ◀
+              <VscTriangleLeft />
             </button>
             <select
               id="sranLevelUpperSelect"
@@ -532,7 +534,7 @@ export default class ControlPanel extends React.Component<
               type="button"
               onClick={this.onLevelButtonClick}
             >
-              ▶
+              <VscTriangleRight />
             </button>
           </section>
         </section>
@@ -550,7 +552,7 @@ export default class ControlPanel extends React.Component<
             type="button"
             onClick={this.onLevelButtonClick}
           >
-            ◀
+            <VscTriangleLeft />
           </button>
           <select
             id="levelLowerSelect"
@@ -570,7 +572,7 @@ export default class ControlPanel extends React.Component<
             type="button"
             onClick={this.onLevelButtonClick}
           >
-            ▶
+            <VscTriangleRight />
           </button>
 
           <label htmlFor="levelUpperSelect">to</label>
@@ -581,7 +583,7 @@ export default class ControlPanel extends React.Component<
             type="button"
             onClick={this.onLevelButtonClick}
           >
-            ◀
+            <VscTriangleLeft />
           </button>
           <select
             id="levelUpperSelect"
@@ -601,7 +603,7 @@ export default class ControlPanel extends React.Component<
             type="button"
             onClick={this.onLevelButtonClick}
           >
-            ▶
+            <VscTriangleRight />
           </button>
         </section>
       </section>
@@ -749,7 +751,7 @@ export default class ControlPanel extends React.Component<
             type="button"
             onClick={this.onClearClick}
           >
-            🗑
+            <FaTrash />
           </button>
 
           <button
@@ -757,7 +759,7 @@ export default class ControlPanel extends React.Component<
             type="button"
             onClick={this.toggleCollapsed}
           >
-            {isCollapsed ? "🔻Expand" : "🔺Collapse"}
+            {isCollapsed ? <FaChevronDown /> : <FaChevronUp />}
           </button>
         </section>
 
