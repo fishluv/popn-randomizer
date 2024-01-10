@@ -473,139 +473,135 @@ export default class ControlPanel extends React.Component<
 
     if (sranModeEnabled) {
       return (
-        <section className={styles.levelControls}>
-          <section className={styles.control}>
-            <label htmlFor="sranLevelLowerSelect">Sran level</label>
+        <section className={cx(styles.control, styles.level)}>
+          <label htmlFor="sranLevelLowerSelect">Sran level</label>
 
-            <button
-              id="sranLevelMinDownButton"
-              className={styles.levelDownButton}
-              type="button"
-              onClick={this.onLevelButtonClick}
-            >
-              <VscTriangleLeft />
-            </button>
-            <select
-              id="sranLevelLowerSelect"
-              className={styles[`sranlevel${sranLevelCategory(sranLevelMin)}`]}
-              value={sranLevelMin!}
-              onChange={this.onSelectChange}
-            >
-              {SRAN_LEVELS.map((sranLv: string) => (
-                <option value={sranLv} key={sranLv}>
-                  {normSranLevel(sranLv)}
-                </option>
-              ))}
-            </select>
-            <button
-              id="sranLevelMinUpButton"
-              className={styles.levelUpButton}
-              type="button"
-              onClick={this.onLevelButtonClick}
-            >
-              <VscTriangleRight />
-            </button>
+          <button
+            id="sranLevelMinDownButton"
+            className={styles.levelDownButton}
+            type="button"
+            onClick={this.onLevelButtonClick}
+          >
+            <VscTriangleLeft />
+          </button>
+          <select
+            id="sranLevelLowerSelect"
+            className={styles[`sranlevel${sranLevelCategory(sranLevelMin)}`]}
+            value={sranLevelMin!}
+            onChange={this.onSelectChange}
+          >
+            {SRAN_LEVELS.map((sranLv: string) => (
+              <option value={sranLv} key={sranLv}>
+                {normSranLevel(sranLv)}
+              </option>
+            ))}
+          </select>
+          <button
+            id="sranLevelMinUpButton"
+            className={styles.levelUpButton}
+            type="button"
+            onClick={this.onLevelButtonClick}
+          >
+            <VscTriangleRight />
+          </button>
 
-            <label htmlFor="sranLevelUpperSelect">to</label>
+          <label htmlFor="sranLevelUpperSelect">to</label>
 
-            <button
-              id="sranLevelMaxDownButton"
-              className={styles.levelDownButton}
-              type="button"
-              onClick={this.onLevelButtonClick}
-            >
-              <VscTriangleLeft />
-            </button>
-            <select
-              id="sranLevelUpperSelect"
-              className={styles[`sranlevel${sranLevelCategory(sranLevelMax)}`]}
-              value={sranLevelMax!}
-              onChange={this.onSelectChange}
-            >
-              {SRAN_LEVELS.map((sranLv: string) => (
-                <option value={sranLv} key={sranLv}>
-                  {normSranLevel(sranLv)}
-                </option>
-              ))}
-            </select>
-            <button
-              id="sranLevelMaxUpButton"
-              className={styles.levelUpButton}
-              type="button"
-              onClick={this.onLevelButtonClick}
-            >
-              <VscTriangleRight />
-            </button>
-          </section>
+          <button
+            id="sranLevelMaxDownButton"
+            className={styles.levelDownButton}
+            type="button"
+            onClick={this.onLevelButtonClick}
+          >
+            <VscTriangleLeft />
+          </button>
+          <select
+            id="sranLevelUpperSelect"
+            className={styles[`sranlevel${sranLevelCategory(sranLevelMax)}`]}
+            value={sranLevelMax!}
+            onChange={this.onSelectChange}
+          >
+            {SRAN_LEVELS.map((sranLv: string) => (
+              <option value={sranLv} key={sranLv}>
+                {normSranLevel(sranLv)}
+              </option>
+            ))}
+          </select>
+          <button
+            id="sranLevelMaxUpButton"
+            className={styles.levelUpButton}
+            type="button"
+            onClick={this.onLevelButtonClick}
+          >
+            <VscTriangleRight />
+          </button>
         </section>
       )
     }
 
     return (
-      <section>
-        <section className={styles.control}>
-          <label htmlFor="levelLowerSelect">Level</label>
+      <section className={cx(styles.control, styles.level)}>
+        <label htmlFor="levelLowerSelect">Level</label>
 
-          <button
-            id="levelMinDownButton"
-            className={styles.levelDownButton}
-            type="button"
-            onClick={this.onLevelButtonClick}
-          >
-            <VscTriangleLeft />
-          </button>
-          <select
-            id="levelLowerSelect"
-            className={styles[`level${Math.floor((levelMin ?? 0) / 10)}x`]}
-            value={levelMin}
-            onChange={this.onSelectChange}
-          >
-            {LEVELS.map((level: number) => (
-              <option value={level} key={level}>
-                {level}
-              </option>
-            ))}
-          </select>
-          <button
-            id="levelMinUpButton"
-            className={styles.levelUpButton}
-            type="button"
-            onClick={this.onLevelButtonClick}
-          >
-            <VscTriangleRight />
-          </button>
+        <button
+          id="levelMinDownButton"
+          className={styles.levelDownButton}
+          type="button"
+          onClick={this.onLevelButtonClick}
+        >
+          <VscTriangleLeft />
+        </button>
+        <select
+          id="levelLowerSelect"
+          className={styles[`level${Math.floor((levelMin ?? 0) / 10)}x`]}
+          value={levelMin}
+          onChange={this.onSelectChange}
+        >
+          {LEVELS.map((level: number) => (
+            <option value={level} key={level}>
+              {level}
+            </option>
+          ))}
+        </select>
+        <button
+          id="levelMinUpButton"
+          className={styles.levelUpButton}
+          type="button"
+          onClick={this.onLevelButtonClick}
+        >
+          <VscTriangleRight />
+        </button>
 
-          <label htmlFor="levelUpperSelect">to</label>
+        <label htmlFor="levelUpperSelect">to</label>
 
-          <button
-            id="levelMaxDownButton"
-            className={styles.levelDownButton}
-            type="button"
-            onClick={this.onLevelButtonClick}
-          >
-            <VscTriangleLeft />
-          </button>
-          <select
-            id="levelUpperSelect"
-            className={styles[`level${Math.floor((levelMax ?? 0) / 10)}x`]}
-            value={levelMax}
-            onChange={this.onSelectChange}
-          >
-            {LEVELS.map((level: number) => (
-              <option value={level} key={level}>
-                {level}
-              </option>
-            ))}
-          </select>
-          <button
-            id="levelMaxUpButton"
-            className={styles.levelUpButton}
-            type="button"
-            onClick={this.onLevelButtonClick}
-          >
-            <VscTriangleRight />
-          </button>
-        </section>
+        <button
+          id="levelMaxDownButton"
+          className={styles.levelDownButton}
+          type="button"
+          onClick={this.onLevelButtonClick}
+        >
+          <VscTriangleLeft />
+        </button>
+        <select
+          id="levelUpperSelect"
+          className={styles[`level${Math.floor((levelMax ?? 0) / 10)}x`]}
+          value={levelMax}
+          onChange={this.onSelectChange}
+        >
+          {LEVELS.map((level: number) => (
+            <option value={level} key={level}>
+              {level}
+            </option>
+          ))}
+        </select>
+        <button
+          id="levelMaxUpButton"
+          className={styles.levelUpButton}
+          type="button"
+          onClick={this.onLevelButtonClick}
+        >
+          <VscTriangleRight />
+        </button>
       </section>
     )
   }
@@ -711,8 +707,8 @@ export default class ControlPanel extends React.Component<
     return (
       <section className={rootClassName}>
         {!isCollapsed && (
-          <section className={styles.drawControl}>
-            <section className={styles.control}>
+          <>
+            <section className={cx(styles.control, styles.draw)}>
               <label htmlFor="drawCountSelect">Draw</label>
               <select
                 id="drawCountSelect"
@@ -728,7 +724,7 @@ export default class ControlPanel extends React.Component<
             </section>
 
             {this.getLevelControls()}
-          </section>
+          </>
         )}
 
         <section className={styles.buttonsAndSummary}>

@@ -98,12 +98,8 @@ select {
   }
 }
 
-.drawControl select,
-.levelControls select {
-  width: 2.75rem;
-}
-
 .control {
+  display: flex;
   margin-bottom: 0.5rem;
 
   label {
@@ -124,13 +120,18 @@ select {
 
   .levelDownButton {
     margin-right: -0.5rem;
-    line-height: 1.2;
+    line-height: 0.8;
   }
 
   // Make sure this goes after :not(:first-child)
   .levelUpButton {
     margin-left: 0;
-    line-height: 1.2;
+    line-height: 0.8;
+  }
+
+  &.draw select,
+  &.level select {
+    width: 2.75rem;
   }
 
   &.includeDiffs .inner {
