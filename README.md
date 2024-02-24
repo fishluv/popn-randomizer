@@ -9,6 +9,9 @@ The app is currently available at https://chinatsu.surge.sh.
 ## Dev
 
 ```sh
+# As needed
+yarn upgrade popn-db-js --latest
+
 yarn dev
 ```
 
