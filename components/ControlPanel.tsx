@@ -145,7 +145,7 @@ export default class ControlPanel extends React.Component<
       floorInfection: floorInfection ?? "include",
       buggedBpms: buggedBpms ?? "include",
       holdNotes: holdNotes ?? "include",
-      gameVersion: gameVersion || "kaimei_0613",
+      gameVersion: gameVersion || "unilab_0411",
       // Display options
       sranModeEnabled: sranModeEnabled ?? false,
       preferGenre: preferGenre ?? false,
@@ -670,7 +670,7 @@ export default class ControlPanel extends React.Component<
         floorInfection: "include",
         buggedBpms: "include",
         holdNotes: "include",
-        gameVersion: "kaimei_0613",
+        gameVersion: "unilab_0411",
         // Display options
         sranModeEnabled: false,
         preferGenre: false,
@@ -967,12 +967,12 @@ export default class ControlPanel extends React.Component<
             <label htmlFor="gameVersionSelect">Game data</label>
             <select
               id="gameVersionSelect"
-              className={gameVersion ? styles[gameVersion.split("_")[0]] : ""}
+              className={gameVersion ? styles[gameVersion] : ""}
               value={gameVersion}
               onChange={this.onSelectChange}
             >
-              <option value="unilab_0905">UniLab 0905</option>
-              <option value="kaimei_0613">Kaimei final</option>
+              <option value="unilab_1218">UniLab 1218</option>
+              <option value="unilab_0411">UniLab 0411</option>
             </select>
           </section>
 

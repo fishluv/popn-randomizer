@@ -1,6 +1,6 @@
 import React from "react"
 import { Toaster } from "react-hot-toast"
-import { Chart, Kaimei, Unilab, parseSranLevel } from "popn-db-js"
+import { Chart, Unilab0411, Unilab1218, parseSranLevel } from "popn-db-js"
 import ControlPanel, { ControlPanelState } from "../components/ControlPanel"
 import SetList from "../components/SetList"
 import {
@@ -78,12 +78,14 @@ function getDatabase(gameVersion: string) {
     case "unilab_0913":
     case "unilab_1220":
     case "unilab_0905":
-      return Unilab
+    case "unilab_1218":
+      return Unilab1218
     case "kaimei_0613":
-      return Kaimei
+    case "unilab_0411":
+      return Unilab0411
     default:
       console.error(`Unknown game version ${gameVersion}`)
-      return Kaimei
+      return Unilab0411
   }
 }
 
@@ -130,7 +132,7 @@ export default class RandomizerApp extends React.Component<
     setStorageItemIfNull("excludeFloorInfection", false)
     setStorageItemIfNull("excludeBuggedBpms", false)
     setStorageItemIfNull("holdNotes", "include")
-    setStorageItemIfNull("gameVersion", "kaimei_0613")
+    setStorageItemIfNull("gameVersion", "unilab_0411")
     // Display options
     setStorageItemIfNull("sranModeEnabled", false)
     setStorageItemIfNull("preferGenre", false)
