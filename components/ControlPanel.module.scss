@@ -99,34 +99,29 @@ select {
   }
 }
 
+.flex {
+  display: flex;
+}
+
 .control {
   display: flex;
+  column-gap: 0.5rem;
   margin-bottom: 0.5rem;
 
   label {
     margin-bottom: 0; /* Override browser default. */
   }
 
-  > :not(:first-child) {
-    margin-left: 0.5rem;
-  }
-
   input[type="radio"] {
-    margin-left: 0.75rem;
+    margin-left: 0.25rem;
   }
 
   input[type="radio"] + label {
     margin-left: 0.25rem;
   }
 
-  .levelDownButton {
-    margin-right: -0.5rem;
-    line-height: 0.8;
-  }
-
-  // Make sure this goes after :not(:first-child)
+  .levelDownButton,
   .levelUpButton {
-    margin-left: 0;
     line-height: 0.8;
   }
 
@@ -135,17 +130,19 @@ select {
     width: 2.75rem;
   }
 
-  &.includeDiffs .inner {
+  &.diffsChoose {
+    margin-top: 0.25rem;
     margin-left: 1rem;
-    width: 12rem; // = diffwidth * 2
+    width: 14rem;
+    display: flex;
+    flex-wrap: wrap;
 
     .diffContainer {
-      display: inline-block;
       width: 6rem;
-    }
 
-    label {
-      margin-left: 0.5rem;
+      label {
+        margin-left: 0.5rem;
+      }
     }
   }
 
@@ -154,34 +151,32 @@ select {
       line-height: 1.125rem;
       margin-left: 0.75rem;
     }
+  }
 
-    .inner {
-      margin-top: 0.25rem;
-      margin-left: 1rem;
-      width: 18rem;
-      display: flex;
-      flex-direction: column;
-      flex-wrap: wrap;
-      height: 24.5rem; // = folderheight * 15
+  &.foldersChoose {
+    margin-top: 0.25rem;
+    margin-left: 1rem;
+    width: 18rem;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    height: 24.5rem; // = folderheight * 15
 
-      .folderSelect {
-        height: 1.75rem;
+    .folderSelect {
+      height: 1.75rem;
 
-        label {
-          margin-left: 0.5rem;
-        }
+      label {
+        margin-left: 0.5rem;
       }
     }
   }
 
-  &.chartAppearance {
-    display: block;
-
-    .compactInfo {
-      font-size: 0.75rem;
-      font-style: italic;
-      color: #666;
-    }
+  &.chartAppearanceCompactInfo {
+    margin-top: -0.5rem;
+    margin-left: 0.5rem;
+    font-size: 0.75rem;
+    font-style: italic;
+    color: #666;
   }
 
   &.customLink input {

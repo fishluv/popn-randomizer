@@ -476,65 +476,69 @@ export default class ControlPanel extends React.Component<
         <section className={cx(styles.control, styles.level)}>
           <label htmlFor="sranLevelLowerSelect">Sran level</label>
 
-          <button
-            id="sranLevelMinDownButton"
-            className={styles.levelDownButton}
-            type="button"
-            onClick={this.onLevelButtonClick}
-          >
-            <VscTriangleLeft />
-          </button>
-          <select
-            id="sranLevelLowerSelect"
-            className={styles[`sranlevel${sranLevelCategory(sranLevelMin)}`]}
-            value={sranLevelMin!}
-            onChange={this.onSelectChange}
-          >
-            {SRAN_LEVELS.map((sranLv: string) => (
-              <option value={sranLv} key={sranLv}>
-                {normSranLevel(sranLv)}
-              </option>
-            ))}
-          </select>
-          <button
-            id="sranLevelMinUpButton"
-            className={styles.levelUpButton}
-            type="button"
-            onClick={this.onLevelButtonClick}
-          >
-            <VscTriangleRight />
-          </button>
+          <section className={styles.flex}>
+            <button
+              id="sranLevelMinDownButton"
+              className={styles.levelDownButton}
+              type="button"
+              onClick={this.onLevelButtonClick}
+            >
+              <VscTriangleLeft />
+            </button>
+            <select
+              id="sranLevelLowerSelect"
+              className={styles[`sranlevel${sranLevelCategory(sranLevelMin)}`]}
+              value={sranLevelMin!}
+              onChange={this.onSelectChange}
+            >
+              {SRAN_LEVELS.map((sranLv: string) => (
+                <option value={sranLv} key={sranLv}>
+                  {normSranLevel(sranLv)}
+                </option>
+              ))}
+            </select>
+            <button
+              id="sranLevelMinUpButton"
+              className={styles.levelUpButton}
+              type="button"
+              onClick={this.onLevelButtonClick}
+            >
+              <VscTriangleRight />
+            </button>
+          </section>
 
           <label htmlFor="sranLevelUpperSelect">to</label>
 
-          <button
-            id="sranLevelMaxDownButton"
-            className={styles.levelDownButton}
-            type="button"
-            onClick={this.onLevelButtonClick}
-          >
-            <VscTriangleLeft />
-          </button>
-          <select
-            id="sranLevelUpperSelect"
-            className={styles[`sranlevel${sranLevelCategory(sranLevelMax)}`]}
-            value={sranLevelMax!}
-            onChange={this.onSelectChange}
-          >
-            {SRAN_LEVELS.map((sranLv: string) => (
-              <option value={sranLv} key={sranLv}>
-                {normSranLevel(sranLv)}
-              </option>
-            ))}
-          </select>
-          <button
-            id="sranLevelMaxUpButton"
-            className={styles.levelUpButton}
-            type="button"
-            onClick={this.onLevelButtonClick}
-          >
-            <VscTriangleRight />
-          </button>
+          <section className={styles.flex}>
+            <button
+              id="sranLevelMaxDownButton"
+              className={styles.levelDownButton}
+              type="button"
+              onClick={this.onLevelButtonClick}
+            >
+              <VscTriangleLeft />
+            </button>
+            <select
+              id="sranLevelUpperSelect"
+              className={styles[`sranlevel${sranLevelCategory(sranLevelMax)}`]}
+              value={sranLevelMax!}
+              onChange={this.onSelectChange}
+            >
+              {SRAN_LEVELS.map((sranLv: string) => (
+                <option value={sranLv} key={sranLv}>
+                  {normSranLevel(sranLv)}
+                </option>
+              ))}
+            </select>
+            <button
+              id="sranLevelMaxUpButton"
+              className={styles.levelUpButton}
+              type="button"
+              onClick={this.onLevelButtonClick}
+            >
+              <VscTriangleRight />
+            </button>
+          </section>
         </section>
       )
     }
@@ -543,65 +547,69 @@ export default class ControlPanel extends React.Component<
       <section className={cx(styles.control, styles.level)}>
         <label htmlFor="levelLowerSelect">Level</label>
 
-        <button
-          id="levelMinDownButton"
-          className={styles.levelDownButton}
-          type="button"
-          onClick={this.onLevelButtonClick}
-        >
-          <VscTriangleLeft />
-        </button>
-        <select
-          id="levelLowerSelect"
-          className={styles[`level${Math.floor((levelMin ?? 0) / 10)}x`]}
-          value={levelMin}
-          onChange={this.onSelectChange}
-        >
-          {LEVELS.map((level: number) => (
-            <option value={level} key={level}>
-              {level}
-            </option>
-          ))}
-        </select>
-        <button
-          id="levelMinUpButton"
-          className={styles.levelUpButton}
-          type="button"
-          onClick={this.onLevelButtonClick}
-        >
-          <VscTriangleRight />
-        </button>
+        <section className={styles.flex}>
+          <button
+            id="levelMinDownButton"
+            className={styles.levelDownButton}
+            type="button"
+            onClick={this.onLevelButtonClick}
+          >
+            <VscTriangleLeft />
+          </button>
+          <select
+            id="levelLowerSelect"
+            className={styles[`level${Math.floor((levelMin ?? 0) / 10)}x`]}
+            value={levelMin}
+            onChange={this.onSelectChange}
+          >
+            {LEVELS.map((level: number) => (
+              <option value={level} key={level}>
+                {level}
+              </option>
+            ))}
+          </select>
+          <button
+            id="levelMinUpButton"
+            className={styles.levelUpButton}
+            type="button"
+            onClick={this.onLevelButtonClick}
+          >
+            <VscTriangleRight />
+          </button>
+        </section>
 
         <label htmlFor="levelUpperSelect">to</label>
 
-        <button
-          id="levelMaxDownButton"
-          className={styles.levelDownButton}
-          type="button"
-          onClick={this.onLevelButtonClick}
-        >
-          <VscTriangleLeft />
-        </button>
-        <select
-          id="levelUpperSelect"
-          className={styles[`level${Math.floor((levelMax ?? 0) / 10)}x`]}
-          value={levelMax}
-          onChange={this.onSelectChange}
-        >
-          {LEVELS.map((level: number) => (
-            <option value={level} key={level}>
-              {level}
-            </option>
-          ))}
-        </select>
-        <button
-          id="levelMaxUpButton"
-          className={styles.levelUpButton}
-          type="button"
-          onClick={this.onLevelButtonClick}
-        >
-          <VscTriangleRight />
-        </button>
+        <section className={styles.flex}>
+          <button
+            id="levelMaxDownButton"
+            className={styles.levelDownButton}
+            type="button"
+            onClick={this.onLevelButtonClick}
+          >
+            <VscTriangleLeft />
+          </button>
+          <select
+            id="levelUpperSelect"
+            className={styles[`level${Math.floor((levelMax ?? 0) / 10)}x`]}
+            value={levelMax}
+            onChange={this.onSelectChange}
+          >
+            {LEVELS.map((level: number) => (
+              <option value={level} key={level}>
+                {level}
+              </option>
+            ))}
+          </select>
+          <button
+            id="levelMaxUpButton"
+            className={styles.levelUpButton}
+            type="button"
+            onClick={this.onLevelButtonClick}
+          >
+            <VscTriangleRight />
+          </button>
+        </section>
       </section>
     )
   }
@@ -801,66 +809,70 @@ export default class ControlPanel extends React.Component<
           <section className={cx(styles.control, styles.includeDiffs)}>
             <span>Include difficulties</span>
 
-            <input
-              id="includeAllDiffsInput"
-              type="radio"
-              checked={includeDiffsRadio === "all"}
-              onChange={this.onInputChange}
-            />
-            <label htmlFor="includeAllDiffsInput">All</label>
+            <section className={styles.flex}>
+              <input
+                id="includeAllDiffsInput"
+                type="radio"
+                checked={includeDiffsRadio === "all"}
+                onChange={this.onInputChange}
+              />
+              <label htmlFor="includeAllDiffsInput">All</label>
+            </section>
 
-            <input
-              id="includeChooseDiffsInput"
-              type="radio"
-              checked={includeDiffsRadio === "choose"}
-              onChange={this.onInputChange}
-            />
-            <label htmlFor="includeChooseDiffsInput">Choose</label>
-
-            {includeDiffsRadio === "choose" && (
-              <section className={styles.inner}>
-                <div className={styles.diffContainer}>
-                  <input
-                    id="includeEasyInput"
-                    type="checkbox"
-                    checked={includeDiffs!.includes("e")}
-                    onChange={this.onInputChange}
-                  />
-                  <label htmlFor="includeEasyInput">easy</label>
-                </div>
-
-                <div className={styles.diffContainer}>
-                  <input
-                    id="includeNormalInput"
-                    type="checkbox"
-                    checked={includeDiffs!.includes("n")}
-                    onChange={this.onInputChange}
-                  />
-                  <label htmlFor="includeNormalInput">normal</label>
-                </div>
-
-                <div className={styles.diffContainer}>
-                  <input
-                    id="includeHyperInput"
-                    type="checkbox"
-                    checked={includeDiffs!.includes("h")}
-                    onChange={this.onInputChange}
-                  />
-                  <label htmlFor="includeHyperInput">hyper</label>
-                </div>
-
-                <div className={styles.diffContainer}>
-                  <input
-                    id="includeExInput"
-                    type="checkbox"
-                    checked={includeDiffs!.includes("x")}
-                    onChange={this.onInputChange}
-                  />
-                  <label htmlFor="includeExInput">ex</label>
-                </div>
-              </section>
-            )}
+            <section className={styles.flex}>
+              <input
+                id="includeChooseDiffsInput"
+                type="radio"
+                checked={includeDiffsRadio === "choose"}
+                onChange={this.onInputChange}
+              />
+              <label htmlFor="includeChooseDiffsInput">Choose</label>
+            </section>
           </section>
+
+          {includeDiffsRadio === "choose" && (
+            <section className={cx(styles.control, styles.diffsChoose)}>
+              <div className={styles.diffContainer}>
+                <input
+                  id="includeEasyInput"
+                  type="checkbox"
+                  checked={includeDiffs!.includes("e")}
+                  onChange={this.onInputChange}
+                />
+                <label htmlFor="includeEasyInput">easy</label>
+              </div>
+
+              <div className={styles.diffContainer}>
+                <input
+                  id="includeNormalInput"
+                  type="checkbox"
+                  checked={includeDiffs!.includes("n")}
+                  onChange={this.onInputChange}
+                />
+                <label htmlFor="includeNormalInput">normal</label>
+              </div>
+
+              <div className={styles.diffContainer}>
+                <input
+                  id="includeHyperInput"
+                  type="checkbox"
+                  checked={includeDiffs!.includes("h")}
+                  onChange={this.onInputChange}
+                />
+                <label htmlFor="includeHyperInput">hyper</label>
+              </div>
+
+              <div className={styles.diffContainer}>
+                <input
+                  id="includeExInput"
+                  type="checkbox"
+                  checked={includeDiffs!.includes("x")}
+                  onChange={this.onInputChange}
+                />
+                <label htmlFor="includeExInput">ex</label>
+              </div>
+            </section>
+          )}
 
           <section className={styles.control}>
             <input
@@ -877,21 +889,25 @@ export default class ControlPanel extends React.Component<
           <section className={cx(styles.control, styles.includeFolders)}>
             <label>Include folders</label>
 
-            <input
-              id="includeAllFoldersInput"
-              type="radio"
-              checked={versionFoldersRadio === "all"}
-              onChange={this.onInputChange}
-            />
-            <label htmlFor="includeAllFoldersInput">All</label>
+            <section className={styles.flex}>
+              <input
+                id="includeAllFoldersInput"
+                type="radio"
+                checked={versionFoldersRadio === "all"}
+                onChange={this.onInputChange}
+              />
+              <label htmlFor="includeAllFoldersInput">All</label>
+            </section>
 
-            <input
-              id="includeChooseFoldersInput"
-              type="radio"
-              checked={versionFoldersRadio === "choose"}
-              onChange={this.onInputChange}
-            />
-            <label htmlFor="includeChooseFoldersInput">Choose</label>
+            <section className={styles.flex}>
+              <input
+                id="includeChooseFoldersInput"
+                type="radio"
+                checked={versionFoldersRadio === "choose"}
+                onChange={this.onInputChange}
+              />
+              <label htmlFor="includeChooseFoldersInput">Choose</label>
+            </section>
 
             {versionFoldersRadio === "choose" && (
               <button
@@ -902,30 +918,30 @@ export default class ControlPanel extends React.Component<
                 None
               </button>
             )}
-
-            {versionFoldersRadio === "choose" && (
-              <section className={styles.inner}>
-                {Array.from(Array(VERSION_FOLDERS.length).keys())
-                  .reverse()
-                  .map((folderNum) => (
-                    <section className={styles.folderSelect} key={folderNum}>
-                      <input
-                        id={`folder${folderNum}Input`}
-                        type="checkbox"
-                        checked={versionFolders![folderNum]}
-                        onChange={this.onInputChange}
-                      />
-                      <label htmlFor={`folder${folderNum}Input`}>
-                        <FolderPill
-                          songFolder={parseVersionFolder(String(folderNum))}
-                          style="normal"
-                        />
-                      </label>
-                    </section>
-                  ))}
-              </section>
-            )}
           </section>
+
+          {versionFoldersRadio === "choose" && (
+            <section className={cx(styles.control, styles.foldersChoose)}>
+              {Array.from(Array(VERSION_FOLDERS.length).keys())
+                .reverse()
+                .map((folderNum) => (
+                  <section className={styles.folderSelect} key={folderNum}>
+                    <input
+                      id={`folder${folderNum}Input`}
+                      type="checkbox"
+                      checked={versionFolders![folderNum]}
+                      onChange={this.onInputChange}
+                    />
+                    <label htmlFor={`folder${folderNum}Input`}>
+                      <FolderPill
+                        songFolder={parseVersionFolder(String(folderNum))}
+                        style="normal"
+                      />
+                    </label>
+                  </section>
+                ))}
+            </section>
+          )}
 
           <section className={styles.control}>
             <label htmlFor="holdNotesSelect">Long pop-kuns</label>
@@ -988,32 +1004,38 @@ export default class ControlPanel extends React.Component<
             <label htmlFor="displayGenreInput">Display genre</label>
           </section>
 
-          <section className={cx(styles.control, styles.chartAppearance)}>
+          <section className={styles.control}>
             <label>Chart appearance</label>
 
-            <input
-              id="displayStyleNormalInput"
-              type="radio"
-              checked={displayStyle === "normal"}
-              onChange={this.onInputChange}
-            />
-            <label htmlFor="displayStyleNormalInput">Normal</label>
+            <section className={styles.flex}>
+              <input
+                id="displayStyleNormalInput"
+                type="radio"
+                checked={displayStyle === "normal"}
+                onChange={this.onInputChange}
+              />
+              <label htmlFor="displayStyleNormalInput">Normal</label>
+            </section>
 
-            <input
-              id="displayStyleCompactInput"
-              type="radio"
-              checked={displayStyle === "compact"}
-              onChange={this.onInputChange}
-            />
-            <label htmlFor="displayStyleCompactInput">Compact</label>
-
-            {displayStyle === "compact" && (
-              <section className={styles.compactInfo}>
-                When compact, tap on charts to reveal their{" "}
-                {preferGenre ? "genre" : "title"}
-              </section>
-            )}
+            <section className={styles.flex}>
+              <input
+                id="displayStyleCompactInput"
+                type="radio"
+                checked={displayStyle === "compact"}
+                onChange={this.onInputChange}
+              />
+              <label htmlFor="displayStyleCompactInput">Compact</label>
+            </section>
           </section>
+
+          {displayStyle === "compact" && (
+            <section
+              className={cx(styles.control, styles.chartAppearanceCompactInfo)}
+            >
+              When compact, tap on charts to reveal their{" "}
+              {preferGenre ? "genre" : "title"}
+            </section>
+          )}
 
           {/* <section className={cx(styles.control, styles.customLink)}>
             <label htmlFor="customLink1UrlInput">Custom link</label>
