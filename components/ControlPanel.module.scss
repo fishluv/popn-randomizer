@@ -52,28 +52,28 @@ select {
     color: white;
   }
 
+  &.sranlevelveryeasy {
+    background: #f0f0f0;
+  }
+
   &.sranleveleasy {
-    background: $e-bright;
-    color: white;
+    background: $e-light;
   }
 
   &.sranlevelmid {
-    background: $n-bright;
-    color: white;
+    background: $n-light;
   }
 
   &.sranlevelhard {
-    background: $h-bright;
-    color: white;
+    background: $h-light;
   }
 
   &.sranlevelveryhard {
-    background: $ex-bright;
-    color: white;
+    background: $ex-light;
   }
 
   &.sranlevelmax {
-    background: $ex-x-dark;
+    background: $ex-bright;
     color: white;
   }
 
@@ -118,11 +118,6 @@ select {
 
   input[type="radio"] + label {
     margin-left: 0.25rem;
-  }
-
-  .levelDownButton,
-  .levelUpButton {
-    line-height: 0.8;
   }
 
   &.draw select,
@@ -190,11 +185,10 @@ select {
 
   .levelEmhButton {
     flex: 1;
-    line-height: 1.2;
     color: #777;
 
     &.easy {
-      background: $n-light;
+      background: $n-x-light;
 
       &.selected {
         background: $n-bright;
@@ -203,7 +197,7 @@ select {
     }
 
     &.medium {
-      background: $h-light;
+      background: $h-x-light;
 
       &.selected {
         background: $h-bright;
@@ -212,7 +206,7 @@ select {
     }
 
     &.hard {
-      background: $ex-light;
+      background: $ex-x-light;
 
       &.selected {
         background: $ex-bright;

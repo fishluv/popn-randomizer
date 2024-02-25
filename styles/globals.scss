@@ -3,5 +3,15 @@
 @import "~bootstrap/scss/bootstrap-reboot";
 
 button {
-  border-style: solid;
+  background: #ddd;
+  border-radius: 4px;
+  border-width: 0;
+  box-shadow: 2px 2px 2px #aaa;
+}
+
+select {
+  background: #ddd;
+  border-radius: 4px;
+  border-width: 0;
+  box-shadow: 2px 2px 2px #aaa;
 }
