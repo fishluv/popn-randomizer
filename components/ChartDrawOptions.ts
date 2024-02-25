@@ -34,8 +34,9 @@ export interface ChartDrawOptions {
   count?: number
   levelMin?: number
   levelMax?: number
-  ratingMin?: number
-  ratingMax?: number
+  levelEmhEnabled?: boolean
+  levelMinEmh?: "e" | "m" | "h"
+  levelMaxEmh?: "e" | "m" | "h"
   sranLevelMin?: SranLevel
   sranLevelMax?: SranLevel
   includeDiffsRadio?: "all" | "choose"

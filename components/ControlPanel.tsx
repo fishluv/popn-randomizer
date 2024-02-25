@@ -105,6 +105,9 @@ export default class ControlPanel extends React.Component<
         count,
         levelMin,
         levelMax,
+        levelEmhEnabled,
+        levelMinEmh,
+        levelMaxEmh,
         sranLevelMin,
         sranLevelMax,
         includeDiffsRadio,
@@ -135,6 +138,9 @@ export default class ControlPanel extends React.Component<
       count: count || 4,
       levelMin: levelMin || 30,
       levelMax: levelMax || 40,
+      levelEmhEnabled: levelEmhEnabled ?? false,
+      levelMinEmh: levelMinEmh ?? "e",
+      levelMaxEmh: levelMaxEmh ?? "h",
       sranLevelMin: sranLevelMin || "01a",
       sranLevelMax: sranLevelMax || "05",
       includeDiffsRadio: includeDiffsRadio ?? "all",
@@ -245,6 +251,9 @@ export default class ControlPanel extends React.Component<
       this.setState(newState) // For type safety, can't put this outside the if block.
     } else if (id === "showChartDetailsInput") {
       newState = { showChartDetails: checked }
+      this.setState(newState)
+    } else if (id === "isLevelEmhEnabledInput") {
+      newState = { levelEmhEnabled: checked }
       this.setState(newState)
     } else if (id === "isSranModeEnabledInput") {
       newState = { sranModeEnabled: checked }
@@ -386,6 +395,41 @@ export default class ControlPanel extends React.Component<
     this.props.onChange(newState)
   }
 
+  onLevelEmhButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const { id } = event.currentTarget
+    let newState: {
+      levelMinEmh?: "e" | "m" | "h"
+      levelMaxEmh?: "e" | "m" | "h"
+    }
+
+    switch (id) {
+      case "levelMinEmhButtonE":
+        newState = { levelMinEmh: "e" }
+        break
+      case "levelMinEmhButtonM":
+        newState = { levelMinEmh: "m" }
+        break
+      case "levelMinEmhButtonH":
+        newState = { levelMinEmh: "h" }
+        break
+      case "levelMaxEmhButtonE":
+        newState = { levelMaxEmh: "e" }
+        break
+      case "levelMaxEmhButtonM":
+        newState = { levelMaxEmh: "m" }
+        break
+      case "levelMaxEmhButtonH":
+        newState = { levelMaxEmh: "h" }
+        break
+      default:
+        console.warn(`ControlPanel: Unknown id ${id}`)
+        return
+    }
+
+    this.setState(newState)
+    this.props.onChange(newState)
+  }
+
   onNoneVersionFoldersButtonClick = () => {
     const newState = {
       versionFolders: NONE_VERSION_FOLDERS.slice(),
@@ -400,6 +444,9 @@ export default class ControlPanel extends React.Component<
       count,
       levelMin,
       levelMax,
+      levelEmhEnabled,
+      levelMinEmh,
+      levelMaxEmh,
       sranModeEnabled,
       sranLevelMin,
       sranLevelMax,
@@ -418,8 +465,12 @@ export default class ControlPanel extends React.Component<
       querySegments.push(`srlv >= ${sranLevelMin}`)
       querySegments.push(`srlv <= ${sranLevelMax}`)
     } else {
-      querySegments.push(`lv >= ${levelMin}`)
-      querySegments.push(`lv <= ${levelMax}`)
+      querySegments.push(
+        `lv >= ${levelMin}${levelEmhEnabled ? levelMinEmh : ""}`,
+      )
+      querySegments.push(
+        `lv <= ${levelMax}${levelEmhEnabled ? levelMaxEmh : ""}`,
+      )
     }
 
     if (includeDiffs!.split("").sort().join("") !== "ehnx") {
@@ -468,8 +519,16 @@ export default class ControlPanel extends React.Component<
   }
 
   getLevelControls = () => {
-    const { levelMin, levelMax, sranModeEnabled, sranLevelMin, sranLevelMax } =
-      this.state
+    const {
+      levelMin,
+      levelMax,
+      levelEmhEnabled,
+      levelMinEmh,
+      levelMaxEmh,
+      sranModeEnabled,
+      sranLevelMin,
+      sranLevelMax,
+    } = this.state
 
     if (sranModeEnabled) {
       return (
@@ -547,68 +606,154 @@ export default class ControlPanel extends React.Component<
       <section className={cx(styles.control, styles.level)}>
         <label htmlFor="levelLowerSelect">Level</label>
 
-        <section className={styles.flex}>
-          <button
-            id="levelMinDownButton"
-            className={styles.levelDownButton}
-            type="button"
-            onClick={this.onLevelButtonClick}
-          >
-            <VscTriangleLeft />
-          </button>
-          <select
-            id="levelLowerSelect"
-            className={styles[`level${Math.floor((levelMin ?? 0) / 10)}x`]}
-            value={levelMin}
-            onChange={this.onSelectChange}
-          >
-            {LEVELS.map((level: number) => (
-              <option value={level} key={level}>
-                {level}
-              </option>
-            ))}
-          </select>
-          <button
-            id="levelMinUpButton"
-            className={styles.levelUpButton}
-            type="button"
-            onClick={this.onLevelButtonClick}
-          >
-            <VscTriangleRight />
-          </button>
+        <section>
+          <section className={styles.flex}>
+            <button
+              id="levelMinDownButton"
+              className={styles.levelDownButton}
+              type="button"
+              onClick={this.onLevelButtonClick}
+            >
+              <VscTriangleLeft />
+            </button>
+            <select
+              id="levelLowerSelect"
+              className={styles[`level${Math.floor((levelMin ?? 0) / 10)}x`]}
+              value={levelMin}
+              onChange={this.onSelectChange}
+            >
+              {LEVELS.map((level: number) => (
+                <option value={level} key={level}>
+                  {level}
+                </option>
+              ))}
+            </select>
+            <button
+              id="levelMinUpButton"
+              className={styles.levelUpButton}
+              type="button"
+              onClick={this.onLevelButtonClick}
+            >
+              <VscTriangleRight />
+            </button>
+          </section>
+
+          {levelEmhEnabled && (
+            <section className={styles.chooseLevelEmh}>
+              <button
+                id="levelMinEmhButtonE"
+                className={cx(
+                  styles.levelEmhButton,
+                  styles.easy,
+                  levelMinEmh === "e" ? styles.selected : "",
+                )}
+                type="button"
+                onClick={this.onLevelEmhButtonClick}
+              >
+                e
+              </button>
+              <button
+                id="levelMinEmhButtonM"
+                className={cx(
+                  styles.levelEmhButton,
+                  styles.medium,
+                  levelMinEmh === "m" ? styles.selected : "",
+                )}
+                type="button"
+                onClick={this.onLevelEmhButtonClick}
+              >
+                m
+              </button>
+              <button
+                id="levelMinEmhButtonH"
+                className={cx(
+                  styles.levelEmhButton,
+                  styles.hard,
+                  levelMinEmh === "h" ? styles.selected : "",
+                )}
+                type="button"
+                onClick={this.onLevelEmhButtonClick}
+              >
+                h
+              </button>
+            </section>
+          )}
         </section>
 
         <label htmlFor="levelUpperSelect">to</label>
 
-        <section className={styles.flex}>
-          <button
-            id="levelMaxDownButton"
-            className={styles.levelDownButton}
-            type="button"
-            onClick={this.onLevelButtonClick}
-          >
-            <VscTriangleLeft />
-          </button>
-          <select
-            id="levelUpperSelect"
-            className={styles[`level${Math.floor((levelMax ?? 0) / 10)}x`]}
-            value={levelMax}
-            onChange={this.onSelectChange}
-          >
-            {LEVELS.map((level: number) => (
-              <option value={level} key={level}>
-                {level}
-              </option>
-            ))}
-          </select>
-          <button
-            id="levelMaxUpButton"
-            className={styles.levelUpButton}
-            type="button"
-            onClick={this.onLevelButtonClick}
-          >
-            <VscTriangleRight />
-          </button>
+        <section>
+          <section className={styles.flex}>
+            <button
+              id="levelMaxDownButton"
+              className={styles.levelDownButton}
+              type="button"
+              onClick={this.onLevelButtonClick}
+            >
+              <VscTriangleLeft />
+            </button>
+            <select
+              id="levelUpperSelect"
+              className={styles[`level${Math.floor((levelMax ?? 0) / 10)}x`]}
+              value={levelMax}
+              onChange={this.onSelectChange}
+            >
+              {LEVELS.map((level: number) => (
+                <option value={level} key={level}>
+                  {level}
+                </option>
+              ))}
+            </select>
+            <button
+              id="levelMaxUpButton"
+              className={styles.levelUpButton}
+              type="button"
+              onClick={this.onLevelButtonClick}
+            >
+              <VscTriangleRight />
+            </button>
+          </section>
+
+          {levelEmhEnabled && (
+            <section className={styles.chooseLevelEmh}>
+              <button
+                id="levelMaxEmhButtonE"
+                className={cx(
+                  styles.levelEmhButton,
+                  styles.easy,
+                  levelMaxEmh === "e" ? styles.selected : "",
+                )}
+                type="button"
+                onClick={this.onLevelEmhButtonClick}
+              >
+                e
+              </button>
+              <button
+                id="levelMaxEmhButtonM"
+                className={cx(
+                  styles.levelEmhButton,
+                  styles.medium,
+                  levelMaxEmh === "m" ? styles.selected : "",
+                )}
+                type="button"
+                onClick={this.onLevelEmhButtonClick}
+              >
+                m
+              </button>
+              <button
+                id="levelMaxEmhButtonH"
+                className={cx(
+                  styles.levelEmhButton,
+                  styles.hard,
+                  levelMaxEmh === "h" ? styles.selected : "",
+                )}
+                type="button"
+                onClick={this.onLevelEmhButtonClick}
+              >
+                h
+              </button>
+            </section>
+          )}
         </section>
       </section>
     )
@@ -619,6 +764,9 @@ export default class ControlPanel extends React.Component<
       count,
       levelMin,
       levelMax,
+      levelEmhEnabled,
+      levelMinEmh,
+      levelMaxEmh,
       sranModeEnabled,
       sranLevelMin,
       sranLevelMax,
@@ -633,10 +781,23 @@ export default class ControlPanel extends React.Component<
       )}~${normSranLevel(sranLevelMax!)}`
     }
 
-    if (levelMin === levelMax) {
-      return `${count} songs, lv ${levelMin}`
+    if (levelEmhEnabled) {
+      if (levelMin === levelMax) {
+        if (levelMinEmh === levelMaxEmh) {
+          return `${count} songs, lv ${levelMin}[${levelMinEmh}]`
+        } else {
+          return `${count} songs, lv ${levelMin}[${levelMinEmh}~${levelMaxEmh}]`
+        }
+      } else {
+        return `${count} songs, lv ${levelMin}[${levelMinEmh}]~${levelMax}[${levelMaxEmh}]`
+      }
+    } else {
+      if (levelMin === levelMax) {
+        return `${count} songs, lv ${levelMin}`
+      } else {
+        return `${count} songs, lv ${levelMin}~${levelMax}`
+      }
     }
-    return `${count} songs, lv ${levelMin}~${levelMax}`
   }
 
   toggleCollapsed = () => {
@@ -668,6 +829,9 @@ export default class ControlPanel extends React.Component<
         count: 4,
         levelMin: 30,
         levelMax: 40,
+        levelEmhEnabled: false,
+        levelMinEmh: "e",
+        levelMaxEmh: "h",
         sranLevelMin: "01a",
         sranLevelMax: "05",
         includeDiffsRadio: "all",
@@ -693,6 +857,7 @@ export default class ControlPanel extends React.Component<
     const { extraClass } = this.props
     const {
       count,
+      levelEmhEnabled,
       includeDiffsRadio,
       includeDiffs,
       hardestDiff,
@@ -795,6 +960,18 @@ export default class ControlPanel extends React.Component<
           <h5 className={styles.header}>Draw options</h5>
 
           {this.getLevelControls()}
+
+          <section className={styles.control}>
+            <input
+              id="isLevelEmhEnabledInput"
+              type="checkbox"
+              checked={levelEmhEnabled}
+              onChange={this.onInputChange}
+            />
+            <label htmlFor="isLevelEmhEnabledInput">
+              Enable filtering by easy/medium/hard
+            </label>
+          </section>
 
           <section className={styles.control}>
             <input

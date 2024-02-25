@@ -119,6 +119,9 @@ export default class RandomizerApp extends React.Component<
     setStorageItemIfNull("count", 5)
     setStorageItemIfNull("levelMin", 30)
     setStorageItemIfNull("levelMax", 40)
+    setStorageItemIfNull("levelEmhEnabled", false)
+    setStorageItemIfNull("levelMinEmh", "e")
+    setStorageItemIfNull("levelMaxEmh", "h")
     setStorageItemIfNull("sranLevelMin", "01a")
     setStorageItemIfNull("sranLevelMax", "05")
     setStorageItemIfNull("includeDiffsRadio", "all")
@@ -164,6 +167,9 @@ export default class RandomizerApp extends React.Component<
         count: getStorageNumber("count"),
         levelMin: getStorageNumber("levelMin"),
         levelMax: getStorageNumber("levelMax"),
+        levelEmhEnabled: getStorageBoolean("levelEmhEnabled"),
+        levelMinEmh: getStorageString("levelMinEmh") as "e" | "m" | "h",
+        levelMaxEmh: getStorageString("levelMaxEmh") as "e" | "m" | "h",
         sranLevelMin: parseSranLevel(getStorageString("sranLevelMin", "01a")),
         sranLevelMax: parseSranLevel(getStorageString("sranLevelMax", "05")),
         includeDiffsRadio: getStorageString("includeDiffsRadio", "all") as

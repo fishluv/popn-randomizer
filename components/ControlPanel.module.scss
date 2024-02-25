@@ -185,6 +185,43 @@ select {
   }
 }
 
+.chooseLevelEmh {
+  display: flex;
+
+  .levelEmhButton {
+    flex: 1;
+    line-height: 1.2;
+    color: #777;
+
+    &.easy {
+      background: $n-light;
+
+      &.selected {
+        background: $n-bright;
+        color: white;
+      }
+    }
+
+    &.medium {
+      background: $h-light;
+
+      &.selected {
+        background: $h-bright;
+        color: white;
+      }
+    }
+
+    &.hard {
+      background: $ex-light;
+
+      &.selected {
+        background: $ex-bright;
+        color: white;
+      }
+    }
+  }
+}
+
 h5.header {
   margin-top: 1rem;
 }
