@@ -1,6 +1,6 @@
 import React from "react"
 import { ComponentStory, ComponentMeta } from "@storybook/react"
-import { Chart, Unilab } from "popn-db-js"
+import { Chart, Unilab1218 } from "popn-db-js"
 
 import ChartCard from "../components/ChartCard"
 
@@ -35,26 +35,26 @@ function templateFor(chart: Chart) {
   return template
 }
 
-const [absoluteEx] = Unilab.findCharts("300ex")
+const [absoluteEx] = Unilab1218.findCharts("300ex")
 export const PreGenre = templateFor(absoluteEx!)
 
-const [tripleCounterEx] = Unilab.findCharts("1549ex")
+const [tripleCounterEx] = Unilab1218.findCharts("1549ex")
 export const PostGenre = templateFor(tripleCounterEx!)
 
-const [zankokuEx] = Unilab.findCharts("539ex")
+const [zankokuEx] = Unilab1218.findCharts("539ex")
 export const KanjiSongwheelTitleAndGenre = templateFor(zankokuEx!)
 
-const [uraBaliEx] = Unilab.findCharts("1770ex")
+const [uraBaliEx] = Unilab1218.findCharts("1770ex")
 export const Ura = templateFor(uraBaliEx!)
 
-const [cowboyUpperEx] = Unilab.findCharts("1746ex")
+const [cowboyUpperEx] = Unilab1218.findCharts("1746ex")
 export const UpperDifferentTitleAndGenre = templateFor(cowboyUpperEx!)
 
-const [nostosUpperEx] = Unilab.findCharts("1815ex")
+const [nostosUpperEx] = Unilab1218.findCharts("1815ex")
 export const UpperSameTitleAndGenre = templateFor(nostosUpperEx!)
 
-const [aprilFoolUpperEx] = Unilab.findCharts("1840ex")
+const [aprilFoolUpperEx] = Unilab1218.findCharts("1840ex")
 export const KonamiForgotUpper = templateFor(aprilFoolUpperEx!)
 
-const [eggMetalEx] = Unilab.findCharts("1407ex")
+const [eggMetalEx] = Unilab1218.findCharts("1407ex")
 export const ReallyLongTitle = templateFor(eggMetalEx!)

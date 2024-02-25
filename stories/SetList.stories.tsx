@@ -1,6 +1,6 @@
 import React from "react"
 import { ComponentStory, ComponentMeta } from "@storybook/react"
-import { Chart, Unilab } from "popn-db-js"
+import { Chart, Unilab1218 } from "popn-db-js"
 import SetList from "../components/SetList"
 
 export default {
@@ -31,7 +31,7 @@ function templateFor(chartDataSets: Chart[][]) {
   return template
 }
 
-const absolute = Unilab.findCharts("0e", "0n", "0h", "0ex")
+const absolute = Unilab1218.findCharts("0e", "0n", "0h", "0ex")
 
 export const MoreThanOne = templateFor([
   absolute as Chart[],

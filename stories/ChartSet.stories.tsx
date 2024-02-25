@@ -1,6 +1,6 @@
 import React from "react"
 import { ComponentStory, ComponentMeta } from "@storybook/react"
-import { Chart, Unilab } from "popn-db-js"
+import { Chart, Unilab1218 } from "popn-db-js"
 import ChartSet from "../components/ChartSet"
 
 export default {
@@ -35,7 +35,7 @@ function templateFor(charts: Chart[]) {
   return template
 }
 
-const absolute = Unilab.findCharts("300n", "300h", "300ex")
+const absolute = Unilab1218.findCharts("300n", "300h", "300ex")
 
 export const NonEmpty = templateFor(absolute as Chart[])
 export const Empty = templateFor([])
