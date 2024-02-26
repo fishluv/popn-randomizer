@@ -993,6 +993,21 @@ export default class ControlPanel extends React.Component<
 
           <h5 className={styles.header}>Draw options</h5>
 
+          <section className={cx(styles.control, styles.draw)}>
+            <label htmlFor="drawCountSelect">Draw</label>
+            <select
+              id="drawCountSelect"
+              value={count}
+              onChange={this.onSelectChange}
+            >
+              {DRAW_COUNTS.map((count) => (
+                <option value={count} key={count}>
+                  {count}
+                </option>
+              ))}
+            </select>
+          </section>
+
           {this.getLevelControls()}
 
           <section className={styles.control}>
