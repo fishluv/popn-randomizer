@@ -1044,7 +1044,7 @@ export default class ControlPanel extends React.Component<
               margin: "0 auto",
               maxWidth: "400px",
               padding: "1rem",
-              position: "relative",
+              position: "absolute",
             },
           }}
         >
