@@ -109,6 +109,11 @@ select {
     }
   }
 
+  &.hardestDiff {
+    margin-top: -0.5rem;
+    margin-left: 1rem;
+  }
+
   &.includeFolders {
     .noneFoldersButton {
       line-height: 1.125rem;

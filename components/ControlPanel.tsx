@@ -291,6 +291,7 @@ export default class ControlPanel extends React.Component<
       newState = {
         includeDiffsRadio: "all" as const,
         includeDiffs: "enhx",
+        hardestDiff: "include" as const,
       }
       this.setState(newState)
     } else if (id === "includeChooseDiffsInput" && checked) {
@@ -1126,60 +1127,64 @@ export default class ControlPanel extends React.Component<
               <label htmlFor="includeChooseDiffsInput">Choose</label>
             </section>
           </section>
+
           {includeDiffsRadio === "choose" && (
-            <section className={cx(styles.control, styles.diffsChoose)}>
-              <div className={styles.diffContainer}>
-                <input
-                  id="includeEasyInput"
-                  type="checkbox"
-                  checked={includeDiffs!.includes("e")}
-                  onChange={this.onInputChange}
-                />
-                <label htmlFor="includeEasyInput">easy</label>
-              </div>
+            <>
+              <section className={cx(styles.control, styles.diffsChoose)}>
+                <div className={styles.diffContainer}>
+                  <input
+                    id="includeEasyInput"
+                    type="checkbox"
+                    checked={includeDiffs!.includes("e")}
+                    onChange={this.onInputChange}
+                  />
+                  <label htmlFor="includeEasyInput">easy</label>
+                </div>
 
-              <div className={styles.diffContainer}>
-                <input
-                  id="includeNormalInput"
-                  type="checkbox"
-                  checked={includeDiffs!.includes("n")}
-                  onChange={this.onInputChange}
-                />
-                <label htmlFor="includeNormalInput">normal</label>
-              </div>
+                <div className={styles.diffContainer}>
+                  <input
+                    id="includeNormalInput"
+                    type="checkbox"
+                    checked={includeDiffs!.includes("n")}
+                    onChange={this.onInputChange}
+                  />
+                  <label htmlFor="includeNormalInput">normal</label>
+                </div>
 
-              <div className={styles.diffContainer}>
-                <input
-                  id="includeHyperInput"
-                  type="checkbox"
-                  checked={includeDiffs!.includes("h")}
-                  onChange={this.onInputChange}
-                />
-                <label htmlFor="includeHyperInput">hyper</label>
-              </div>
+                <div className={styles.diffContainer}>
+                  <input
+                    id="includeHyperInput"
+                    type="checkbox"
+                    checked={includeDiffs!.includes("h")}
+                    onChange={this.onInputChange}
+                  />
+                  <label htmlFor="includeHyperInput">hyper</label>
+                </div>
 
-              <div className={styles.diffContainer}>
+                <div className={styles.diffContainer}>
+                  <input
+                    id="includeExInput"
+                    type="checkbox"
+                    checked={includeDiffs!.includes("x")}
+                    onChange={this.onInputChange}
+                  />
+                  <label htmlFor="includeExInput">ex</label>
+                </div>
+              </section>
+              <section className={cx(styles.control, styles.hardestDiff)}>
                 <input
-                  id="includeExInput"
+                  id="onlyIncludeHardestInput"
                   type="checkbox"
-                  checked={includeDiffs!.includes("x")}
+                  checked={hardestDiff === "only"}
                   onChange={this.onInputChange}
                 />
-                <label htmlFor="includeExInput">ex</label>
-              </div>
-            </section>
+                <label htmlFor="onlyIncludeHardestInput">
+                  Only song&apos;s hardest
+                </label>
+              </section>
+            </>
           )}
-          <section className={styles.control}>
-            <input
-              id="onlyIncludeHardestInput"
-              type="checkbox"
-              checked={hardestDiff === "only"}
-              onChange={this.onInputChange}
-            />
-            <label htmlFor="onlyIncludeHardestInput">
-              Only include song&apos;s hardest difficulty
-            </label>
-          </section>
+
           <section className={cx(styles.control, styles.includeFolders)}>
             <label>Include folders</label>
 
