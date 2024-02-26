@@ -958,14 +958,6 @@ export default class ControlPanel extends React.Component<
 
           <section className={styles.right}>
             <button
-              className={cx(styles.iconButton, styles.clearButton)}
-              type="button"
-              onClick={this.onClearClick}
-            >
-              <FaTrash />
-            </button>
-
-            <button
               className={styles.iconButton}
               type="button"
               onClick={this.toggleCollapsed}
