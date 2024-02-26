@@ -38,6 +38,26 @@ function range(start: number, stop: number) {
   return [...Array.from(Array(size).keys())].map((i) => i + realStart)
 }
 
+function emhToOrd(emh: "e" | "m" | "h") {
+  return ["e", "m", "h"].indexOf(emh)
+}
+
+function emhFromOrd(ord: 0 | 1 | 2): "e" | "m" | "h" {
+  return ["e", "m", "h"][ord] as "e" | "m" | "h"
+}
+
+function minEmh(...emhs: ("e" | "m" | "h")[]) {
+  const ords = emhs.map(emhToOrd) as (0 | 1 | 2)[]
+  const minOrd = Math.min(...ords) as 0 | 1 | 2
+  return emhFromOrd(minOrd)
+}
+
+function maxEmh(...emhs: ("e" | "m" | "h")[]) {
+  const ords = emhs.map(emhToOrd) as (0 | 1 | 2)[]
+  const maxOrd = Math.max(...ords) as 0 | 1 | 2
+  return emhFromOrd(maxOrd)
+}
+
 function normSranLevel(sranLv: string): string {
   return sranLv.replace("a", "-").replace("b", "+").replace(/^0+/, "")
 }
@@ -166,21 +186,31 @@ export default class ControlPanel extends React.Component<
     }
   }
 
-  getNewStateForNewLevelMin = (newMin: number) => {
-    const { levelMax: prevMax } = this.state
+  getNewStateForNewLevelMin = (newMin: number, newMinEmh: "e" | "m" | "h") => {
+    const { levelMax: prevMax, levelMaxEmh: prevMaxEmh } = this.state
+    const newMax = Math.max(prevMax!, newMin)
+    const newMaxEmh =
+      newMin === newMax ? maxEmh(prevMaxEmh!, newMinEmh) : prevMaxEmh
 
     return {
       levelMin: newMin,
-      levelMax: Math.max(prevMax!, newMin),
+      levelMax: newMax,
+      levelMinEmh: newMinEmh,
+      levelMaxEmh: newMaxEmh,
     }
   }
 
-  getNewStateForNewLevelMax = (newMax: number) => {
-    const { levelMin: prevMin } = this.state
+  getNewStateForNewLevelMax = (newMax: number, newMaxEmh: "e" | "m" | "h") => {
+    const { levelMin: prevMin, levelMinEmh: prevMinEmh } = this.state
+    const newMin = Math.min(prevMin!, newMax)
+    const newMinEmh =
+      newMin === newMax ? minEmh(prevMinEmh!, newMaxEmh) : prevMinEmh
 
     return {
+      levelMin: newMin,
       levelMax: newMax,
-      levelMin: Math.min(prevMin!, newMax),
+      levelMinEmh: newMinEmh,
+      levelMaxEmh: newMaxEmh,
     }
   }
 
@@ -205,6 +235,7 @@ export default class ControlPanel extends React.Component<
   }
 
   onSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const { levelMinEmh, levelMaxEmh } = this.state
     const { id, value } = event.target
     let newState
 
@@ -216,9 +247,9 @@ export default class ControlPanel extends React.Component<
         count: Number(value),
       }
     } else if (id === "levelLowerSelect") {
-      newState = this.getNewStateForNewLevelMin(Number(value))
+      newState = this.getNewStateForNewLevelMin(Number(value), levelMinEmh!)
     } else if (id === "levelUpperSelect") {
-      newState = this.getNewStateForNewLevelMax(Number(value))
+      newState = this.getNewStateForNewLevelMax(Number(value), levelMaxEmh!)
     } else if (id === "gameVersionSelect") {
       newState = {
         gameVersion: value,
@@ -355,6 +386,8 @@ export default class ControlPanel extends React.Component<
     const {
       levelMin: prevMin,
       levelMax: prevMax,
+      levelMinEmh: prevMinEmh,
+      levelMaxEmh: prevMaxEmh,
       sranLevelMin: prevSranMin,
       sranLevelMax: prevSranMax,
     } = this.state
@@ -364,16 +397,16 @@ export default class ControlPanel extends React.Component<
 
     if (id === "levelMinDownButton") {
       const newMin = Math.max(1, prevMin! - 1)
-      newState = this.getNewStateForNewLevelMin(newMin)
+      newState = this.getNewStateForNewLevelMin(newMin, prevMinEmh!)
     } else if (id === "levelMinUpButton") {
       const newMin = Math.min(50, prevMin! + 1)
-      newState = this.getNewStateForNewLevelMin(newMin)
+      newState = this.getNewStateForNewLevelMin(newMin, prevMinEmh!)
     } else if (id === "levelMaxDownButton") {
       const newMax = Math.max(1, prevMax! - 1)
-      newState = this.getNewStateForNewLevelMax(newMax)
+      newState = this.getNewStateForNewLevelMax(newMax, prevMaxEmh!)
     } else if (id === "levelMaxUpButton") {
       const newMax = Math.min(50, prevMax! + 1)
-      newState = this.getNewStateForNewLevelMax(newMax)
+      newState = this.getNewStateForNewLevelMax(newMax, prevMaxEmh!)
     } else if (id === "sranLevelMinDownButton") {
       const newSranMin = sranLevelMinusOne(prevSranMin!)
       newState = this.getNewStateForNewSranLevelMin(newSranMin)
@@ -396,6 +429,7 @@ export default class ControlPanel extends React.Component<
   }
 
   onLevelEmhButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const { levelMin: prevMin, levelMax: prevMax } = this.state
     const { id } = event.currentTarget
     let newState: {
       levelMinEmh?: "e" | "m" | "h"
@@ -404,22 +438,22 @@ export default class ControlPanel extends React.Component<
 
     switch (id) {
       case "levelMinEmhButtonE":
-        newState = { levelMinEmh: "e" }
+        newState = this.getNewStateForNewLevelMin(prevMin!, "e")
         break
       case "levelMinEmhButtonM":
-        newState = { levelMinEmh: "m" }
+        newState = this.getNewStateForNewLevelMin(prevMin!, "m")
         break
       case "levelMinEmhButtonH":
-        newState = { levelMinEmh: "h" }
+        newState = this.getNewStateForNewLevelMin(prevMin!, "h")
         break
       case "levelMaxEmhButtonE":
-        newState = { levelMaxEmh: "e" }
+        newState = this.getNewStateForNewLevelMax(prevMax!, "e")
         break
       case "levelMaxEmhButtonM":
-        newState = { levelMaxEmh: "m" }
+        newState = this.getNewStateForNewLevelMax(prevMax!, "m")
         break
       case "levelMaxEmhButtonH":
-        newState = { levelMaxEmh: "h" }
+        newState = this.getNewStateForNewLevelMax(prevMax!, "h")
         break
       default:
         console.warn(`ControlPanel: Unknown id ${id}`)
