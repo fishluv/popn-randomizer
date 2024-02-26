@@ -159,7 +159,7 @@ export default class RandomizerApp extends React.Component<
         showChartDetails: getStorageBoolean("showChartDetails"),
         displayStyle: parseChartDisplayStyle(getStorageString("displayStyle")),
         // Currently not configurable in the UI.
-        assetsUrl: "https://popn-assets.surge.sh",
+        assetsUrl: "https://popn-assets.pages.dev/assets",
         showLinks: false,
         customLink1Url: getStorageString("customLink1Url"),
       },

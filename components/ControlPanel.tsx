@@ -176,7 +176,7 @@ export default class ControlPanel extends React.Component<
       preferGenre: preferGenre ?? false,
       showChartDetails: showChartDetails ?? false,
       displayStyle: displayStyle ?? "normal",
-      assetsUrl: assetsUrl || "https://popn-assets.surge.sh",
+      assetsUrl: assetsUrl || "https://popn-assets.pages.dev/assets",
       showLinks: showLinks ?? false,
       customLink1Url: customLink1Url || "",
       // Control panel state
