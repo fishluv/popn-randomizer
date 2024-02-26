@@ -252,9 +252,9 @@ export default class RandomizerApp extends React.Component<
     } = this.state
 
     return (
-      <section className="App">
+      <section className={styles.App}>
         {isDoneLoading && (
-          <>
+          <section className={styles.body}>
             <ControlPanel
               extraClass={styles.controlPanel}
               initialDrawOptions={chartDrawOptions}
@@ -269,7 +269,7 @@ export default class RandomizerApp extends React.Component<
               chartDisplayOptions={chartDisplayOptions}
             />
             <Toaster position="bottom-center" />
-          </>
+          </section>
         )}
       </section>
     )

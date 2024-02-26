@@ -1036,7 +1036,16 @@ export default class ControlPanel extends React.Component<
           onRequestClose={this.closeMoreControls}
           style={{
             overlay: { zIndex: 10 },
-            content: { border: "none", inset: 0, padding: "1rem" },
+            content: {
+              background: "#fdfdfd",
+              border: "none",
+              boxShadow: "0 0 50px 50px #fdfdfd",
+              inset: "0",
+              margin: "0 auto",
+              maxWidth: "400px",
+              padding: "1rem",
+              position: "relative",
+            },
           }}
         >
           <section className={styles.topRow}>
