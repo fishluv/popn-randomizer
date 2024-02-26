@@ -4,6 +4,10 @@ import { ChartDisplayOptions } from "./ChartDisplay"
 import styles from "./ChartCard.module.scss"
 import { Chart } from "popn-db-js"
 import FolderPill from "./FolderPill"
+import { BsStopwatch } from "react-icons/bs"
+import { LiaDrumSolid } from "react-icons/lia"
+import { LuMountain } from "react-icons/lu"
+import { IoMusicalNotesOutline } from "react-icons/io5"
 
 function getSortChar(titleOrGenre: string, sortChar: string) {
   if (titleOrGenre.charAt(0).toLowerCase() !== sortChar.toLowerCase()) {
@@ -246,23 +250,23 @@ export default class ChartCard extends React.Component<
 
         <div className={cx(styles.details, diffStyle)}>
           <span className={styles.item}>
-            <span className={styles.emoji}>🥁</span>
+            <LiaDrumSolid size="1rem" />
             <span>{bpm || "?"}</span>
           </span>
 
           <span className={styles.item}>
-            <span className={styles.emoji}>⏱</span>
+            <BsStopwatch size="0.875rem" />
             <span>{this.formatDuration()}</span>
           </span>
 
           <span className={styles.item}>
-            <span className={styles.emoji}>🎶</span>
+            <IoMusicalNotesOutline size="0.875rem" />
             <span>{notes || "?"}</span>
             {hasHolds && <span className={styles.holdsPill}>L</span>}
           </span>
 
           <span className={styles.item}>
-            <span className={cx(styles.emoji, styles.mountain)}>⛰</span>
+            <LuMountain size="0.875rem" />
             <span>{this.formatRating()}</span>
           </span>
         </div>

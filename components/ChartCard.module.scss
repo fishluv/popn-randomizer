@@ -120,15 +120,12 @@
     justify-content: space-between;
 
     .item {
-      display: inline-block;
+      display: flex;
+      column-gap: 0.125rem;
+      align-items: center;
 
-      :not(:first-child) {
-        margin-left: 0.125rem;
-      }
-
-      .emoji.mountain {
-        position: relative;
-        top: -1.5px;
+      svg {
+        vertical-align: text-bottom;
       }
     }
   }
