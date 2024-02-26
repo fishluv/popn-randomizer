@@ -973,6 +973,13 @@ export default class ControlPanel extends React.Component<
             </label>
           </section>
 
+          {levelEmhEnabled && (
+            <section className={cx(styles.control, styles.info)}>
+              Only supported for charts level 29+ that have ratings on
+              popn.wiki.
+            </section>
+          )}
+
           <section className={styles.control}>
             <input
               id="isSranModeEnabledInput"
@@ -1206,9 +1213,7 @@ export default class ControlPanel extends React.Component<
           </section>
 
           {displayStyle === "compact" && (
-            <section
-              className={cx(styles.control, styles.chartAppearanceCompactInfo)}
-            >
+            <section className={cx(styles.control, styles.info)}>
               When compact, tap on charts to reveal their{" "}
               {preferGenre ? "genre" : "title"}
             </section>
