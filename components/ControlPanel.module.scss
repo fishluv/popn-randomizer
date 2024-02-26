@@ -13,6 +13,18 @@
 
     .summary {
       align-self: center;
+
+      .levelString {
+        padding: 0.125rem 0.25rem;
+      }
+
+      .sranLevelString {
+        padding: 0.125rem 0.25rem;
+      }
+
+      .emhString {
+        padding: 0.125rem 0.25rem;
+      }
     }
   }
 }
@@ -30,56 +42,6 @@
 }
 
 select {
-  &.level0x {
-    background: #f0f0f0;
-  }
-
-  &.level1x {
-    background: $e-light;
-  }
-
-  &.level2x {
-    background: $n-light;
-  }
-
-  &.level3x {
-    background: $h-light;
-  }
-
-  &.level4x {
-    background: $ex-light;
-  }
-
-  &.level5x {
-    background: $ex-bright;
-    color: white;
-  }
-
-  &.sranlevelveryeasy {
-    background: #f0f0f0;
-  }
-
-  &.sranleveleasy {
-    background: $e-light;
-  }
-
-  &.sranlevelmid {
-    background: $n-light;
-  }
-
-  &.sranlevelhard {
-    background: $h-light;
-  }
-
-  &.sranlevelveryhard {
-    background: $ex-light;
-  }
-
-  &.sranlevelmax {
-    background: $ex-bright;
-    color: white;
-  }
-
   &.unilab_1218 {
     background: #0091d0;
     color: white;
@@ -189,33 +151,83 @@ select {
   .levelEmhButton {
     flex: 1;
     color: #777;
+  }
+}
 
-    &.easy {
-      background: $n-x-light;
+.level0x {
+  background: #f0f0f0;
+}
 
-      &.selected {
-        background: $n-bright;
-        color: white;
-      }
-    }
+.level1x {
+  background: $e-light;
+}
 
-    &.medium {
-      background: $h-x-light;
+.level2x {
+  background: $n-light;
+}
 
-      &.selected {
-        background: $h-bright;
-        color: white;
-      }
-    }
+.level3x {
+  background: $h-light;
+}
 
-    &.hard {
-      background: $ex-x-light;
+.level4x {
+  background: $ex-light;
+}
 
-      &.selected {
-        background: $ex-bright;
-        color: white;
-      }
-    }
+.level5x {
+  background: $ex-bright;
+  color: white;
+}
+
+.sranlevelveryeasy {
+  background: #f0f0f0;
+}
+
+.sranleveleasy {
+  background: $e-light;
+}
+
+.sranlevelmid {
+  background: $n-light;
+}
+
+.sranlevelhard {
+  background: $h-light;
+}
+
+.sranlevelveryhard {
+  background: $ex-light;
+}
+
+.sranlevelmax {
+  background: $ex-bright;
+  color: white;
+}
+
+.easy {
+  background: $n-x-light;
+
+  &.selected {
+    background: $n-bright;
+    color: white;
+  }
+}
+
+.med {
+  background: $h-x-light;
+
+  &.selected {
+    background: $h-bright;
+    color: white;
+  }
+}
+
+.hard {
+  background: $ex-x-light;
+
+  &.selected {
+    background: $ex-bright;
+    color: white;
   }
 }
 

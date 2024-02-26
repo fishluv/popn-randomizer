@@ -689,7 +689,7 @@ export default class ControlPanel extends React.Component<
                   id="levelMinEmhButtonM"
                   className={cx(
                     styles.levelEmhButton,
-                    styles.medium,
+                    styles.med,
                     levelMinEmh === "m" ? styles.selected : "",
                   )}
                   type="button"
@@ -765,7 +765,7 @@ export default class ControlPanel extends React.Component<
                   id="levelMaxEmhButtonM"
                   className={cx(
                     styles.levelEmhButton,
-                    styles.medium,
+                    styles.med,
                     levelMaxEmh === "m" ? styles.selected : "",
                   )}
                   type="button"
@@ -811,7 +811,46 @@ export default class ControlPanel extends React.Component<
     )
   }
 
-  getSummaryString = () => {
+  getLevel = (level: number) => {
+    return (
+      <span
+        className={cx(
+          styles.levelString,
+          styles[`level${Math.floor(level / 10)}x`],
+        )}
+      >
+        {level}
+      </span>
+    )
+  }
+
+  getSranLevel = (sranLevel: SranLevel) => {
+    return (
+      <span
+        className={cx(
+          styles.sranLevelString,
+          styles[`sranlevel${sranLevelCategory(sranLevel)}`],
+        )}
+      >
+        {normSranLevel(sranLevel)}
+      </span>
+    )
+  }
+
+  getEmh = (emh: "e" | "m" | "h") => {
+    const longName = {
+      e: "easy",
+      m: "med",
+      h: "hard",
+    }
+    return (
+      <span className={cx(styles.emhString, styles[longName[emh]])}>
+        {longName[emh]}
+      </span>
+    )
+  }
+
+  getSummaryContents = () => {
     const {
       count,
       levelMin,
@@ -826,28 +865,80 @@ export default class ControlPanel extends React.Component<
 
     if (sranModeEnabled) {
       if (sranLevelMin === sranLevelMax) {
-        return `${count} songs, sran lv ${normSranLevel(sranLevelMin!)}`
+        return (
+          <>
+            {count}
+            {" songs, sran "}
+            {this.getSranLevel(sranLevelMin!)}
+          </>
+        )
       }
-      return `${count} songs, sran lv ${normSranLevel(
-        sranLevelMin!,
-      )}~${normSranLevel(sranLevelMax!)}`
+      return (
+        <>
+          {count}
+          {" songs, sran "}
+          {this.getSranLevel(sranLevelMin!)}
+          {" ~ "}
+          {this.getSranLevel(sranLevelMax!)}
+        </>
+      )
     }
 
     if (levelEmhEnabled) {
       if (levelMin === levelMax) {
         if (levelMinEmh === levelMaxEmh) {
-          return `${count} songs, lv ${levelMin}[${levelMinEmh}]`
+          return (
+            <>
+              {count}
+              {" songs, "}
+              {this.getLevel(levelMin!)}
+              {this.getEmh(levelMinEmh!)}
+            </>
+          )
         } else {
-          return `${count} songs, lv ${levelMin}[${levelMinEmh}~${levelMaxEmh}]`
+          return (
+            <>
+              {count}
+              {" songs, "}
+              {this.getLevel(levelMin!)}
+              {this.getEmh(levelMinEmh!)}
+              {"~"}
+              {this.getEmh(levelMaxEmh!)}
+            </>
+          )
         }
       } else {
-        return `${count} songs, lv ${levelMin}[${levelMinEmh}]~${levelMax}[${levelMaxEmh}]`
+        return (
+          <>
+            {count}
+            {" songs, "}
+            {this.getLevel(levelMin!)}
+            {this.getEmh(levelMinEmh!)}
+            {" ~ "}
+            {this.getLevel(levelMax!)}
+            {this.getEmh(levelMaxEmh!)}
+          </>
+        )
       }
     } else {
       if (levelMin === levelMax) {
-        return `${count} songs, lv ${levelMin}`
+        return (
+          <>
+            {count}
+            {" songs, "}
+            {this.getLevel(levelMin!)}
+          </>
+        )
       } else {
-        return `${count} songs, lv ${levelMin}~${levelMax}`
+        return (
+          <>
+            {count}
+            {" songs "}
+            {this.getLevel(levelMin!)}
+            {" ~ "}
+            {this.getLevel(levelMax!)}
+          </>
+        )
       }
     }
   }
@@ -925,7 +1016,7 @@ export default class ControlPanel extends React.Component<
               Draw
             </button>
 
-            <span className={styles.summary}>{this.getSummaryString()}</span>
+            <span className={styles.summary}>{this.getSummaryContents()}</span>
           </section>
 
           <section className={styles.right}>
