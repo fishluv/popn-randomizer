@@ -20,7 +20,7 @@ import {
 } from "./ChartDrawOptions"
 import { parseIncludeOption, parseIncludeOptionSafe } from "./parse"
 import FolderPill from "./FolderPill"
-import { FaChevronDown, FaChevronUp, FaTrash } from "react-icons/fa"
+import { FaTrash } from "react-icons/fa"
 import { RiSettings3Fill } from "react-icons/ri"
 import { VscTriangleLeft, VscTriangleRight } from "react-icons/vsc"
 
@@ -97,7 +97,6 @@ const DRAW_COUNT_MAX = 10
 const DRAW_COUNTS = range(DRAW_COUNT_MIN, DRAW_COUNT_MAX + 1)
 
 interface ControlPanelOptions {
-  isCollapsed: boolean
   isMoreControlsOpen: boolean
 }
 
@@ -150,7 +149,6 @@ export default class ControlPanel extends React.Component<
         showLinks, // Currently not configurable in UI.
         customLink1Url,
       },
-      isCollapsed,
       isMoreControlsOpen,
     } = props
 
@@ -182,7 +180,6 @@ export default class ControlPanel extends React.Component<
       showLinks: showLinks ?? false,
       customLink1Url: customLink1Url || "",
       // Control panel state
-      isCollapsed: isCollapsed ?? false,
       isMoreControlsOpen: isMoreControlsOpen ?? false,
     }
   }
@@ -835,16 +832,6 @@ export default class ControlPanel extends React.Component<
     }
   }
 
-  toggleCollapsed = () => {
-    this.setState((prevState) => {
-      const newValue = !prevState.isCollapsed
-      localStorage.setItem("isCollapsed", newValue.toString())
-      return {
-        isCollapsed: newValue,
-      }
-    })
-  }
-
   openMoreControls = () => {
     this.setState({
       isMoreControlsOpen: true,
@@ -906,7 +893,6 @@ export default class ControlPanel extends React.Component<
       preferGenre,
       displayStyle,
       // customLink1Url,
-      isCollapsed,
       isMoreControlsOpen,
     } = this.state
 
@@ -914,55 +900,22 @@ export default class ControlPanel extends React.Component<
 
     return (
       <section className={rootClassName}>
-        {!isCollapsed && (
-          <>
-            <section className={cx(styles.control, styles.draw)}>
-              <label htmlFor="drawCountSelect">Draw</label>
-              <select
-                id="drawCountSelect"
-                value={count}
-                onChange={this.onSelectChange}
-              >
-                {DRAW_COUNTS.map((count) => (
-                  <option value={count} key={count}>
-                    {count}
-                  </option>
-                ))}
-              </select>
-            </section>
-
-            {this.getLevelControls()}
-          </>
-        )}
-
         <section className={styles.buttonsAndSummary}>
           <section className={styles.left}>
             <button type="button" onClick={this.onDrawClick}>
               Draw
             </button>
 
-            {!isCollapsed && (
-              <button
-                type="button"
-                className={styles.iconButton}
-                onClick={this.openMoreControls}
-              >
-                <RiSettings3Fill />
-              </button>
-            )}
-
-            {isCollapsed && (
-              <span className={styles.summary}>{this.getSummaryString()}</span>
-            )}
+            <span className={styles.summary}>{this.getSummaryString()}</span>
           </section>
 
           <section className={styles.right}>
             <button
-              className={styles.iconButton}
               type="button"
-              onClick={this.toggleCollapsed}
+              className={styles.iconButton}
+              onClick={this.openMoreControls}
             >
-              {isCollapsed ? <FaChevronDown /> : <FaChevronUp />}
+              <RiSettings3Fill />
             </button>
           </section>
         </section>
@@ -1274,9 +1227,6 @@ export default class ControlPanel extends React.Component<
             />
           </section> */}
         </ReactModal>
-
-        {/* Show when I come up with UI */}
-        {/* {!isCollapsed && <About extraClass={styles.aboutIcon} />} */}
       </section>
     )
   }

@@ -24,8 +24,5 @@ const Template: ComponentStory<typeof ControlPanel> = (props) => (
 
 export const Default = Template.bind({})
 
-export const Collapsed = Template.bind({})
-Collapsed.args = { isCollapsed: true }
-
 export const MoreControlsOpen = Template.bind({})
 MoreControlsOpen.args = { isMoreControlsOpen: true }
