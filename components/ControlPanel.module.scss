@@ -153,6 +153,32 @@ select {
   }
 }
 
+.github {
+  // Temp
+  visibility: hidden;
+
+  margin-top: 2rem;
+  display: flex;
+  justify-content: right;
+  align-items: flex-end;
+  column-gap: 0.25rem;
+  line-height: 1;
+
+  .sha {
+    color: #888;
+    font-size: 0.5625rem;
+    line-height: 1;
+  }
+
+  a {
+    color: #555;
+    // https://stackoverflow.com/a/48690899
+    // box-shadow: inset 0 -1px 0 0 #222;
+    // text-decoration: none;
+    font-size: 1.25rem;
+  }
+}
+
 .chooseLevelEmh {
   display: flex;
 

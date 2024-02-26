@@ -20,6 +20,7 @@ import {
 } from "./ChartDrawOptions"
 import { parseIncludeOption, parseIncludeOptionSafe } from "./parse"
 import FolderPill from "./FolderPill"
+import { BsGithub } from "react-icons/bs"
 import { FaTrash } from "react-icons/fa"
 import { RiSettings3Fill } from "react-icons/ri"
 import { VscTriangleLeft, VscTriangleRight } from "react-icons/vsc"
@@ -1333,6 +1334,17 @@ export default class ControlPanel extends React.Component<
               onChange={this.onInputChange}
             />
           </section> */}
+
+          <div className={styles.github}>
+            <span className={styles.sha}>{process.env.GIT_SHA}</span>
+            <a
+              href="https://github.com/fishluv/popn-randomizer"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <BsGithub />
+            </a>
+          </div>
         </ReactModal>
       </section>
     )
