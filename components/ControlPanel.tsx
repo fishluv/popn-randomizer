@@ -635,159 +635,179 @@ export default class ControlPanel extends React.Component<
     }
 
     return (
-      <section className={cx(styles.control, styles.level)}>
-        <label htmlFor="levelLowerSelect">Level</label>
+      <>
+        <section className={cx(styles.control, styles.level)}>
+          <label htmlFor="levelLowerSelect">Level</label>
 
-        <section>
-          <section className={styles.flex}>
-            <button
-              id="levelMinDownButton"
-              className={styles.levelDownButton}
-              type="button"
-              onClick={this.onLevelButtonClick}
-            >
-              <VscTriangleLeft />
-            </button>
-            <select
-              id="levelLowerSelect"
-              className={styles[`level${Math.floor((levelMin ?? 0) / 10)}x`]}
-              value={levelMin}
-              onChange={this.onSelectChange}
-            >
-              {LEVELS.map((level: number) => (
-                <option value={level} key={level}>
-                  {level}
-                </option>
-              ))}
-            </select>
-            <button
-              id="levelMinUpButton"
-              className={styles.levelUpButton}
-              type="button"
-              onClick={this.onLevelButtonClick}
-            >
-              <VscTriangleRight />
-            </button>
-          </section>
-
-          {levelEmhEnabled && (
-            <section className={styles.chooseLevelEmh}>
+          <section>
+            <section className={styles.flex}>
               <button
-                id="levelMinEmhButtonE"
-                className={cx(
-                  styles.levelEmhButton,
-                  styles.easy,
-                  levelMinEmh === "e" ? styles.selected : "",
-                )}
+                id="levelMinDownButton"
+                className={styles.levelDownButton}
                 type="button"
-                onClick={this.onLevelEmhButtonClick}
+                onClick={this.onLevelButtonClick}
               >
-                e
+                <VscTriangleLeft />
               </button>
-              <button
-                id="levelMinEmhButtonM"
-                className={cx(
-                  styles.levelEmhButton,
-                  styles.medium,
-                  levelMinEmh === "m" ? styles.selected : "",
-                )}
-                type="button"
-                onClick={this.onLevelEmhButtonClick}
+              <select
+                id="levelLowerSelect"
+                className={styles[`level${Math.floor((levelMin ?? 0) / 10)}x`]}
+                value={levelMin}
+                onChange={this.onSelectChange}
               >
-                m
-              </button>
+                {LEVELS.map((level: number) => (
+                  <option value={level} key={level}>
+                    {level}
+                  </option>
+                ))}
+              </select>
               <button
-                id="levelMinEmhButtonH"
-                className={cx(
-                  styles.levelEmhButton,
-                  styles.hard,
-                  levelMinEmh === "h" ? styles.selected : "",
-                )}
+                id="levelMinUpButton"
+                className={styles.levelUpButton}
                 type="button"
-                onClick={this.onLevelEmhButtonClick}
+                onClick={this.onLevelButtonClick}
               >
-                h
+                <VscTriangleRight />
               </button>
             </section>
-          )}
-        </section>
 
-        <label htmlFor="levelUpperSelect">to</label>
-
-        <section>
-          <section className={styles.flex}>
-            <button
-              id="levelMaxDownButton"
-              className={styles.levelDownButton}
-              type="button"
-              onClick={this.onLevelButtonClick}
-            >
-              <VscTriangleLeft />
-            </button>
-            <select
-              id="levelUpperSelect"
-              className={styles[`level${Math.floor((levelMax ?? 0) / 10)}x`]}
-              value={levelMax}
-              onChange={this.onSelectChange}
-            >
-              {LEVELS.map((level: number) => (
-                <option value={level} key={level}>
-                  {level}
-                </option>
-              ))}
-            </select>
-            <button
-              id="levelMaxUpButton"
-              className={styles.levelUpButton}
-              type="button"
-              onClick={this.onLevelButtonClick}
-            >
-              <VscTriangleRight />
-            </button>
+            {levelEmhEnabled && (
+              <section className={styles.chooseLevelEmh}>
+                <button
+                  id="levelMinEmhButtonE"
+                  className={cx(
+                    styles.levelEmhButton,
+                    styles.easy,
+                    levelMinEmh === "e" ? styles.selected : "",
+                  )}
+                  type="button"
+                  onClick={this.onLevelEmhButtonClick}
+                >
+                  e
+                </button>
+                <button
+                  id="levelMinEmhButtonM"
+                  className={cx(
+                    styles.levelEmhButton,
+                    styles.medium,
+                    levelMinEmh === "m" ? styles.selected : "",
+                  )}
+                  type="button"
+                  onClick={this.onLevelEmhButtonClick}
+                >
+                  m
+                </button>
+                <button
+                  id="levelMinEmhButtonH"
+                  className={cx(
+                    styles.levelEmhButton,
+                    styles.hard,
+                    levelMinEmh === "h" ? styles.selected : "",
+                  )}
+                  type="button"
+                  onClick={this.onLevelEmhButtonClick}
+                >
+                  h
+                </button>
+              </section>
+            )}
           </section>
 
-          {levelEmhEnabled && (
-            <section className={styles.chooseLevelEmh}>
+          <label htmlFor="levelUpperSelect">to</label>
+
+          <section>
+            <section className={styles.flex}>
               <button
-                id="levelMaxEmhButtonE"
-                className={cx(
-                  styles.levelEmhButton,
-                  styles.easy,
-                  levelMaxEmh === "e" ? styles.selected : "",
-                )}
+                id="levelMaxDownButton"
+                className={styles.levelDownButton}
                 type="button"
-                onClick={this.onLevelEmhButtonClick}
+                onClick={this.onLevelButtonClick}
               >
-                e
+                <VscTriangleLeft />
               </button>
-              <button
-                id="levelMaxEmhButtonM"
-                className={cx(
-                  styles.levelEmhButton,
-                  styles.medium,
-                  levelMaxEmh === "m" ? styles.selected : "",
-                )}
-                type="button"
-                onClick={this.onLevelEmhButtonClick}
+              <select
+                id="levelUpperSelect"
+                className={styles[`level${Math.floor((levelMax ?? 0) / 10)}x`]}
+                value={levelMax}
+                onChange={this.onSelectChange}
               >
-                m
-              </button>
+                {LEVELS.map((level: number) => (
+                  <option value={level} key={level}>
+                    {level}
+                  </option>
+                ))}
+              </select>
               <button
-                id="levelMaxEmhButtonH"
-                className={cx(
-                  styles.levelEmhButton,
-                  styles.hard,
-                  levelMaxEmh === "h" ? styles.selected : "",
-                )}
+                id="levelMaxUpButton"
+                className={styles.levelUpButton}
                 type="button"
-                onClick={this.onLevelEmhButtonClick}
+                onClick={this.onLevelButtonClick}
               >
-                h
+                <VscTriangleRight />
               </button>
             </section>
-          )}
+
+            {levelEmhEnabled && (
+              <section className={styles.chooseLevelEmh}>
+                <button
+                  id="levelMaxEmhButtonE"
+                  className={cx(
+                    styles.levelEmhButton,
+                    styles.easy,
+                    levelMaxEmh === "e" ? styles.selected : "",
+                  )}
+                  type="button"
+                  onClick={this.onLevelEmhButtonClick}
+                >
+                  e
+                </button>
+                <button
+                  id="levelMaxEmhButtonM"
+                  className={cx(
+                    styles.levelEmhButton,
+                    styles.medium,
+                    levelMaxEmh === "m" ? styles.selected : "",
+                  )}
+                  type="button"
+                  onClick={this.onLevelEmhButtonClick}
+                >
+                  m
+                </button>
+                <button
+                  id="levelMaxEmhButtonH"
+                  className={cx(
+                    styles.levelEmhButton,
+                    styles.hard,
+                    levelMaxEmh === "h" ? styles.selected : "",
+                  )}
+                  type="button"
+                  onClick={this.onLevelEmhButtonClick}
+                >
+                  h
+                </button>
+              </section>
+            )}
+          </section>
         </section>
-      </section>
+
+        <section className={styles.control}>
+          <input
+            id="isLevelEmhEnabledInput"
+            type="checkbox"
+            checked={levelEmhEnabled}
+            onChange={this.onInputChange}
+          />
+          <label htmlFor="isLevelEmhEnabledInput">
+            Enable filtering by easy/medium/hard
+          </label>
+        </section>
+
+        {levelEmhEnabled && (
+          <section className={cx(styles.control, styles.info)}>
+            Only supported for charts level 29+ that have ratings on popn.wiki.
+          </section>
+        )}
+      </>
     )
   }
 
@@ -879,7 +899,6 @@ export default class ControlPanel extends React.Component<
     const { extraClass } = this.props
     const {
       count,
-      levelEmhEnabled,
       includeDiffsRadio,
       includeDiffs,
       hardestDiff,
@@ -975,23 +994,6 @@ export default class ControlPanel extends React.Component<
             </select>
           </section>
           {this.getLevelControls()}
-          <section className={styles.control}>
-            <input
-              id="isLevelEmhEnabledInput"
-              type="checkbox"
-              checked={levelEmhEnabled}
-              onChange={this.onInputChange}
-            />
-            <label htmlFor="isLevelEmhEnabledInput">
-              Enable filtering by easy/medium/hard
-            </label>
-          </section>
-          {levelEmhEnabled && (
-            <section className={cx(styles.control, styles.info)}>
-              Only supported for charts level 29+ that have ratings on
-              popn.wiki.
-            </section>
-          )}
           <section className={styles.control}>
             <input
               id="isSranModeEnabledInput"
