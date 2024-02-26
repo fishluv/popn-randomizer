@@ -878,7 +878,7 @@ export default class ControlPanel extends React.Component<
           {count}
           {" songs, sran "}
           {this.getSranLevel(sranLevelMin!)}
-          {" ~ "}
+          {"~"}
           {this.getSranLevel(sranLevelMax!)}
         </>
       )
@@ -914,7 +914,7 @@ export default class ControlPanel extends React.Component<
             {" songs, "}
             {this.getLevel(levelMin!)}
             {this.getEmh(levelMinEmh!)}
-            {" ~ "}
+            {"~"}
             {this.getLevel(levelMax!)}
             {this.getEmh(levelMaxEmh!)}
           </>
@@ -933,9 +933,9 @@ export default class ControlPanel extends React.Component<
         return (
           <>
             {count}
-            {" songs "}
+            {" songs, "}
             {this.getLevel(levelMin!)}
-            {" ~ "}
+            {"~"}
             {this.getLevel(levelMax!)}
           </>
         )
