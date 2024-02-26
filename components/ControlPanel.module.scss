@@ -30,6 +30,10 @@
 }
 
 select {
+  &.level0x {
+    background: #f0f0f0;
+  }
+
   &.level1x {
     background: $e-light;
   }
