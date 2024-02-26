@@ -21,6 +21,7 @@ import {
 import { parseIncludeOption, parseIncludeOptionSafe } from "./parse"
 import FolderPill from "./FolderPill"
 import { FaChevronDown, FaChevronUp, FaTrash } from "react-icons/fa"
+import { RiSettings3Fill } from "react-icons/ri"
 import { VscTriangleLeft, VscTriangleRight } from "react-icons/vsc"
 
 function range(start: number, stop: number) {
@@ -935,35 +936,43 @@ export default class ControlPanel extends React.Component<
         )}
 
         <section className={styles.buttonsAndSummary}>
-          <button type="button" onClick={this.onDrawClick}>
-            Draw
-          </button>
-
-          {!isCollapsed && (
-            <button type="button" onClick={this.openMoreControls}>
-              Advanced
+          <section className={styles.left}>
+            <button type="button" onClick={this.onDrawClick}>
+              Draw
             </button>
-          )}
 
-          {isCollapsed && (
-            <span className={styles.summary}>{this.getSummaryString()}</span>
-          )}
+            {!isCollapsed && (
+              <button
+                type="button"
+                className={styles.iconButton}
+                onClick={this.openMoreControls}
+              >
+                <RiSettings3Fill />
+              </button>
+            )}
 
-          <button
-            className={styles.clearButton}
-            type="button"
-            onClick={this.onClearClick}
-          >
-            <FaTrash />
-          </button>
+            {isCollapsed && (
+              <span className={styles.summary}>{this.getSummaryString()}</span>
+            )}
+          </section>
 
-          <button
-            className={styles.collapseButton}
-            type="button"
-            onClick={this.toggleCollapsed}
-          >
-            {isCollapsed ? <FaChevronDown /> : <FaChevronUp />}
-          </button>
+          <section className={styles.right}>
+            <button
+              className={cx(styles.iconButton, styles.clearButton)}
+              type="button"
+              onClick={this.onClearClick}
+            >
+              <FaTrash />
+            </button>
+
+            <button
+              className={styles.iconButton}
+              type="button"
+              onClick={this.toggleCollapsed}
+            >
+              {isCollapsed ? <FaChevronDown /> : <FaChevronUp />}
+            </button>
+          </section>
         </section>
 
         <ReactModal
@@ -975,24 +984,37 @@ export default class ControlPanel extends React.Component<
             content: { inset: 0, padding: "1rem" },
           }}
         >
-          <button
-            className={styles.closeMoreControlsButton}
-            type="button"
-            onClick={this.closeMoreControls}
-          >
-            Close
-          </button>
+          <section className={styles.topRow}>
+            <section>
+              <button
+                className={styles.closeMoreControlsButton}
+                type="button"
+                onClick={this.closeMoreControls}
+              >
+                Close
+              </button>
+            </section>
 
-          <button
-            className={styles.resetButton}
-            type="button"
-            onClick={this.resetControls}
-          >
-            Reset to defaults
-          </button>
+            <section className={styles.right}>
+              <button
+                className={cx(styles.iconButton, styles.clearButton)}
+                type="button"
+                onClick={this.onClearClick}
+              >
+                <FaTrash />
+              </button>
+
+              <button
+                className={styles.resetButton}
+                type="button"
+                onClick={this.resetControls}
+              >
+                Reset to defaults
+              </button>
+            </section>
+          </section>
 
           <h5 className={styles.header}>Draw options</h5>
-
           <section className={cx(styles.control, styles.draw)}>
             <label htmlFor="drawCountSelect">Draw</label>
             <select
@@ -1007,9 +1029,7 @@ export default class ControlPanel extends React.Component<
               ))}
             </select>
           </section>
-
           {this.getLevelControls()}
-
           <section className={styles.control}>
             <input
               id="isLevelEmhEnabledInput"
@@ -1021,14 +1041,12 @@ export default class ControlPanel extends React.Component<
               Enable filtering by easy/medium/hard
             </label>
           </section>
-
           {levelEmhEnabled && (
             <section className={cx(styles.control, styles.info)}>
               Only supported for charts level 29+ that have ratings on
               popn.wiki.
             </section>
           )}
-
           <section className={styles.control}>
             <input
               id="isSranModeEnabledInput"
@@ -1038,7 +1056,6 @@ export default class ControlPanel extends React.Component<
             />
             <label htmlFor="isSranModeEnabledInput">Enable sran mode</label>
           </section>
-
           <section className={cx(styles.control, styles.includeDiffs)}>
             <span>Include difficulties</span>
 
@@ -1062,7 +1079,6 @@ export default class ControlPanel extends React.Component<
               <label htmlFor="includeChooseDiffsInput">Choose</label>
             </section>
           </section>
-
           {includeDiffsRadio === "choose" && (
             <section className={cx(styles.control, styles.diffsChoose)}>
               <div className={styles.diffContainer}>
@@ -1106,7 +1122,6 @@ export default class ControlPanel extends React.Component<
               </div>
             </section>
           )}
-
           <section className={styles.control}>
             <input
               id="onlyIncludeHardestInput"
@@ -1118,7 +1133,6 @@ export default class ControlPanel extends React.Component<
               Only include song&apos;s hardest difficulty
             </label>
           </section>
-
           <section className={cx(styles.control, styles.includeFolders)}>
             <label>Include folders</label>
 
@@ -1152,7 +1166,6 @@ export default class ControlPanel extends React.Component<
               </button>
             )}
           </section>
-
           {versionFoldersRadio === "choose" && (
             <section className={cx(styles.control, styles.foldersChoose)}>
               {Array.from(Array(VERSION_FOLDERS.length).keys())
@@ -1175,7 +1188,6 @@ export default class ControlPanel extends React.Component<
                 ))}
             </section>
           )}
-
           <section className={styles.control}>
             <label htmlFor="holdNotesSelect">Long pop-kuns</label>
             <select
@@ -1189,7 +1201,6 @@ export default class ControlPanel extends React.Component<
               <option value="only">Only</option>
             </select>
           </section>
-
           <section className={styles.control}>
             <input
               id="excludeBuggedBpmsInput"
@@ -1199,7 +1210,6 @@ export default class ControlPanel extends React.Component<
             />
             <label htmlFor="excludeBuggedBpmsInput">Exclude bugged bpms</label>
           </section>
-
           <section className={styles.control}>
             <input
               id="excludeFloorInfectionInput"
@@ -1211,7 +1221,6 @@ export default class ControlPanel extends React.Component<
               Exclude FLOOR INFECTION
             </label>
           </section>
-
           <section className={styles.control}>
             <label htmlFor="gameVersionSelect">Game data</label>
             <select
@@ -1224,9 +1233,7 @@ export default class ControlPanel extends React.Component<
               <option value="unilab_0411">UniLab 0411</option>
             </select>
           </section>
-
           <h5 className={styles.header}>Display options</h5>
-
           <section className={styles.control}>
             <input
               id="displayGenreInput"
@@ -1236,7 +1243,6 @@ export default class ControlPanel extends React.Component<
             />
             <label htmlFor="displayGenreInput">Display genre</label>
           </section>
-
           <section className={styles.control}>
             <label>Chart appearance</label>
 
@@ -1260,14 +1266,12 @@ export default class ControlPanel extends React.Component<
               <label htmlFor="displayStyleCompactInput">Compact</label>
             </section>
           </section>
-
           {displayStyle === "compact" && (
             <section className={cx(styles.control, styles.info)}>
               When compact, tap on charts to reveal their{" "}
               {preferGenre ? "genre" : "title"}
             </section>
           )}
-
           {/* <section className={cx(styles.control, styles.customLink)}>
             <label htmlFor="customLink1UrlInput">Custom link</label>
             <input

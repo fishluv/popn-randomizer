@@ -3,31 +3,30 @@
 .ControlPanel {
   .buttonsAndSummary {
     display: flex;
+    justify-content: space-between;
 
-    :not(:first-child) {
-      margin-left: 0.5rem;
+    .left,
+    .right {
+      display: flex;
+      column-gap: 0.5rem;
     }
 
     .summary {
       align-self: center;
-    }
-
-    .clearButton {
-      margin-left: auto;
-      line-height: 0.8;
-    }
-
-    .collapseButton {
-      line-height: 0.8;
     }
   }
 }
 
 // Stuff in the modal should go below.
 
-.resetButton {
-  position: absolute;
-  right: 1rem;
+.topRow {
+  display: flex;
+  justify-content: space-between;
+
+  .right {
+    display: flex;
+    column-gap: 0.5rem;
+  }
 }
 
 select {
@@ -214,6 +213,10 @@ select {
       }
     }
   }
+}
+
+.iconButton {
+  line-height: 0.8;
 }
 
 h5.header {
