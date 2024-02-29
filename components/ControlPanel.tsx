@@ -800,7 +800,7 @@ export default class ControlPanel extends React.Component<
             onChange={this.onInputChange}
           />
           <label htmlFor="isLevelEmhEnabledInput">
-            Enable filtering by easy/medium/hard
+            Filter by easy/medium/hard
           </label>
         </section>
 
@@ -1103,7 +1103,7 @@ export default class ControlPanel extends React.Component<
               checked={sranModeEnabled}
               onChange={this.onInputChange}
             />
-            <label htmlFor="isSranModeEnabledInput">Enable sran mode</label>
+            <label htmlFor="isSranModeEnabledInput">Sran mode</label>
           </section>
           <section className={cx(styles.control, styles.includeDiffs)}>
             <span>Include difficulties</span>
