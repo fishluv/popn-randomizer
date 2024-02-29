@@ -1095,7 +1095,9 @@ export default class ControlPanel extends React.Component<
               ))}
             </select>
           </section>
+
           {this.getLevelControls()}
+
           <section className={styles.control}>
             <input
               id="isSranModeEnabledInput"
@@ -1105,6 +1107,7 @@ export default class ControlPanel extends React.Component<
             />
             <label htmlFor="isSranModeEnabledInput">Sran mode</label>
           </section>
+
           <section className={cx(styles.control, styles.includeDiffs)}>
             <span>Include difficulties</span>
 
@@ -1219,6 +1222,7 @@ export default class ControlPanel extends React.Component<
               </button>
             )}
           </section>
+
           {versionFoldersRadio === "choose" && (
             <section className={cx(styles.control, styles.foldersChoose)}>
               {Array.from(Array(VERSION_FOLDERS.length).keys())
@@ -1241,6 +1245,7 @@ export default class ControlPanel extends React.Component<
                 ))}
             </section>
           )}
+
           <section className={styles.control}>
             <label htmlFor="holdNotesSelect">Long pop-kuns</label>
             <select
@@ -1254,6 +1259,7 @@ export default class ControlPanel extends React.Component<
               <option value="only">Only</option>
             </select>
           </section>
+
           <section className={styles.control}>
             <input
               id="excludeBuggedBpmsInput"
@@ -1263,6 +1269,7 @@ export default class ControlPanel extends React.Component<
             />
             <label htmlFor="excludeBuggedBpmsInput">Exclude bugged bpms</label>
           </section>
+
           <section className={styles.control}>
             <input
               id="excludeFloorInfectionInput"
@@ -1274,6 +1281,7 @@ export default class ControlPanel extends React.Component<
               Exclude FLOOR INFECTION
             </label>
           </section>
+
           <section className={styles.control}>
             <label htmlFor="gameVersionSelect">Game data</label>
             <select
@@ -1286,7 +1294,9 @@ export default class ControlPanel extends React.Component<
               <option value="unilab_0411">UniLab 0411</option>
             </select>
           </section>
+
           <h5 className={styles.header}>Display options</h5>
+
           <section className={styles.control}>
             <input
               id="displayGenreInput"
@@ -1296,6 +1306,7 @@ export default class ControlPanel extends React.Component<
             />
             <label htmlFor="displayGenreInput">Display genre</label>
           </section>
+
           <section className={styles.control}>
             <label>Chart appearance</label>
 
@@ -1319,12 +1330,14 @@ export default class ControlPanel extends React.Component<
               <label htmlFor="displayStyleCompactInput">Compact</label>
             </section>
           </section>
+
           {displayStyle === "compact" && (
             <section className={cx(styles.control, styles.info)}>
               When compact, tap on charts to reveal their{" "}
               {preferGenre ? "genre" : "title"}
             </section>
           )}
+
           {/* <section className={cx(styles.control, styles.customLink)}>
             <label htmlFor="customLink1UrlInput">Custom link</label>
             <input
