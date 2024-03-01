@@ -151,8 +151,6 @@ export default class ControlPanel extends React.Component<
         displayStyle,
         notepadContents,
         assetsUrl, // Currently not configurable in UI.
-        showLinks, // Currently not configurable in UI.
-        customLink1Url,
       },
       isMoreControlsOpen,
     } = props
@@ -183,8 +181,6 @@ export default class ControlPanel extends React.Component<
       displayStyle: displayStyle ?? "normal",
       notepadContents: notepadContents ?? "",
       assetsUrl: assetsUrl || "https://popn-assets.pages.dev/assets",
-      showLinks: showLinks ?? false,
-      customLink1Url: customLink1Url || "",
       // Control panel state
       isMoreControlsOpen: isMoreControlsOpen ?? false,
     }
@@ -277,7 +273,7 @@ export default class ControlPanel extends React.Component<
 
   onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { includeDiffs, versionFolders } = this.state
-    const { id, value, checked } = event.target
+    const { id, checked } = event.target
     let newState
 
     // TODO: Probably shouldn't assume `type`
@@ -369,9 +365,6 @@ export default class ControlPanel extends React.Component<
           ? parseIncludeOption("exclude")
           : parseIncludeOption("include"),
       }
-      this.setState(newState)
-    } else if (id === "customLink1UrlInput") {
-      newState = { customLink1Url: value }
       this.setState(newState)
     } else if (id === "displayStyleNormalInput") {
       newState = { displayStyle: "normal" as const }
@@ -1023,7 +1016,6 @@ export default class ControlPanel extends React.Component<
       preferGenre,
       displayStyle,
       notepadContents,
-      // customLink1Url,
       isMoreControlsOpen,
     } = this.state
 
@@ -1388,16 +1380,6 @@ export default class ControlPanel extends React.Component<
               onChange={this.onTextareaChange}
             />
           </section>
-
-          {/* <section className={cx(styles.control, styles.customLink)}>
-            <label htmlFor="customLink1UrlInput">Custom link</label>
-            <input
-              id="customLink1UrlInput"
-              type="text"
-              value={customLink1Url}
-              onChange={this.onInputChange}
-            />
-          </section> */}
 
           <div className={styles.github}>
             <span className={styles.sha}>{process.env.GIT_SHA}</span>

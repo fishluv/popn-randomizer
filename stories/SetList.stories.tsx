@@ -15,8 +15,6 @@ export default {
       displayStyle: "normal",
       notepadContents: "",
       assetsUrl: "https://popn-assets.pages.dev/assets",
-      showLinks: false,
-      customLink1Url: "",
     },
   },
 } as ComponentMeta<typeof SetList>
