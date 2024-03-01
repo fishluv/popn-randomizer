@@ -77,20 +77,15 @@
     width: 100%;
     @include diff-bg-colors(x-light);
 
-    .bannerAndBasicInfo {
-      grid-area: left;
+    .bannerContainer {
       position: relative;
-      height: 5rem;
+      height: 84px;
       padding: 0.5rem;
+      padding: 6px 6px 6px 4px;
 
-      .banner {
+      .bannerImage {
+        clip-path: rect(2px 288px 70px 4px round 4px);
         z-index: 3;
-        height: 100%;
-        width: 100%;
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: 104%;
-        border-radius: 0.25rem;
       }
     }
 

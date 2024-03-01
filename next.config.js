@@ -11,7 +11,13 @@ module.exports = {
   },
   reactStrictMode: true,
   images: {
-    loader: "imgix",
-    path: "",
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "popn-assets.pages.dev",
+        port: "",
+        pathname: "/assets/**",
+      },
+    ],
   },
 }

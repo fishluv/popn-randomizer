@@ -1,4 +1,5 @@
 import cx from "classnames"
+import Image from "next/image"
 import React from "react"
 import { ChartDisplayOptions } from "./ChartDisplay"
 import styles from "./ChartCard.module.scss"
@@ -104,25 +105,6 @@ export default class ChartCard extends React.Component<
     )
   }
 
-  renderTitleGenreCompact() {
-    const {
-      chartDisplayOptions: { sranModeEnabled },
-    } = this.props
-
-    const sortChar = this.getTitleOrGenreSortChar()
-
-    const className = cx(styles.titleGenre, {
-      [styles.withSranLevel]: sranModeEnabled,
-    })
-
-    return (
-      <span className={className} style={this.getBannerBgImageStyle()}>
-        {sortChar && `(${sortChar}) `}
-        {this.getDisplayTitleOrGenre()}
-      </span>
-    )
-  }
-
   getTitleOrGenreSortChar = () => {
     const {
       chartDisplayOptions: { preferGenre },
@@ -162,6 +144,27 @@ export default class ChartCard extends React.Component<
     return {
       backgroundImage: `url("${bannerUrl}")`,
     }
+  }
+
+  getBannerImage = () => {
+    const {
+      chartDisplayOptions: { assetsUrl },
+      chartData: { songId, title },
+    } = this.props
+
+    const urlWithoutSlash = assetsUrl.replace(/\/$/, "")
+    const paddedId = `000${songId}`.slice(-4)
+    const bannerUrl = `${urlWithoutSlash}/kc_${paddedId}.png`
+
+    return (
+      <Image
+        className={styles.bannerImage}
+        src={bannerUrl}
+        alt={`Banner for ${title}`}
+        width={290}
+        height={72}
+      />
+    )
   }
 
   formatDuration = () => {
@@ -221,8 +224,6 @@ export default class ChartCard extends React.Component<
       },
     )
 
-    const bannerAndBasicInfoClassName = cx(styles.bannerAndBasicInfo, diffStyle)
-
     return (
       <div className={rootClassName} onClick={this.onClick}>
         <div className={cx(diffStyle, styles.topInfoContainer)}>
@@ -234,12 +235,7 @@ export default class ChartCard extends React.Component<
         </div>
 
         <div className={cx(styles.bottomContainer, diffStyle)}>
-          <div className={bannerAndBasicInfoClassName}>
-            <div
-              className={cx(styles.banner, diffStyle)}
-              style={this.getBannerBgImageStyle()}
-            />
-          </div>
+          <div className={styles.bannerContainer}>{this.getBannerImage()}</div>
 
           <FolderPill
             extraClass={styles.folderPill}
