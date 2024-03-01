@@ -250,7 +250,7 @@ export default class RandomizerApp extends React.Component<
     } = this.state
 
     return (
-      <section className={styles.App}>
+      <section id="app" className={styles.App}>
         {isDoneLoading && (
           <section className={styles.body}>
             <ControlPanel

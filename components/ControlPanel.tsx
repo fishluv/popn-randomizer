@@ -27,6 +27,7 @@ import { RiSettings3Fill } from "react-icons/ri"
 import { VscTriangleLeft, VscTriangleRight } from "react-icons/vsc"
 
 const md = markdownit({ html: false, breaks: true, linkify: true })
+ReactModal.setAppElement("#app")
 
 function range(start: number, stop: number) {
   let realStart: number
