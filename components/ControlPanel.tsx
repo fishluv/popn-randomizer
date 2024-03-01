@@ -1,4 +1,5 @@
 import cx from "classnames"
+import markdownit from "markdown-it"
 import React from "react"
 import ReactModal from "react-modal"
 import {
@@ -24,6 +25,8 @@ import { BsGithub } from "react-icons/bs"
 import { FaTrash } from "react-icons/fa"
 import { RiSettings3Fill } from "react-icons/ri"
 import { VscTriangleLeft, VscTriangleRight } from "react-icons/vsc"
+
+const md = markdownit({ html: false, breaks: true, linkify: true })
 
 function range(start: number, stop: number) {
   let realStart: number
@@ -146,6 +149,7 @@ export default class ControlPanel extends React.Component<
         preferGenre,
         showChartDetails,
         displayStyle,
+        notepadContents,
         assetsUrl, // Currently not configurable in UI.
         showLinks, // Currently not configurable in UI.
         customLink1Url,
@@ -177,6 +181,7 @@ export default class ControlPanel extends React.Component<
       preferGenre: preferGenre ?? false,
       showChartDetails: showChartDetails ?? false,
       displayStyle: displayStyle ?? "normal",
+      notepadContents: notepadContents ?? "",
       assetsUrl: assetsUrl || "https://popn-assets.pages.dev/assets",
       showLinks: showLinks ?? false,
       customLink1Url: customLink1Url || "",
@@ -467,6 +472,14 @@ export default class ControlPanel extends React.Component<
   onNoneVersionFoldersButtonClick = () => {
     const newState = {
       versionFolders: NONE_VERSION_FOLDERS.slice(),
+    }
+    this.setState(newState)
+    this.props.onChange(newState)
+  }
+
+  onTextareaChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const newState = {
+      notepadContents: event.currentTarget.value,
     }
     this.setState(newState)
     this.props.onChange(newState)
@@ -958,7 +971,11 @@ export default class ControlPanel extends React.Component<
   }
 
   resetControls = () => {
-    if (window.confirm("Reset options to default values?")) {
+    if (
+      window.confirm(
+        "Reset options to default values? Notepad will not be affected.",
+      )
+    ) {
       const newState: ChartDrawOptions & Partial<ChartDisplayOptions> = {
         // Draw options
         count: 4,
@@ -982,6 +999,7 @@ export default class ControlPanel extends React.Component<
         sranModeEnabled: false,
         preferGenre: false,
         displayStyle: "normal",
+        // Don't reset notepad contents.
       }
       this.setState(newState)
       this.props.onChange(newState)
@@ -1004,6 +1022,7 @@ export default class ControlPanel extends React.Component<
       gameVersion,
       preferGenre,
       displayStyle,
+      notepadContents,
       // customLink1Url,
       isMoreControlsOpen,
     } = this.state
@@ -1031,6 +1050,15 @@ export default class ControlPanel extends React.Component<
             </button>
           </section>
         </section>
+
+        {notepadContents?.trim() && (
+          <section
+            className={styles.notepadContents}
+            dangerouslySetInnerHTML={{
+              __html: md.render(notepadContents),
+            }}
+          ></section>
+        )}
 
         <ReactModal
           isOpen={isMoreControlsOpen}
@@ -1337,6 +1365,29 @@ export default class ControlPanel extends React.Component<
               {preferGenre ? "genre" : "title"}
             </section>
           )}
+
+          <section className={cx(styles.control, styles.notepad)}>
+            <label>
+              <section className={styles.left}>
+                Notepad
+                <span className={styles.info}>Markdown supported</span>
+              </section>
+
+              <section className={styles.right}>
+                <span className={cx(styles.info, styles.charCount)}>
+                  {notepadContents!.length}/1000
+                </span>
+              </section>
+            </label>
+
+            <textarea
+              id="notepadTextarea"
+              rows={10}
+              maxLength={1000}
+              value={notepadContents}
+              onChange={this.onTextareaChange}
+            />
+          </section>
 
           {/* <section className={cx(styles.control, styles.customLink)}>
             <label htmlFor="customLink1UrlInput">Custom link</label>

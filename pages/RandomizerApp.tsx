@@ -104,6 +104,7 @@ export default class RandomizerApp extends React.Component<
         preferGenre: false,
         showChartDetails: false,
         displayStyle: "normal",
+        notepadContents: "",
         assetsUrl: "",
         showLinks: false,
         customLink1Url: "",
@@ -141,6 +142,7 @@ export default class RandomizerApp extends React.Component<
     setStorageItemIfNull("preferGenre", false)
     setStorageItemIfNull("showChartDetails", false)
     setStorageItemIfNull("displayStyle", "normal")
+    setStorageItemIfNull("notepadContents", "")
     setStorageItemIfNull("customLink1Url", "")
     // State
     setStorageItemIfNull("drawnChartSets", "[]")
@@ -158,6 +160,7 @@ export default class RandomizerApp extends React.Component<
         preferGenre: getStorageBoolean("preferGenre"),
         showChartDetails: getStorageBoolean("showChartDetails"),
         displayStyle: parseChartDisplayStyle(getStorageString("displayStyle")),
+        notepadContents: getStorageString("notepadContents").trim(),
         // Currently not configurable in the UI.
         assetsUrl: "https://popn-assets.pages.dev/assets",
         showLinks: false,

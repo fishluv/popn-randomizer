@@ -15,6 +15,7 @@ export interface ChartDisplayOptions {
   preferGenre: boolean
   showChartDetails: boolean
   displayStyle: ChartDisplayStyle
+  notepadContents: string
   assetsUrl: string
   showLinks: boolean
   customLink1Url: string
