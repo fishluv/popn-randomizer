@@ -157,13 +157,11 @@
     }
 
     .banner {
-      position: absolute;
       z-index: 3;
-      width: 100%;
-      height: 100%;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-size: cover;
+
+      .bannerImage {
+        scale: 1.02 1.06;
+      }
 
       &.vetoed {
         display: none;

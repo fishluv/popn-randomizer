@@ -146,7 +146,7 @@ export default class ChartCard extends React.Component<
     }
   }
 
-  getBannerImage = () => {
+  getBannerImage = (width: number, height: number) => {
     const {
       chartDisplayOptions: { assetsUrl },
       chartData: { songId, title },
@@ -161,8 +161,8 @@ export default class ChartCard extends React.Component<
         className={styles.bannerImage}
         src={bannerUrl}
         alt={`Banner for ${title}`}
-        width={290}
-        height={72}
+        width={width}
+        height={height}
       />
     )
   }
@@ -235,7 +235,9 @@ export default class ChartCard extends React.Component<
         </div>
 
         <div className={cx(styles.bottomContainer, diffStyle)}>
-          <div className={styles.bannerContainer}>{this.getBannerImage()}</div>
+          <div className={styles.bannerContainer}>
+            {this.getBannerImage(290, 72)}
+          </div>
 
           <FolderPill
             extraClass={styles.folderPill}
@@ -295,7 +297,7 @@ export default class ChartCard extends React.Component<
         <div className={cx(diffStyle, styles.bannerTitleGenre)}>
           {this.renderTitleGenre()}
 
-          <div className={bannerClass} style={this.getBannerBgImageStyle()} />
+          <div className={bannerClass}>{this.getBannerImage(160, 40)}</div>
 
           <div className={styles.levels}>
             {this.renderDiffLevel()}
