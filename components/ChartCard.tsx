@@ -1,5 +1,4 @@
 import cx from "classnames"
-import Image from "next/image"
 import React from "react"
 import { ChartDisplayOptions } from "./ChartDisplay"
 import styles from "./ChartCard.module.scss"
@@ -157,7 +156,8 @@ export default class ChartCard extends React.Component<
     const bannerUrl = `${urlWithoutSlash}/kc_${paddedId}.png`
 
     return (
-      <Image
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
         className={styles.bannerImage}
         src={bannerUrl}
         alt={`Banner for ${title}`}

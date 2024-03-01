@@ -9,8 +9,5 @@ module.exports = {
   env: {
     GIT_SHA: gitSha,
   },
-  images: {
-    domains: ["popn-assets.pages.dev"],
-  },
   reactStrictMode: true,
 }

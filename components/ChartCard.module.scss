@@ -85,7 +85,6 @@
 
       .bannerImage {
         clip-path: rect(2px 288px 70px 4px round 4px);
-        z-index: 3;
       }
     }
 
@@ -157,7 +156,7 @@
     }
 
     .banner {
-      z-index: 3;
+      overflow: hidden;
 
       .bannerImage {
         scale: 1.02 1.06;
