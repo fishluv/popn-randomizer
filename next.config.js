@@ -9,15 +9,8 @@ module.exports = {
   env: {
     GIT_SHA: gitSha,
   },
-  reactStrictMode: true,
   images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "popn-assets.pages.dev",
-        port: "",
-        pathname: "/assets/**",
-      },
-    ],
+    domains: ["popn-assets.pages.dev"],
   },
+  reactStrictMode: true,
 }
