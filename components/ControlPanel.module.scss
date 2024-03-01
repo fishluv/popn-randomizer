@@ -209,15 +209,15 @@ select {
 }
 
 .github {
-  // Temp
-  visibility: hidden;
-
   margin-top: 2rem;
   display: flex;
   justify-content: right;
   align-items: flex-end;
   column-gap: 0.25rem;
   line-height: 1;
+
+  // Temp
+  display: none;
 
   .sha {
     color: #888;
