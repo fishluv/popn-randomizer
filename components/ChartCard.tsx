@@ -207,7 +207,7 @@ export default class ChartCard extends React.Component<
   renderNormal() {
     const {
       extraClass,
-      chartData: { difficulty, bpm, notes, hasHolds, songFolder },
+      chartData: { difficulty, bpm, notes, hasHolds, songFolder, songLabels },
     } = this.props
 
     const { isVetoed } = this.state
@@ -241,7 +241,7 @@ export default class ChartCard extends React.Component<
 
           <FolderPill
             extraClass={styles.folderPill}
-            songFolder={songFolder}
+            songFolder={songLabels.includes("lively") ? "lively" : songFolder}
             style="normal"
           />
         </div>
@@ -275,7 +275,7 @@ export default class ChartCard extends React.Component<
   renderCompact() {
     const {
       extraClass,
-      chartData: { difficulty, songFolder },
+      chartData: { difficulty, songFolder, songLabels },
     } = this.props
     const { isVetoed } = this.state
 
@@ -306,7 +306,7 @@ export default class ChartCard extends React.Component<
 
           <FolderPill
             extraClass={styles.folderPill}
-            songFolder={songFolder}
+            songFolder={songLabels.includes("lively") ? "lively" : songFolder}
             style="compact"
           />
         </div>

@@ -134,6 +134,8 @@ export default class RandomizerApp extends React.Component<
     setStorageItemIfNull("excludeFloorInfection", false)
     setStorageItemIfNull("excludeBuggedBpms", false)
     setStorageItemIfNull("holdNotes", "include")
+    setStorageItemIfNull("omnimix", "exclude")
+    setStorageItemIfNull("lively", "exclude")
     setStorageItemIfNull("gameVersion", "unilab_0411")
     // Display options
     setStorageItemIfNull("sranModeEnabled", false)
@@ -186,6 +188,8 @@ export default class RandomizerApp extends React.Component<
         ),
         buggedBpms: parseIncludeOptionSafe(getStorageString("buggedBpms")),
         holdNotes: parseIncludeOptionSafe(getStorageString("holdNotes")),
+        omnimix: parseIncludeOptionSafe(getStorageString("omnimix")),
+        lively: parseIncludeOptionSafe(getStorageString("lively")),
         gameVersion,
       },
     })

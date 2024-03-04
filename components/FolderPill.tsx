@@ -7,7 +7,7 @@ export type FolderPillStyle = "normal" | "compact"
 
 interface FolderPillProps {
   extraClass?: string
-  songFolder: VersionFolder
+  songFolder: VersionFolder | "lively"
   style: FolderPillStyle
 }
 
@@ -55,6 +55,8 @@ export default class FolderPill extends React.Component<FolderPillProps> {
       }
     } else {
       switch (songFolder) {
+        case "lively":
+          return "liv"
         case "27":
           return "ul"
         case "26":

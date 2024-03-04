@@ -143,6 +143,8 @@ export default class ControlPanel extends React.Component<
         floorInfection,
         buggedBpms,
         holdNotes,
+        omnimix,
+        lively,
         gameVersion,
       },
       initialDisplayOptions: {
@@ -174,6 +176,8 @@ export default class ControlPanel extends React.Component<
       floorInfection: floorInfection ?? "include",
       buggedBpms: buggedBpms ?? "include",
       holdNotes: holdNotes ?? "include",
+      omnimix: omnimix ?? "exclude",
+      lively: lively ?? "exclude",
       gameVersion: gameVersion || "unilab_0411",
       // Display options
       sranModeEnabled: sranModeEnabled ?? false,
@@ -262,6 +266,14 @@ export default class ControlPanel extends React.Component<
     } else if (id === "holdNotesSelect") {
       newState = {
         holdNotes: parseIncludeOptionSafe(value),
+      }
+    } else if (id === "omnimixSelect") {
+      newState = {
+        omnimix: parseIncludeOptionSafe(value),
+      }
+    } else if (id === "livelySelect") {
+      newState = {
+        lively: parseIncludeOptionSafe(value),
       }
     } else {
       console.warn(`ControlPanel: Unknown id ${id}`)
@@ -497,6 +509,8 @@ export default class ControlPanel extends React.Component<
       floorInfection,
       buggedBpms,
       holdNotes,
+      omnimix,
+      lively,
       gameVersion,
     } = this.state
 
@@ -520,18 +534,36 @@ export default class ControlPanel extends React.Component<
     }
 
     if (buggedBpms === "exclude") {
-      querySegments.push("!buggedbpm")
+      querySegments.push("-buggedbpm")
     }
 
     if (holdNotes === "only") {
       querySegments.push("holds")
     }
     if (holdNotes === "exclude") {
-      querySegments.push("!holds")
+      querySegments.push("-holds")
     }
 
     if (floorInfection === "exclude") {
-      querySegments.push("!floorinfection")
+      querySegments.push("-floorinfection")
+    }
+
+    if (gameVersion === "unilab_1218") {
+      // These are only supported for newest non-Eagle datecodes.
+
+      if (omnimix === "only") {
+        querySegments.push("omnimix")
+      }
+      if (omnimix === "exclude") {
+        querySegments.push("-omnimix")
+      }
+
+      if (lively === "only") {
+        querySegments.push("lively")
+      }
+      if (lively === "exclude") {
+        querySegments.push("-lively")
+      }
     }
 
     // Put this late because it's somewhat expensive.
@@ -988,6 +1020,8 @@ export default class ControlPanel extends React.Component<
         floorInfection: "include",
         buggedBpms: "include",
         holdNotes: "include",
+        omnimix: "exclude",
+        lively: "exclude",
         gameVersion: "unilab_0411",
         // Display options
         sranModeEnabled: false,
@@ -1012,6 +1046,8 @@ export default class ControlPanel extends React.Component<
       floorInfection,
       buggedBpms,
       holdNotes,
+      omnimix,
+      lively,
       sranModeEnabled,
       gameVersion,
       preferGenre,
@@ -1271,7 +1307,7 @@ export default class ControlPanel extends React.Component<
             <label htmlFor="holdNotesSelect">Long pop-kuns</label>
             <select
               id="holdNotesSelect"
-              className={holdNotes ? styles[holdNotes] : ""}
+              className={styles[holdNotes!]}
               value={holdNotes}
               onChange={this.onSelectChange}
             >
@@ -1302,6 +1338,38 @@ export default class ControlPanel extends React.Component<
               Exclude FLOOR INFECTION
             </label>
           </section>
+
+          {gameVersion === "unilab_1218" && (
+            <>
+              <section className={styles.control}>
+                <label htmlFor="omnimixSelect">Omnimix</label>
+                <select
+                  id="omnimixSelect"
+                  className={styles[omnimix!]}
+                  value={omnimix}
+                  onChange={this.onSelectChange}
+                >
+                  <option value="include">Include</option>
+                  <option value="exclude">Exclude</option>
+                  <option value="only">Only</option>
+                </select>
+              </section>
+
+              <section className={styles.control}>
+                <label htmlFor="livelySelect">Lively exclusives</label>
+                <select
+                  id="livelySelect"
+                  className={styles[lively!]}
+                  value={lively}
+                  onChange={this.onSelectChange}
+                >
+                  <option value="include">Include</option>
+                  <option value="exclude">Exclude</option>
+                  <option value="only">Only</option>
+                </select>
+              </section>
+            </>
+          )}
 
           <section className={styles.control}>
             <label htmlFor="gameVersionSelect">Game data</label>
