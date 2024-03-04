@@ -267,6 +267,14 @@ export default class ControlPanel extends React.Component<
       newState = {
         holdNotes: parseIncludeOptionSafe(value),
       }
+    } else if (id === "buggedBpmsSelect") {
+      newState = {
+        buggedBpms: parseIncludeOptionSafe(value),
+      }
+    } else if (id === "floorInfectionSelect") {
+      newState = {
+        floorInfection: parseIncludeOptionSafe(value),
+      }
     } else if (id === "omnimixSelect") {
       newState = {
         omnimix: parseIncludeOptionSafe(value),
@@ -364,20 +372,6 @@ export default class ControlPanel extends React.Component<
       const folderNum = Number(id.match(/folder(\d+)Input/)![1])
       versionFolders![folderNum] = checked
       newState = { versionFolders }
-      this.setState(newState)
-    } else if (id === "excludeFloorInfectionInput") {
-      newState = {
-        floorInfection: checked
-          ? parseIncludeOption("exclude")
-          : parseIncludeOption("include"),
-      }
-      this.setState(newState)
-    } else if (id === "excludeBuggedBpmsInput") {
-      newState = {
-        buggedBpms: checked
-          ? parseIncludeOption("exclude")
-          : parseIncludeOption("include"),
-      }
       this.setState(newState)
     } else if (id === "displayStyleNormalInput") {
       newState = { displayStyle: "normal" as const }
@@ -533,6 +527,9 @@ export default class ControlPanel extends React.Component<
       querySegments.push(`diff = ${includeDiffs}`)
     }
 
+    if (buggedBpms === "only") {
+      querySegments.push("buggedbpm")
+    }
     if (buggedBpms === "exclude") {
       querySegments.push("-buggedbpm")
     }
@@ -544,6 +541,9 @@ export default class ControlPanel extends React.Component<
       querySegments.push("-holds")
     }
 
+    if (floorInfection === "only") {
+      querySegments.push("floorinfection")
+    }
     if (floorInfection === "exclude") {
       querySegments.push("-floorinfection")
     }
@@ -1304,7 +1304,6 @@ export default class ControlPanel extends React.Component<
           )}
 
           <section className={styles.control}>
-            <label htmlFor="holdNotesSelect">Long pop-kuns</label>
             <select
               id="holdNotesSelect"
               className={styles[holdNotes!]}
@@ -1315,34 +1314,40 @@ export default class ControlPanel extends React.Component<
               <option value="exclude">Exclude</option>
               <option value="only">Only</option>
             </select>
+            <label htmlFor="holdNotesSelect">Long pop-kuns</label>
           </section>
 
           <section className={styles.control}>
-            <input
-              id="excludeBuggedBpmsInput"
-              type="checkbox"
-              checked={buggedBpms === "exclude"}
-              onChange={this.onInputChange}
-            />
-            <label htmlFor="excludeBuggedBpmsInput">Exclude bugged bpms</label>
+            <select
+              id="buggedBpmsSelect"
+              className={styles[buggedBpms!]}
+              value={buggedBpms}
+              onChange={this.onSelectChange}
+            >
+              <option value="include">Include</option>
+              <option value="exclude">Exclude</option>
+              <option value="only">Only</option>
+            </select>
+            <label htmlFor="excludeBuggedBpmsInput">Bugged bpms</label>
           </section>
 
           <section className={styles.control}>
-            <input
-              id="excludeFloorInfectionInput"
-              type="checkbox"
-              checked={floorInfection === "exclude"}
-              onChange={this.onInputChange}
-            />
-            <label htmlFor="excludeFloorInfectionInput">
-              Exclude FLOOR INFECTION
-            </label>
+            <select
+              id="floorInfectionSelect"
+              className={styles[floorInfection!]}
+              value={floorInfection}
+              onChange={this.onSelectChange}
+            >
+              <option value="include">Include</option>
+              <option value="exclude">Exclude</option>
+              <option value="only">Only</option>
+            </select>
+            <label htmlFor="excludeFloorInfectionInput">FLOOR INFECTION</label>
           </section>
 
           {gameVersion === "unilab_1218" && (
             <>
               <section className={styles.control}>
-                <label htmlFor="omnimixSelect">Omnimix</label>
                 <select
                   id="omnimixSelect"
                   className={styles[omnimix!]}
@@ -1353,10 +1358,10 @@ export default class ControlPanel extends React.Component<
                   <option value="exclude">Exclude</option>
                   <option value="only">Only</option>
                 </select>
+                <label htmlFor="omnimixSelect">Omnimix</label>
               </section>
 
               <section className={styles.control}>
-                <label htmlFor="livelySelect">Lively exclusives</label>
                 <select
                   id="livelySelect"
                   className={styles[lively!]}
@@ -1367,6 +1372,7 @@ export default class ControlPanel extends React.Component<
                   <option value="exclude">Exclude</option>
                   <option value="only">Only</option>
                 </select>
+                <label htmlFor="livelySelect">Lively exclusives</label>
               </section>
             </>
           )}

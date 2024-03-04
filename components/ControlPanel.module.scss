@@ -98,11 +98,12 @@ select {
   }
 
   &.exclude {
-    background: $h-light;
+    background: #ddd;
   }
 
   &.only {
-    background: $ex-light;
+    background: $ex-bright;
+    color: white;
   }
 }
 
