@@ -1022,12 +1022,11 @@ export default class ControlPanel extends React.Component<
         holdNotes: "include",
         omnimix: "exclude",
         lively: "exclude",
-        gameVersion: "unilab_0411",
         // Display options
         sranModeEnabled: false,
         preferGenre: false,
         displayStyle: "normal",
-        // Don't reset notepad contents.
+        // Don't reset game version or notepad contents.
       }
       this.setState(newState)
       this.props.onChange(newState)
@@ -1385,7 +1384,7 @@ export default class ControlPanel extends React.Component<
               value={gameVersion}
               onChange={this.onSelectChange}
             >
-              <option value="unilab_1218">UniLab 1218</option>
+              <option value="unilab_1218">UniLab 1218 + extras</option>
               <option value="unilab_0411">UniLab 0411</option>
             </select>
           </section>
