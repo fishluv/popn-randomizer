@@ -1175,7 +1175,7 @@ export default class ControlPanel extends React.Component<
           </section>
 
           <section className={cx(styles.control, styles.includeDiffs)}>
-            <span>Include difficulties</span>
+            <span>Difficulties</span>
 
             <section className={styles.flex}>
               <input
@@ -1256,7 +1256,7 @@ export default class ControlPanel extends React.Component<
           )}
 
           <section className={cx(styles.control, styles.includeFolders)}>
-            <label>Include folders</label>
+            <label>Folders</label>
 
             <section className={styles.flex}>
               <input
@@ -1398,7 +1398,7 @@ export default class ControlPanel extends React.Component<
               checked={preferGenre}
               onChange={this.onInputChange}
             />
-            <label htmlFor="displayGenreInput">Display genre</label>
+            <label htmlFor="displayGenreInput">Prefer genre</label>
           </section>
 
           <section className={styles.control}>
