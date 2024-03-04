@@ -1083,7 +1083,7 @@ export default class ControlPanel extends React.Component<
       return (
         <>
           <option value="include">OK</option>
-          <option value="exclude">Omit</option>
+          <option value="exclude">Exclude</option>
           <option value="only">Require</option>
         </>
       )
