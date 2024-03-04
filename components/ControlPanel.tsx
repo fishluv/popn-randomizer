@@ -1058,6 +1058,16 @@ export default class ControlPanel extends React.Component<
 
     const rootClassName = cx(extraClass, styles.ControlPanel)
 
+    function includeOptions() {
+      return (
+        <>
+          <option value="include">OK</option>
+          <option value="exclude">Omit</option>
+          <option value="only">Require</option>
+        </>
+      )
+    }
+
     return (
       <section className={rootClassName}>
         <section className={styles.buttonsAndSummary}>
@@ -1310,9 +1320,7 @@ export default class ControlPanel extends React.Component<
               value={holdNotes}
               onChange={this.onSelectChange}
             >
-              <option value="include">Include</option>
-              <option value="exclude">Exclude</option>
-              <option value="only">Only</option>
+              {includeOptions()}
             </select>
             <label htmlFor="holdNotesSelect">Long pop-kuns</label>
           </section>
@@ -1324,9 +1332,7 @@ export default class ControlPanel extends React.Component<
               value={buggedBpms}
               onChange={this.onSelectChange}
             >
-              <option value="include">Include</option>
-              <option value="exclude">Exclude</option>
-              <option value="only">Only</option>
+              {includeOptions()}
             </select>
             <label htmlFor="excludeBuggedBpmsInput">Bugged bpms</label>
           </section>
@@ -1338,9 +1344,7 @@ export default class ControlPanel extends React.Component<
               value={floorInfection}
               onChange={this.onSelectChange}
             >
-              <option value="include">Include</option>
-              <option value="exclude">Exclude</option>
-              <option value="only">Only</option>
+              {includeOptions()}
             </select>
             <label htmlFor="excludeFloorInfectionInput">FLOOR INFECTION</label>
           </section>
@@ -1354,9 +1358,7 @@ export default class ControlPanel extends React.Component<
                   value={omnimix}
                   onChange={this.onSelectChange}
                 >
-                  <option value="include">Include</option>
-                  <option value="exclude">Exclude</option>
-                  <option value="only">Only</option>
+                  {includeOptions()}
                 </select>
                 <label htmlFor="omnimixSelect">Omnimix</label>
               </section>
@@ -1368,9 +1370,7 @@ export default class ControlPanel extends React.Component<
                   value={lively}
                   onChange={this.onSelectChange}
                 >
-                  <option value="include">Include</option>
-                  <option value="exclude">Exclude</option>
-                  <option value="only">Only</option>
+                  {includeOptions()}
                 </select>
                 <label htmlFor="livelySelect">Lively exclusives</label>
               </section>

@@ -98,7 +98,8 @@ select {
   }
 
   &.exclude {
-    background: #ddd;
+    background: $h-bright;
+    color: white;
   }
 
   &.only {
