@@ -1093,7 +1093,11 @@ export default class ControlPanel extends React.Component<
       <section className={rootClassName}>
         <section className={styles.buttonsAndSummary}>
           <section className={styles.left}>
-            <button type="button" onClick={this.onDrawClick}>
+            <button
+              type="button"
+              title="(shortcut: d)"
+              onClick={this.onDrawClick}
+            >
               Draw
             </button>
 
@@ -1103,6 +1107,7 @@ export default class ControlPanel extends React.Component<
           <section className={styles.right}>
             <button
               type="button"
+              title="Settings (shortcut: s)"
               className={styles.iconButton}
               onClick={this.openMoreControls}
             >
@@ -1153,6 +1158,7 @@ export default class ControlPanel extends React.Component<
               <button
                 className={cx(styles.iconButton, styles.clearButton)}
                 type="button"
+                title="Clear drawn charts"
                 onClick={this.onClearClick}
               >
                 <FaTrash />

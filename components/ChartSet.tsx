@@ -61,7 +61,11 @@ export default function ChartSet({
       <div className={styles.triangle}></div>
 
       {chartCardsMarkup.length ? (
-        <button className={styles.copyButton} onClick={onCopyButtonClick}>
+        <button
+          className={styles.copyButton}
+          title="Copy to clipboard"
+          onClick={onCopyButtonClick}
+        >
           <FaRegCopy />
         </button>
       ) : null}
