@@ -191,6 +191,28 @@ export default class ControlPanel extends React.Component<
     }
   }
 
+  componentDidMount() {
+    document.addEventListener("keydown", this.handleKeyPress)
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener("keydown", this.handleKeyPress)
+  }
+
+  handleKeyPress = (event: KeyboardEvent) => {
+    const { isMoreControlsOpen } = this.state
+    if (isMoreControlsOpen) return
+
+    const { key, repeat } = event
+    if (repeat) return
+
+    if (key === "s") {
+      this.openMoreControls()
+    } else if (key === "d") {
+      this.onDrawClick()
+    }
+  }
+
   getNewStateForNewLevelMin = (newMin: number, newMinEmh: "e" | "m" | "h") => {
     const { levelMax: prevMax, levelMaxEmh: prevMaxEmh } = this.state
     const newMax = Math.max(prevMax!, newMin)
