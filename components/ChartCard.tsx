@@ -2,13 +2,12 @@ import cx from "classnames"
 import React from "react"
 import { ChartDisplayOptions } from "./ChartDisplay"
 import styles from "./ChartCard.module.scss"
-import { Chart, VersionFolder } from "popn-db-js"
+import { Chart, OtherFolder, VersionFolder } from "popn-db-js"
 import FolderPill from "./FolderPill"
 import { BsStopwatch } from "react-icons/bs"
 import { LiaDrumSolid } from "react-icons/lia"
 import { LuMountain } from "react-icons/lu"
 import { IoMusicalNotesOutline } from "react-icons/io5"
-import OtherFolder from "popn-db-js/build/models/OtherFolder"
 
 function getSortChar(titleOrGenre: string, sortChar: string) {
   if (titleOrGenre.charAt(0).toLowerCase() !== sortChar.toLowerCase()) {

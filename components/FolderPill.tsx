@@ -1,8 +1,7 @@
 import cx from "classnames"
-import { VersionFolder } from "popn-db-js"
+import { OtherFolder, VersionFolder } from "popn-db-js"
 import React from "react"
 import styles from "./FolderPill.module.scss"
-import OtherFolder from "popn-db-js/build/models/OtherFolder"
 
 export type FolderPillStyle = "normal" | "compact"
 
