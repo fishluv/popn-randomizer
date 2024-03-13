@@ -17,13 +17,13 @@ export default function SetList({
   chartDisplayOptions,
 }: SetListProps) {
   return (
-    <section className={cx(extraClass, "SetList")}>
+    <section className={cx(extraClass, styles.SetList)}>
       {chartDataSets.map((chartDataSet, index) => (
         <ChartSet
           key={index}
           extraClass={styles.borderBetween}
           charts={chartDataSet}
-          index={chartDataSets.length - index - 1}
+          index={index}
           chartDisplayOptions={chartDisplayOptions}
         />
       ))}

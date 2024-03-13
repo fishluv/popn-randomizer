@@ -215,7 +215,7 @@ export default class RandomizerApp extends React.Component<
     const newChartDataSet = database.sampleQueriedCharts(querySampleOptions)
 
     this.setState((prevState) => {
-      const newChartSets = [newChartDataSet, ...prevState.chartDataSets]
+      const newChartSets = [...prevState.chartDataSets, newChartDataSet]
 
       setStorageItem("drawnChartSets", serializeChartSets(newChartSets))
       return {
