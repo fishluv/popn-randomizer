@@ -1035,7 +1035,7 @@ export default class ControlPanel extends React.Component<
   resetControls = () => {
     if (
       window.confirm(
-        "Reset options to default values? Notepad will not be affected.",
+        "Reset options to default values? Display options will not be affected.",
       )
     ) {
       const newState: ChartDrawOptions & Partial<ChartDisplayOptions> = {
@@ -1061,9 +1061,7 @@ export default class ControlPanel extends React.Component<
         lively: "exclude",
         // Display options
         sranModeEnabled: false,
-        preferGenre: false,
-        displayStyle: "normal",
-        // Don't reset game version or notepad contents.
+        // Don't reset game version or display options.
       }
       this.setState(newState)
       this.props.onChange(newState)
