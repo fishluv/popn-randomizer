@@ -44,6 +44,7 @@ export interface ChartDrawOptions {
   hardestDiff?: IncludeOption
   versionFoldersRadio?: "all" | "choose"
   versionFolders?: boolean[]
+  eemall?: IncludeOption
   floorInfection?: IncludeOption
   buggedBpms?: IncludeOption
   holdNotes?: IncludeOption

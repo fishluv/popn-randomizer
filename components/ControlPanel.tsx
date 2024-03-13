@@ -140,6 +140,7 @@ export default class ControlPanel extends React.Component<
         hardestDiff,
         versionFoldersRadio,
         versionFolders,
+        eemall,
         floorInfection,
         buggedBpms,
         holdNotes,
@@ -173,6 +174,7 @@ export default class ControlPanel extends React.Component<
       hardestDiff: hardestDiff ?? "include",
       versionFoldersRadio: versionFoldersRadio ?? "all",
       versionFolders: versionFolders ?? ALL_VERSION_FOLDERS.slice(),
+      eemall: eemall ?? "include",
       floorInfection: floorInfection ?? "include",
       buggedBpms: buggedBpms ?? "include",
       holdNotes: holdNotes ?? "include",
@@ -292,6 +294,10 @@ export default class ControlPanel extends React.Component<
     } else if (id === "buggedBpmsSelect") {
       newState = {
         buggedBpms: parseIncludeOptionSafe(value),
+      }
+    } else if (id === "eemallSelect") {
+      newState = {
+        eemall: parseIncludeOptionSafe(value),
       }
     } else if (id === "floorInfectionSelect") {
       newState = {
@@ -522,6 +528,7 @@ export default class ControlPanel extends React.Component<
       includeDiffs,
       hardestDiff,
       versionFolders,
+      eemall,
       floorInfection,
       buggedBpms,
       holdNotes,
@@ -561,6 +568,13 @@ export default class ControlPanel extends React.Component<
     }
     if (holdNotes === "exclude") {
       querySegments.push("-holds")
+    }
+
+    if (eemall === "only") {
+      querySegments.push("eemall")
+    }
+    if (eemall === "exclude") {
+      querySegments.push("-eemall")
     }
 
     if (floorInfection === "only") {
@@ -1039,6 +1053,7 @@ export default class ControlPanel extends React.Component<
         hardestDiff: "include",
         versionFoldersRadio: "all",
         versionFolders: ALL_VERSION_FOLDERS.slice(),
+        eemall: "include",
         floorInfection: "include",
         buggedBpms: "include",
         holdNotes: "include",
@@ -1064,6 +1079,7 @@ export default class ControlPanel extends React.Component<
       hardestDiff,
       versionFoldersRadio,
       versionFolders,
+      eemall,
       floorInfection,
       buggedBpms,
       holdNotes,
@@ -1366,6 +1382,18 @@ export default class ControlPanel extends React.Component<
 
           <section className={styles.control}>
             <select
+              id="eemallSelect"
+              className={styles[eemall!]}
+              value={eemall}
+              onChange={this.onSelectChange}
+            >
+              {includeOptions()}
+            </select>
+            <label htmlFor="eemallSelect">ee&apos;MALL</label>
+          </section>
+
+          <section className={styles.control}>
+            <select
               id="floorInfectionSelect"
               className={styles[floorInfection!]}
               value={floorInfection}
@@ -1373,7 +1401,7 @@ export default class ControlPanel extends React.Component<
             >
               {includeOptions()}
             </select>
-            <label htmlFor="excludeFloorInfectionInput">FLOOR INFECTION</label>
+            <label htmlFor="floorInfectionSelect">FLOOR INFECTION</label>
           </section>
 
           {gameVersion === "unilab_1218" && (
