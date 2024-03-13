@@ -2,12 +2,13 @@ import cx from "classnames"
 import React from "react"
 import { ChartDisplayOptions } from "./ChartDisplay"
 import styles from "./ChartCard.module.scss"
-import { Chart } from "popn-db-js"
+import { Chart, VersionFolder } from "popn-db-js"
 import FolderPill from "./FolderPill"
 import { BsStopwatch } from "react-icons/bs"
 import { LiaDrumSolid } from "react-icons/lia"
 import { LuMountain } from "react-icons/lu"
 import { IoMusicalNotesOutline } from "react-icons/io5"
+import OtherFolder from "popn-db-js/build/models/OtherFolder"
 
 function getSortChar(titleOrGenre: string, sortChar: string) {
   if (titleOrGenre.charAt(0).toLowerCase() !== sortChar.toLowerCase()) {
@@ -167,6 +168,29 @@ export default class ChartCard extends React.Component<
     )
   }
 
+  getFolderPill = (pillStyle: "normal" | "compact") => {
+    const {
+      chartData: { songDebut, songFolder },
+    } = this.props
+
+    let songFolderToDisplay: VersionFolder | OtherFolder | "lively" | null
+    if (songFolder) {
+      songFolderToDisplay = songFolder
+    } else if (songDebut === "cslively") {
+      songFolderToDisplay = "lively"
+    } else {
+      songFolderToDisplay = null
+    }
+
+    return (
+      <FolderPill
+        extraClass={styles.folderPill}
+        songFolder={songFolderToDisplay}
+        style={pillStyle}
+      />
+    )
+  }
+
   formatDuration = () => {
     const {
       chartData: { duration },
@@ -207,7 +231,7 @@ export default class ChartCard extends React.Component<
   renderNormal() {
     const {
       extraClass,
-      chartData: { difficulty, bpm, notes, hasHolds, songFolder, songLabels },
+      chartData: { difficulty, bpm, notes, hasHolds },
     } = this.props
 
     const { isVetoed } = this.state
@@ -239,11 +263,7 @@ export default class ChartCard extends React.Component<
             {this.getBannerImage(290, 72)}
           </div>
 
-          <FolderPill
-            extraClass={styles.folderPill}
-            songFolder={songLabels.includes("lively") ? "lively" : songFolder}
-            style="normal"
-          />
+          {this.getFolderPill("normal")}
         </div>
 
         <div className={cx(styles.details, diffStyle)}>
@@ -275,7 +295,7 @@ export default class ChartCard extends React.Component<
   renderCompact() {
     const {
       extraClass,
-      chartData: { difficulty, songFolder, songLabels },
+      chartData: { difficulty },
     } = this.props
     const { isVetoed } = this.state
 
@@ -304,11 +324,7 @@ export default class ChartCard extends React.Component<
             {this.renderSranLevel()}
           </div>
 
-          <FolderPill
-            extraClass={styles.folderPill}
-            songFolder={songLabels.includes("lively") ? "lively" : songFolder}
-            style="compact"
-          />
+          {this.getFolderPill("compact")}
         </div>
       </div>
     )

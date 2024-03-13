@@ -2,12 +2,13 @@ import cx from "classnames"
 import { VersionFolder } from "popn-db-js"
 import React from "react"
 import styles from "./FolderPill.module.scss"
+import OtherFolder from "popn-db-js/build/models/OtherFolder"
 
 export type FolderPillStyle = "normal" | "compact"
 
 interface FolderPillProps {
   extraClass?: string
-  songFolder: VersionFolder | "lively"
+  songFolder: VersionFolder | OtherFolder | "lively" | null
   style: FolderPillStyle
 }
 
@@ -17,6 +18,10 @@ interface FolderPillProps {
 export default class FolderPill extends React.Component<FolderPillProps> {
   getFolderDisplayName() {
     const { songFolder, style } = this.props
+
+    if (songFolder === null) {
+      return "—"
+    }
 
     if (style === "normal") {
       switch (songFolder) {
@@ -55,6 +60,10 @@ export default class FolderPill extends React.Component<FolderPillProps> {
       }
     } else {
       switch (songFolder) {
+        case "bemani":
+          return "bem"
+        case "gitadora":
+          return "gd"
         case "lively":
           return "liv"
         case "27":
@@ -102,7 +111,17 @@ export default class FolderPill extends React.Component<FolderPillProps> {
   render() {
     const { extraClass, songFolder, style } = this.props
 
-    const folderClass = /^\d/.test(songFolder) ? `ac${songFolder}` : songFolder
+    let folderClass
+    if (songFolder) {
+      if (/^\d/.test(songFolder)) {
+        folderClass = `ac${songFolder}`
+      } else {
+        folderClass = songFolder
+      }
+    } else {
+      folderClass = "none"
+    }
+
     const rootClassName = cx(
       extraClass,
       styles.FolderPill,
