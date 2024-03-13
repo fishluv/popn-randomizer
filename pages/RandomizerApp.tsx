@@ -131,10 +131,10 @@ export default class RandomizerApp extends React.Component<
       serializeVersionFolders(ALL_VERSION_FOLDERS),
     )
     setStorageItemIfNull("onlyIncludeHardest", false)
-    setStorageItemIfNull("eemall", "include")
-    setStorageItemIfNull("excludeFloorInfection", false)
-    setStorageItemIfNull("excludeBuggedBpms", false)
     setStorageItemIfNull("holdNotes", "include")
+    setStorageItemIfNull("buggedBpms", "include")
+    setStorageItemIfNull("eemall", "include")
+    setStorageItemIfNull("floorInfection", "include")
     setStorageItemIfNull("omnimix", "exclude")
     setStorageItemIfNull("lively", "exclude")
     setStorageItemIfNull("gameVersion", "unilab_0411")
@@ -184,9 +184,7 @@ export default class RandomizerApp extends React.Component<
         versionFolders: deserializeVersionFolders(
           getStorageString("versionFolders"),
         ),
-        eemall: parseIncludeOptionSafe(
-          getStorageString("eemall"),
-        ),
+        eemall: parseIncludeOptionSafe(getStorageString("eemall")),
         floorInfection: parseIncludeOptionSafe(
           getStorageString("floorInfection"),
         ),
