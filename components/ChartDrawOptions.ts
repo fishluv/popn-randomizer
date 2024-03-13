@@ -37,8 +37,10 @@ export interface ChartDrawOptions {
   levelEmhEnabled?: boolean
   levelMinEmh?: "e" | "m" | "h"
   levelMaxEmh?: "e" | "m" | "h"
+  levelRange?: boolean
   sranLevelMin?: SranLevel
   sranLevelMax?: SranLevel
+  sranLevelRange?: boolean
   includeDiffsRadio?: "all" | "choose"
   includeDiffs?: string
   hardestDiff?: IncludeOption

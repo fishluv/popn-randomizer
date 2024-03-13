@@ -133,8 +133,10 @@ export default class ControlPanel extends React.Component<
         levelEmhEnabled,
         levelMinEmh,
         levelMaxEmh,
+        levelRange,
         sranLevelMin,
         sranLevelMax,
+        sranLevelRange,
         includeDiffsRadio,
         includeDiffs,
         hardestDiff,
@@ -167,8 +169,10 @@ export default class ControlPanel extends React.Component<
       levelEmhEnabled: levelEmhEnabled ?? false,
       levelMinEmh: levelMinEmh ?? "e",
       levelMaxEmh: levelMaxEmh ?? "h",
+      levelRange: levelRange ?? false,
       sranLevelMin: sranLevelMin || "01a",
       sranLevelMax: sranLevelMax || "05",
+      sranLevelRange: sranLevelRange ?? false,
       includeDiffsRadio: includeDiffsRadio ?? "all",
       includeDiffs: includeDiffs ?? "enhx",
       hardestDiff: hardestDiff ?? "include",
@@ -331,6 +335,12 @@ export default class ControlPanel extends React.Component<
       this.setState(newState) // For type safety, can't put this outside the if block.
     } else if (id === "showChartDetailsInput") {
       newState = { showChartDetails: checked }
+      this.setState(newState)
+    } else if (id === "levelRangeInput") {
+      newState = { levelRange: checked }
+      this.setState(newState)
+    } else if (id === "sranLevelRangeInput") {
+      newState = { sranLevelRange: checked }
       this.setState(newState)
     } else if (id === "isLevelEmhEnabledInput") {
       newState = { levelEmhEnabled: checked }
@@ -522,9 +532,11 @@ export default class ControlPanel extends React.Component<
       levelEmhEnabled,
       levelMinEmh,
       levelMaxEmh,
+      levelRange,
       sranModeEnabled,
       sranLevelMin,
       sranLevelMax,
+      sranLevelRange,
       includeDiffs,
       hardestDiff,
       versionFolders,
@@ -540,15 +552,25 @@ export default class ControlPanel extends React.Component<
     const querySegments = []
 
     if (sranModeEnabled) {
-      querySegments.push(`srlv >= ${sranLevelMin}`)
-      querySegments.push(`srlv <= ${sranLevelMax}`)
+      if (sranLevelRange) {
+        querySegments.push(`srlv >= ${sranLevelMin}`)
+        querySegments.push(`srlv <= ${sranLevelMax}`)
+      } else {
+        querySegments.push(`srlv = ${sranLevelMin}`)
+      }
     } else {
-      querySegments.push(
-        `lv >= ${levelMin}${levelEmhEnabled ? levelMinEmh : ""}`,
-      )
-      querySegments.push(
-        `lv <= ${levelMax}${levelEmhEnabled ? levelMaxEmh : ""}`,
-      )
+      if (levelRange) {
+        querySegments.push(
+          `lv >= ${levelMin}${levelEmhEnabled ? levelMinEmh : ""}`,
+        )
+        querySegments.push(
+          `lv <= ${levelMax}${levelEmhEnabled ? levelMaxEmh : ""}`,
+        )
+      } else {
+        querySegments.push(
+          `lv = ${levelMin}${levelEmhEnabled ? levelMinEmh : ""}`,
+        )
+      }
     }
 
     if (includeDiffs!.split("").sort().join("") !== "ehnx") {
@@ -634,15 +656,17 @@ export default class ControlPanel extends React.Component<
       levelEmhEnabled,
       levelMinEmh,
       levelMaxEmh,
+      levelRange,
       sranModeEnabled,
       sranLevelMin,
       sranLevelMax,
+      sranLevelRange,
     } = this.state
 
     if (sranModeEnabled) {
       return (
         <section className={cx(styles.control, styles.level)}>
-          <label htmlFor="sranLevelLowerSelect">Sran level</label>
+          <label htmlFor="sranLevelLowerSelect">Sran lv</label>
 
           <section className={styles.flex}>
             <button
@@ -675,38 +699,52 @@ export default class ControlPanel extends React.Component<
             </button>
           </section>
 
-          <label htmlFor="sranLevelUpperSelect">to</label>
+          {sranLevelRange && (
+            <>
+              <label htmlFor="sranLevelUpperSelect">to</label>
 
-          <section className={styles.flex}>
-            <button
-              id="sranLevelMaxDownButton"
-              className={styles.levelDownButton}
-              type="button"
-              onClick={this.onLevelButtonClick}
-            >
-              <VscTriangleLeft />
-            </button>
-            <select
-              id="sranLevelUpperSelect"
-              className={styles[`sranlevel${sranLevelCategory(sranLevelMax)}`]}
-              value={sranLevelMax!}
-              onChange={this.onSelectChange}
-            >
-              {SRAN_LEVELS.map((sranLv: string) => (
-                <option value={sranLv} key={sranLv}>
-                  {normSranLevel(sranLv)}
-                </option>
-              ))}
-            </select>
-            <button
-              id="sranLevelMaxUpButton"
-              className={styles.levelUpButton}
-              type="button"
-              onClick={this.onLevelButtonClick}
-            >
-              <VscTriangleRight />
-            </button>
-          </section>
+              <section className={styles.flex}>
+                <button
+                  id="sranLevelMaxDownButton"
+                  className={styles.levelDownButton}
+                  type="button"
+                  onClick={this.onLevelButtonClick}
+                >
+                  <VscTriangleLeft />
+                </button>
+                <select
+                  id="sranLevelUpperSelect"
+                  className={
+                    styles[`sranlevel${sranLevelCategory(sranLevelMax)}`]
+                  }
+                  value={sranLevelMax!}
+                  onChange={this.onSelectChange}
+                >
+                  {SRAN_LEVELS.map((sranLv: string) => (
+                    <option value={sranLv} key={sranLv}>
+                      {normSranLevel(sranLv)}
+                    </option>
+                  ))}
+                </select>
+                <button
+                  id="sranLevelMaxUpButton"
+                  className={styles.levelUpButton}
+                  type="button"
+                  onClick={this.onLevelButtonClick}
+                >
+                  <VscTriangleRight />
+                </button>
+              </section>
+            </>
+          )}
+
+          <input
+            id="sranLevelRangeInput"
+            type="checkbox"
+            checked={sranLevelRange}
+            onChange={this.onInputChange}
+          />
+          <label htmlFor="sranLevelRangeInput">Range</label>
         </section>
       )
     }
@@ -790,81 +828,95 @@ export default class ControlPanel extends React.Component<
             )}
           </section>
 
-          <label htmlFor="levelUpperSelect">to</label>
+          {levelRange && (
+            <>
+              <label htmlFor="levelUpperSelect">to</label>
 
-          <section>
-            <section className={styles.flex}>
-              <button
-                id="levelMaxDownButton"
-                className={styles.levelDownButton}
-                type="button"
-                onClick={this.onLevelButtonClick}
-              >
-                <VscTriangleLeft />
-              </button>
-              <select
-                id="levelUpperSelect"
-                className={styles[`level${Math.floor((levelMax ?? 0) / 10)}x`]}
-                value={levelMax}
-                onChange={this.onSelectChange}
-              >
-                {LEVELS.map((level: number) => (
-                  <option value={level} key={level}>
-                    {level}
-                  </option>
-                ))}
-              </select>
-              <button
-                id="levelMaxUpButton"
-                className={styles.levelUpButton}
-                type="button"
-                onClick={this.onLevelButtonClick}
-              >
-                <VscTriangleRight />
-              </button>
-            </section>
+              <section>
+                <section className={styles.flex}>
+                  <button
+                    id="levelMaxDownButton"
+                    className={styles.levelDownButton}
+                    type="button"
+                    onClick={this.onLevelButtonClick}
+                  >
+                    <VscTriangleLeft />
+                  </button>
+                  <select
+                    id="levelUpperSelect"
+                    className={
+                      styles[`level${Math.floor((levelMax ?? 0) / 10)}x`]
+                    }
+                    value={levelMax}
+                    onChange={this.onSelectChange}
+                  >
+                    {LEVELS.map((level: number) => (
+                      <option value={level} key={level}>
+                        {level}
+                      </option>
+                    ))}
+                  </select>
+                  <button
+                    id="levelMaxUpButton"
+                    className={styles.levelUpButton}
+                    type="button"
+                    onClick={this.onLevelButtonClick}
+                  >
+                    <VscTriangleRight />
+                  </button>
+                </section>
 
-            {levelEmhEnabled && (
-              <section className={styles.chooseLevelEmh}>
-                <button
-                  id="levelMaxEmhButtonE"
-                  className={cx(
-                    styles.levelEmhButton,
-                    styles.easy,
-                    levelMaxEmh === "e" ? styles.selected : "",
-                  )}
-                  type="button"
-                  onClick={this.onLevelEmhButtonClick}
-                >
-                  e
-                </button>
-                <button
-                  id="levelMaxEmhButtonM"
-                  className={cx(
-                    styles.levelEmhButton,
-                    styles.med,
-                    levelMaxEmh === "m" ? styles.selected : "",
-                  )}
-                  type="button"
-                  onClick={this.onLevelEmhButtonClick}
-                >
-                  m
-                </button>
-                <button
-                  id="levelMaxEmhButtonH"
-                  className={cx(
-                    styles.levelEmhButton,
-                    styles.hard,
-                    levelMaxEmh === "h" ? styles.selected : "",
-                  )}
-                  type="button"
-                  onClick={this.onLevelEmhButtonClick}
-                >
-                  h
-                </button>
+                {levelEmhEnabled && (
+                  <section className={styles.chooseLevelEmh}>
+                    <button
+                      id="levelMaxEmhButtonE"
+                      className={cx(
+                        styles.levelEmhButton,
+                        styles.easy,
+                        levelMaxEmh === "e" ? styles.selected : "",
+                      )}
+                      type="button"
+                      onClick={this.onLevelEmhButtonClick}
+                    >
+                      e
+                    </button>
+                    <button
+                      id="levelMaxEmhButtonM"
+                      className={cx(
+                        styles.levelEmhButton,
+                        styles.med,
+                        levelMaxEmh === "m" ? styles.selected : "",
+                      )}
+                      type="button"
+                      onClick={this.onLevelEmhButtonClick}
+                    >
+                      m
+                    </button>
+                    <button
+                      id="levelMaxEmhButtonH"
+                      className={cx(
+                        styles.levelEmhButton,
+                        styles.hard,
+                        levelMaxEmh === "h" ? styles.selected : "",
+                      )}
+                      type="button"
+                      onClick={this.onLevelEmhButtonClick}
+                    >
+                      h
+                    </button>
+                  </section>
+                )}
               </section>
-            )}
-          </section>
+            </>
+          )}
+
+          <input
+            id="levelRangeInput"
+            type="checkbox"
+            checked={levelRange}
+            onChange={this.onInputChange}
+          />
+          <label htmlFor="levelRangeInput">Range</label>
         </section>
 
         <section className={styles.control}>
@@ -935,13 +987,15 @@ export default class ControlPanel extends React.Component<
       levelEmhEnabled,
       levelMinEmh,
       levelMaxEmh,
+      levelRange,
       sranModeEnabled,
       sranLevelMin,
       sranLevelMax,
+      sranLevelRange,
     } = this.state
 
     if (sranModeEnabled) {
-      if (sranLevelMin === sranLevelMax) {
+      if (!sranLevelRange || sranLevelMin === sranLevelMax) {
         return (
           <>
             {count}
@@ -957,6 +1011,17 @@ export default class ControlPanel extends React.Component<
           {this.getSranLevel(sranLevelMin!)}
           {"~"}
           {this.getSranLevel(sranLevelMax!)}
+        </>
+      )
+    }
+
+    if (!levelRange) {
+      return (
+        <>
+          {count}
+          {" songs, "}
+          {this.getLevel(levelMin!)}
+          {levelEmhEnabled && this.getEmh(levelMinEmh!)}
         </>
       )
     }
@@ -1046,8 +1111,10 @@ export default class ControlPanel extends React.Component<
         levelEmhEnabled: false,
         levelMinEmh: "e",
         levelMaxEmh: "h",
+        levelRange: false,
         sranLevelMin: "01a",
         sranLevelMax: "05",
+        sranLevelRange: false,
         includeDiffsRadio: "all",
         includeDiffs: "enhx",
         hardestDiff: "include",

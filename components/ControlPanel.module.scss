@@ -129,6 +129,10 @@ select {
     margin-left: 0.25rem;
   }
 
+  &.level {
+    align-items: baseline;
+  }
+
   &.draw select,
   &.level select {
     width: 2.75rem;
