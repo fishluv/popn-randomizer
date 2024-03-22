@@ -666,7 +666,7 @@ export default class ControlPanel extends React.Component<
     if (sranModeEnabled) {
       return (
         <section className={cx(styles.control, styles.level)}>
-          <label htmlFor="sranLevelLowerSelect">Sran lv</label>
+          <label htmlFor="sranLevelLowerSelect">Sran</label>
 
           <section className={styles.flex}>
             <button
