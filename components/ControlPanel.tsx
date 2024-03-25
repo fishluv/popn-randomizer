@@ -425,6 +425,28 @@ export default class ControlPanel extends React.Component<
     this.props.onChange(newState)
   }
 
+  onDrawCountButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const { count: prevCount } = this.state
+    let newState
+
+    switch (event.currentTarget.id) {
+      case "drawCountDownButton":
+        newState = { count: Math.max(1, prevCount! - 1) }
+        break
+      case "drawCountUpButton":
+        newState = { count: Math.min(10, prevCount! + 1) }
+        break
+      default:
+        console.warn(
+          `onDrawCountButtonClick unknown id ${event.currentTarget.id}`,
+        )
+        return
+    }
+
+    this.setState(newState)
+    this.props.onChange(newState)
+  }
+
   onLevelButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     const {
       levelMin: prevMin,
@@ -463,7 +485,7 @@ export default class ControlPanel extends React.Component<
       const newSranMax = sranLevelPlusOne(prevSranMax!)
       newState = this.getNewStateForNewSranLevelMax(newSranMax)
     } else {
-      console.warn(`ControlPanel: Unknown id ${id}`)
+      console.warn(`onLevelButtonClick unknown id ${id}`)
       return
     }
 
@@ -1258,17 +1280,34 @@ export default class ControlPanel extends React.Component<
           <h5 className={styles.header}>Draw options</h5>
           <section className={cx(styles.control, styles.draw)}>
             <label htmlFor="drawCountSelect">Draw</label>
-            <select
-              id="drawCountSelect"
-              value={count}
-              onChange={this.onSelectChange}
-            >
-              {DRAW_COUNTS.map((count) => (
-                <option value={count} key={count}>
-                  {count}
-                </option>
-              ))}
-            </select>
+
+            <section className={styles.flex}>
+              <button
+                id="drawCountDownButton"
+                type="button"
+                onClick={this.onDrawCountButtonClick}
+              >
+                <VscTriangleLeft />
+              </button>
+              <select
+                id="drawCountSelect"
+                value={count}
+                onChange={this.onSelectChange}
+              >
+                {DRAW_COUNTS.map((count) => (
+                  <option value={count} key={count}>
+                    {count}
+                  </option>
+                ))}
+              </select>
+              <button
+                id="drawCountUpButton"
+                type="button"
+                onClick={this.onDrawCountButtonClick}
+              >
+                <VscTriangleRight />
+              </button>
+            </section>
           </section>
 
           {this.getLevelControls()}
