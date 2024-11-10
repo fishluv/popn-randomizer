@@ -36,8 +36,5 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 
-## Storybook
-storybook-static
-
 # vscode
 .vscode/

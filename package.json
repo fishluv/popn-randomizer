@@ -8,9 +8,7 @@
     "lint": "next lint",
     "export": "next export",
     "deploy:dev": "surge ./out https://chinatsu-dev.surge.sh",
-    "deploy": "surge ./out https://chinatsu.surge.sh",
-    "storybook": "start-storybook -p 6006",
-    "build-storybook": "build-storybook"
+    "deploy": "surge ./out https://chinatsu.surge.sh"
   },
   "dependencies": {
     "markdown-it": "^14.0.0",
@@ -23,10 +21,6 @@
   },
   "devDependencies": {
     "@babel/core": "^7.16.7",
-    "@storybook/addon-actions": "^6.4.9",
-    "@storybook/addon-essentials": "^6.4.9",
-    "@storybook/addon-links": "^6.4.9",
-    "@storybook/react": "^6.4.9",
     "@types/markdown-it": "^13.0.7",
     "@types/node": "16.11.7",
     "@types/react": "17.0.35",
@@ -41,7 +35,6 @@
     "eslint": "^8.33.0",
     "eslint-config-next": "12.0.4",
     "eslint-config-prettier": "^8.6.0",
-    "eslint-plugin-storybook": "^0.5.5",
     "prettier": "2.8.3",
     "react-modal": "^3.14.4",
     "sass": "^1.45.2",
