@@ -9,8 +9,18 @@ import { LiaDrumSolid } from "react-icons/lia"
 import { LuMountain } from "react-icons/lu"
 import { IoMusicalNotesOutline } from "react-icons/io5"
 
+// https://stackoverflow.com/a/20488304
+function toAscii(fw: string) {
+  return fw.replace(/[！-～]/g, (ch: string) =>
+    String.fromCharCode(ch.charCodeAt(0) - 0xfee0),
+  )
+}
+
 function getSortChar(titleOrGenre: string, sortChar: string) {
-  if (titleOrGenre.charAt(0).toLowerCase() !== sortChar.toLowerCase()) {
+  if (
+    toAscii(titleOrGenre.charAt(0)).toLowerCase() !==
+    toAscii(sortChar).toLowerCase()
+  ) {
     return sortChar
   } else {
     return null
