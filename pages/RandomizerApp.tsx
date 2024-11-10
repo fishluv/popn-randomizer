@@ -20,8 +20,8 @@ import {
   deserializeVersionFolders,
   serializeVersionFolders,
   ALL_VERSION_FOLDERS,
+  parseIncludeOption,
 } from "../components/ChartDrawOptions"
-import { parseIncludeOptionSafe } from "../components/parse"
 
 type RandomizerAppProps = Record<string, never>
 
@@ -187,21 +187,19 @@ export default class RandomizerApp extends React.Component<
           | "all"
           | "choose",
         includeDiffs: getStorageString("includeDiffs"),
-        hardestDiff: parseIncludeOptionSafe(getStorageString("hardestDiff")),
+        hardestDiff: parseIncludeOption(getStorageString("hardestDiff")),
         versionFoldersRadio: getStorageString("versionFoldersRadio", "all") as
           | "all"
           | "choose",
         versionFolders: deserializeVersionFolders(
           getStorageString("versionFolders"),
         ),
-        eemall: parseIncludeOptionSafe(getStorageString("eemall")),
-        floorInfection: parseIncludeOptionSafe(
-          getStorageString("floorInfection"),
-        ),
-        buggedBpms: parseIncludeOptionSafe(getStorageString("buggedBpms")),
-        holdNotes: parseIncludeOptionSafe(getStorageString("holdNotes")),
-        omnimix: parseIncludeOptionSafe(getStorageString("omnimix")),
-        lively: parseIncludeOptionSafe(getStorageString("lively")),
+        eemall: parseIncludeOption(getStorageString("eemall")),
+        floorInfection: parseIncludeOption(getStorageString("floorInfection")),
+        buggedBpms: parseIncludeOption(getStorageString("buggedBpms")),
+        holdNotes: parseIncludeOption(getStorageString("holdNotes")),
+        omnimix: parseIncludeOption(getStorageString("omnimix")),
+        lively: parseIncludeOption(getStorageString("lively")),
         gameVersion,
       },
     })

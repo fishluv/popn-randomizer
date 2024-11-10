@@ -18,8 +18,8 @@ import {
   ALL_VERSION_FOLDERS,
   versionFoldersToQueryValue,
   NONE_VERSION_FOLDERS,
+  parseIncludeOption,
 } from "./ChartDrawOptions"
-import { parseIncludeOption, parseIncludeOptionSafe } from "./parse"
 import FolderPill from "./FolderPill"
 import { BsGithub } from "react-icons/bs"
 import { FaTrash } from "react-icons/fa"
@@ -293,27 +293,27 @@ export default class ControlPanel extends React.Component<
       newState = this.getNewStateForNewSranLevelMax(value)
     } else if (id === "holdNotesSelect") {
       newState = {
-        holdNotes: parseIncludeOptionSafe(value),
+        holdNotes: parseIncludeOption(value),
       }
     } else if (id === "buggedBpmsSelect") {
       newState = {
-        buggedBpms: parseIncludeOptionSafe(value),
+        buggedBpms: parseIncludeOption(value),
       }
     } else if (id === "eemallSelect") {
       newState = {
-        eemall: parseIncludeOptionSafe(value),
+        eemall: parseIncludeOption(value),
       }
     } else if (id === "floorInfectionSelect") {
       newState = {
-        floorInfection: parseIncludeOptionSafe(value),
+        floorInfection: parseIncludeOption(value),
       }
     } else if (id === "omnimixSelect") {
       newState = {
-        omnimix: parseIncludeOptionSafe(value),
+        omnimix: parseIncludeOption(value),
       }
     } else if (id === "livelySelect") {
       newState = {
-        lively: parseIncludeOptionSafe(value),
+        lively: parseIncludeOption(value),
       }
     } else {
       console.warn(`ControlPanel: Unknown id ${id}`)

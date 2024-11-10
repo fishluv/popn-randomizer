@@ -1,4 +1,18 @@
-import { IncludeOption, SranLevel, VERSION_FOLDERS } from "popn-db-js"
+import { SranLevel, VERSION_FOLDERS } from "popn-db-js"
+
+export type IncludeOption = "include" | "exclude" | "only"
+
+export function parseIncludeOption(s: string): IncludeOption {
+  const sl = s?.toLowerCase()
+  switch (sl) {
+    case "only":
+      return "only"
+    case "exclude":
+      return "exclude"
+    default:
+      return "include"
+  }
+}
 
 export const ALL_VERSION_FOLDERS: ReadonlyArray<boolean> = VERSION_FOLDERS.map(
   () => true,
