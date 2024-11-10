@@ -184,7 +184,7 @@ export default class ControlPanel extends React.Component<
       holdNotes: holdNotes ?? "include",
       omnimix: omnimix ?? "exclude",
       lively: lively ?? "exclude",
-      gameVersion: gameVersion || "unilab_0411",
+      gameVersion: gameVersion || "unilab_0731",
       // Display options
       sranModeEnabled: sranModeEnabled ?? false,
       preferGenre: preferGenre ?? false,
@@ -628,7 +628,7 @@ export default class ControlPanel extends React.Component<
       querySegments.push("-floorinfection")
     }
 
-    if (gameVersion === "unilab_1218") {
+    if (gameVersion === "jamfizz_0925") {
       // These are only supported for newest non-Eagle datecodes.
 
       if (omnimix === "only") {
@@ -1508,7 +1508,7 @@ export default class ControlPanel extends React.Component<
             <label htmlFor="floorInfectionSelect">FLOOR INFECTION</label>
           </section>
 
-          {gameVersion === "unilab_1218" && (
+          {gameVersion === "jamfizz_0925" && (
             <>
               <section className={styles.control}>
                 <select
@@ -1544,8 +1544,8 @@ export default class ControlPanel extends React.Component<
               value={gameVersion}
               onChange={this.onSelectChange}
             >
-              <option value="unilab_1218">UniLab 1218 + extras</option>
-              <option value="unilab_0411">UniLab 0411</option>
+              <option value="jamfizz_0925">Jam&Fizz 0925 + extras</option>
+              <option value="unilab_0731">UniLab 0731</option>
             </select>
           </section>
 

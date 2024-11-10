@@ -84,12 +84,11 @@
 }
 
 select {
-  &.unilab_1218 {
-    background: #0091d0;
-    color: white;
+  &.jamfizz_0925 {
+    background: #fdd;
   }
 
-  &.unilab_0411 {
+  &.unilab_0731 {
     background: #cceefd;
   }
 
@@ -173,7 +172,7 @@ select {
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-    height: 24.5rem; // = folderheight * 15
+    height: 26.25rem; // = folderheight * 15
 
     .folderSelect {
       height: 1.75rem;

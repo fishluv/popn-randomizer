@@ -9440,10 +9440,10 @@ polished@^4.0.5:
   dependencies:
     "@babel/runtime" "^7.14.0"
 
-popn-db-js@0.15.1:
-  version "0.15.1"
-  resolved "https://registry.yarnpkg.com/popn-db-js/-/popn-db-js-0.15.1.tgz#c92ebc622bf5e563a83d9141a63f70ba2d2e3024"
-  integrity sha512-y/+jHWrD5GahjMOn8y/QVMBIX6+G4oQpsun1thfYwMIuBqf1XblBgC0t6RCBc2Stc3Gplqx45xPbIIOp2KZ9xg==
+popn-db-js@0.16.1-a2:
+  version "0.16.1-a2"
+  resolved "https://registry.yarnpkg.com/popn-db-js/-/popn-db-js-0.16.1-a2.tgz#194450d2a2ca27d0bb3b45fa460889fb4b66b501"
+  integrity sha512-Wdo/9Vvlroi0HgdP1QNSRwy7J59PLjUImV3TKnJN0oM78JSdf7WiJsdf0qBhHzBS5mF2m0CGxCCavsq+Gek/ZA==
 
 posix-character-classes@^0.1.0:
   version "0.1.1"

@@ -107,13 +107,13 @@ export default class ChartCard extends React.Component<
   getTitleOrGenreSortChar = () => {
     const {
       chartDisplayOptions: { preferGenre },
-      chartData: { genre, genreSortChar, title, titleSortChar },
+      chartData: { genre, fwGenre, title, fwTitle },
     } = this.props
 
     if (preferGenre) {
-      return getSortChar(genre, genreSortChar)
+      return getSortChar(genre, fwGenre[0])
     } else {
-      return getSortChar(title, titleSortChar)
+      return getSortChar(title, fwTitle[0])
     }
   }
 
@@ -169,13 +169,13 @@ export default class ChartCard extends React.Component<
 
   getFolderPill = (pillStyle: "normal" | "compact") => {
     const {
-      chartData: { songDebut, songFolder },
+      chartData: { debut, folders },
     } = this.props
 
     let songFolderToDisplay: VersionFolder | OtherFolder | "lively" | null
-    if (songFolder) {
-      songFolderToDisplay = songFolder
-    } else if (songDebut === "cslively") {
+    if (folders.length) {
+      songFolderToDisplay = folders[0] as VersionFolder | OtherFolder
+    } else if (debut === "cslively") {
       songFolderToDisplay = "lively"
     } else {
       songFolderToDisplay = null
@@ -212,25 +212,26 @@ export default class ChartCard extends React.Component<
     if (rating === null) {
       return "?"
     }
-    if (rating === -1) {
+    if (Number(rating) === -1) {
       return "-1.0"
     }
-    if (rating === 0) {
+    if (Number(rating) === 0) {
       return "0.0"
     }
-    if (rating === 1) {
+    if (Number(rating) === 1) {
       return "+1.0"
     }
-    if (rating > 0) {
+    if (Number(rating) > 0) {
       return `+${rating}`
     }
+    // else < 0
     return rating
   }
 
   renderNormal() {
     const {
       extraClass,
-      chartData: { difficulty, bpm, notes, hasHolds },
+      chartData: { difficulty, bpm, notes, holdNotes },
     } = this.props
 
     const { isVetoed } = this.state
@@ -279,7 +280,7 @@ export default class ChartCard extends React.Component<
           <span className={styles.item}>
             <IoMusicalNotesOutline size="0.875rem" />
             <span>{notes || "?"}</span>
-            {hasHolds && <span className={styles.holdsPill}>L</span>}
+            {holdNotes > 0 && <span className={styles.holdsPill}>L</span>}
           </span>
 
           <span className={styles.item}>

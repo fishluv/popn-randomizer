@@ -1,6 +1,6 @@
 import React from "react"
 import { Toaster } from "react-hot-toast"
-import { Chart, Unilab0411, Unilab1218, parseSranLevel } from "popn-db-js"
+import { Chart, Unilab0731, JamFizz0925, parseSranLevel } from "popn-db-js"
 import ControlPanel, { ControlPanelState } from "../components/ControlPanel"
 import SetList from "../components/SetList"
 import {
@@ -51,7 +51,9 @@ function deserializeChartSets(
     }
 
     // Max is 20 sets and 10 charts per set.
-    const sets: string[][] = parsed.filter(Array.isArray).slice(0, 20)
+    const sets: string[][] = parsed
+      .filter(Array.isArray)
+      .slice(parsed.length - 20)
 
     return sets.map((set) => {
       const chartIds = set.filter((s) => typeof s === "string").slice(0, 10)
@@ -75,17 +77,21 @@ function serializeChartSets(chartSets: Chart[][]): string {
 
 function getDatabase(gameVersion: string) {
   switch (gameVersion) {
+    // versions with extras
     case "unilab_0913":
     case "unilab_1220":
     case "unilab_0905":
     case "unilab_1218":
-      return Unilab1218
+    case "jamfizz_0925":
+      return JamFizz0925
+    // versions without extras
     case "kaimei_0613":
     case "unilab_0411":
-      return Unilab0411
+    case "unilab_0731":
+      return Unilab0731
     default:
       console.error(`Unknown game version ${gameVersion}`)
-      return Unilab0411
+      return Unilab0731
   }
 }
 
@@ -139,7 +145,7 @@ export default class RandomizerApp extends React.Component<
     setStorageItemIfNull("floorInfection", "include")
     setStorageItemIfNull("omnimix", "exclude")
     setStorageItemIfNull("lively", "exclude")
-    setStorageItemIfNull("gameVersion", "unilab_0411")
+    setStorageItemIfNull("gameVersion", "unilab_0731")
     // Display options
     setStorageItemIfNull("sranModeEnabled", false)
     setStorageItemIfNull("preferGenre", false)

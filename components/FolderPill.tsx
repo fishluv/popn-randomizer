@@ -24,6 +24,8 @@ export default class FolderPill extends React.Component<FolderPillProps> {
 
     if (style === "normal") {
       switch (songFolder) {
+        case "28":
+          return "jam&fizz"
         case "27":
           return "unilab"
         case "26":
@@ -65,6 +67,8 @@ export default class FolderPill extends React.Component<FolderPillProps> {
           return "gd"
         case "lively":
           return "liv"
+        case "28":
+          return "j&f"
         case "27":
           return "ul"
         case "26":
