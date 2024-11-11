@@ -621,6 +621,7 @@ export default class ControlPanel extends React.Component<
             }
             id="sranLevelInput"
             type="text"
+            placeholder="range"
             value={sranLevelAdv || ""}
             onChange={(event) => {
               const newState = { sranLevelAdv: event.target.value }
@@ -668,6 +669,7 @@ export default class ControlPanel extends React.Component<
             }
             id="levelInput"
             type="text"
+            placeholder="range"
             value={levelAdv || ""}
             onChange={(event) => {
               const newState = { levelAdv: event.target.value }
