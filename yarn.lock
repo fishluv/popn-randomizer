@@ -4191,10 +4191,10 @@ platform@1.3.6:
   resolved "https://registry.npmjs.org/platform/-/platform-1.3.6.tgz"
   integrity sha512-fnWVljUchTro6RiCFvCXBbNhJc2NijN7oIQxbwsyL0buWJPG85v81ehlHI9fXrJsMNgTofEoWIQeClKpgxFLrg==
 
-popn-db-js@0.16.1-a2:
-  version "0.16.1-a2"
-  resolved "https://registry.yarnpkg.com/popn-db-js/-/popn-db-js-0.16.1-a2.tgz#194450d2a2ca27d0bb3b45fa460889fb4b66b501"
-  integrity sha512-Wdo/9Vvlroi0HgdP1QNSRwy7J59PLjUImV3TKnJN0oM78JSdf7WiJsdf0qBhHzBS5mF2m0CGxCCavsq+Gek/ZA==
+popn-db-js@0.16.1-a3:
+  version "0.16.1-a3"
+  resolved "https://registry.yarnpkg.com/popn-db-js/-/popn-db-js-0.16.1-a3.tgz#ab547b3ca6e555b4daa17eaf2d2c41628e201b1a"
+  integrity sha512-UCehhFaC7HZ4pvPRrHJ9fibo0sY/eIpfGuOO7e3EVjBtD0jytRTg4UrENMZgy/i750oWBgri0WqufnSLkMdFDA==
 
 postcss-modules-extract-imports@^3.0.0:
   version "3.0.0"

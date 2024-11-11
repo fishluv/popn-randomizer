@@ -1,6 +1,13 @@
 import React from "react"
 import { Toaster } from "react-hot-toast"
-import { Chart, Unilab0731, JamFizz0925, parseSranLevel } from "popn-db-js"
+import {
+  Chart,
+  Unilab0731,
+  JamFizz0925,
+  parseSranLevel,
+  VersionFolder,
+  BemaniFolder,
+} from "popn-db-js"
 import ControlPanel, { ControlPanelState } from "../components/ControlPanel"
 import SetList from "../components/SetList"
 import {
@@ -17,9 +24,6 @@ import {
 } from "../lib/storage"
 import {
   ChartDrawOptions,
-  deserializeVersionFolders,
-  serializeVersionFolders,
-  ALL_VERSION_FOLDERS,
   parseIncludeOption,
 } from "../components/ChartDrawOptions"
 
@@ -133,11 +137,7 @@ export default class RandomizerApp extends React.Component<
     setStorageItemIfNull("sranLevelRange", false)
     setStorageItemIfNull("includeDiffsRadio", "all")
     setStorageItemIfNull("includeDiffs", "enhx")
-    setStorageItemIfNull("versionFoldersRadio", "all")
-    setStorageItemIfNull(
-      "versionFolders",
-      serializeVersionFolders(ALL_VERSION_FOLDERS),
-    )
+    // `folder` should default to null.
     setStorageItemIfNull("onlyIncludeHardest", false)
     setStorageItemIfNull("holdNotes", "include")
     setStorageItemIfNull("buggedBpms", "include")
@@ -188,12 +188,9 @@ export default class RandomizerApp extends React.Component<
           | "choose",
         includeDiffs: getStorageString("includeDiffs"),
         hardestDiff: parseIncludeOption(getStorageString("hardestDiff")),
-        versionFoldersRadio: getStorageString("versionFoldersRadio", "all") as
-          | "all"
-          | "choose",
-        versionFolders: deserializeVersionFolders(
-          getStorageString("versionFolders"),
-        ),
+        folder:
+          (getStorageString("folder") as VersionFolder | BemaniFolder) ||
+          undefined,
         eemall: parseIncludeOption(getStorageString("eemall")),
         floorInfection: parseIncludeOption(getStorageString("floorInfection")),
         buggedBpms: parseIncludeOption(getStorageString("buggedBpms")),
@@ -247,11 +244,7 @@ export default class RandomizerApp extends React.Component<
       },
     }))
     Object.entries(newControlPanelState).forEach(([key, value]) => {
-      if (key === "versionFolders") {
-        setStorageItem(key, serializeVersionFolders(value as boolean[]))
-      } else {
-        setStorageItem(key, value)
-      }
+      setStorageItem(key, value)
     })
   }
 

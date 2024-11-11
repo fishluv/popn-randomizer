@@ -1,14 +1,13 @@
 import cx from "classnames"
-import { OtherFolder, VersionFolder } from "popn-db-js"
 import React from "react"
 import styles from "./FolderPill.module.scss"
-
-export type FolderPillStyle = "normal" | "compact"
+import { BemaniFolder, VersionFolder } from "popn-db-js"
 
 interface FolderPillProps {
-  extraClass?: string
-  songFolder: VersionFolder | OtherFolder | "lively" | null
-  style: FolderPillStyle
+  className?: string
+  folder: VersionFolder | BemaniFolder | null
+  pillStyle: "full" | "compact"
+  labelStyle: "full" | "compact"
 }
 
 /**
@@ -16,14 +15,14 @@ interface FolderPillProps {
  */
 export default class FolderPill extends React.Component<FolderPillProps> {
   getFolderDisplayName() {
-    const { songFolder, style } = this.props
+    const { folder, labelStyle } = this.props
 
-    if (songFolder === null) {
+    if (folder === null) {
       return "—"
     }
 
-    if (style === "normal") {
-      switch (songFolder) {
+    if (labelStyle === "full") {
+      switch (folder) {
         case "28":
           return "jam&fizz"
         case "27":
@@ -60,13 +59,11 @@ export default class FolderPill extends React.Component<FolderPillProps> {
           return "iroha"
       }
     } else {
-      switch (songFolder) {
+      switch (folder) {
         case "bemani":
           return "bem"
         case "gitadora":
           return "gd"
-        case "lively":
-          return "liv"
         case "28":
           return "j&f"
         case "27":
@@ -104,34 +101,34 @@ export default class FolderPill extends React.Component<FolderPillProps> {
       }
     }
 
-    if (/^\d+/.test(songFolder)) {
-      return Number(songFolder).toString()
+    if (/^\d+/.test(folder)) {
+      return Number(folder).toString()
     } else {
-      return songFolder
+      return folder
     }
   }
 
   render() {
-    const { extraClass, songFolder, style } = this.props
+    const { className, folder, pillStyle } = this.props
 
     let folderClass
-    if (songFolder) {
-      if (/^\d/.test(songFolder)) {
-        folderClass = `ac${songFolder}`
+    if (folder) {
+      if (/^\d/.test(folder)) {
+        folderClass = `ac${folder}`
+      } else if (/^cs/.test(folder)) {
+        folderClass = "cs"
       } else {
-        folderClass = songFolder
+        folderClass = folder
       }
     } else {
       folderClass = "none"
     }
 
     const rootClassName = cx(
-      extraClass,
+      className,
       styles.FolderPill,
       styles[folderClass],
-      {
-        [styles.compact]: style === "compact",
-      },
+      styles[pillStyle],
     )
 
     return <span className={rootClassName}>{this.getFolderDisplayName()}</span>

@@ -2,7 +2,7 @@ import cx from "classnames"
 import React from "react"
 import { ChartDisplayOptions } from "./ChartDisplay"
 import styles from "./ChartCard.module.scss"
-import { Chart, OtherFolder, VersionFolder } from "popn-db-js"
+import { Chart, VersionFolder, BemaniFolder } from "popn-db-js"
 import FolderPill from "./FolderPill"
 import { BsStopwatch } from "react-icons/bs"
 import { LiaDrumSolid } from "react-icons/lia"
@@ -179,23 +179,22 @@ export default class ChartCard extends React.Component<
 
   getFolderPill = (pillStyle: "normal" | "compact") => {
     const {
-      chartData: { debut, folders },
+      chartData: { folders },
     } = this.props
 
-    let songFolderToDisplay: VersionFolder | OtherFolder | "lively" | null
+    let songFolderToDisplay: VersionFolder | BemaniFolder | null
     if (folders.length) {
-      songFolderToDisplay = folders[0] as VersionFolder | OtherFolder
-    } else if (debut === "cslively") {
-      songFolderToDisplay = "lively"
+      songFolderToDisplay = folders[0] as VersionFolder | BemaniFolder
     } else {
       songFolderToDisplay = null
     }
 
     return (
       <FolderPill
-        extraClass={styles.folderPill}
-        songFolder={songFolderToDisplay}
-        style={pillStyle}
+        className={styles.folderPill}
+        folder={songFolderToDisplay}
+        pillStyle={pillStyle === "normal" ? "full" : "compact"}
+        labelStyle={pillStyle === "normal" ? "full" : "compact"}
       />
     )
   }

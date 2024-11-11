@@ -5,22 +5,15 @@ import ReactModal from "react-modal"
 import {
   LEVELS,
   parseSranLevel,
-  parseVersionFolder,
   SranLevel,
   SRAN_LEVELS,
-  VERSION_FOLDERS,
+  VersionFolder,
+  BemaniFolder,
 } from "popn-db-js"
 import styles from "./ControlPanel.module.scss"
 import { ChartDisplayOptions } from "./ChartDisplay"
 import { ChartQuerySampleOptions } from "../pages/RandomizerApp"
-import {
-  ChartDrawOptions,
-  ALL_VERSION_FOLDERS,
-  versionFoldersToQueryValue,
-  NONE_VERSION_FOLDERS,
-  parseIncludeOption,
-} from "./ChartDrawOptions"
-import FolderPill from "./FolderPill"
+import { ChartDrawOptions, parseIncludeOption } from "./ChartDrawOptions"
 import { BsGithub } from "react-icons/bs"
 import { FaTrash } from "react-icons/fa"
 import { RiSettings3Fill } from "react-icons/ri"
@@ -28,6 +21,95 @@ import { VscTriangleLeft, VscTriangleRight } from "react-icons/vsc"
 
 const md = markdownit({ html: false, breaks: true, linkify: true })
 ReactModal.setAppElement("#app")
+
+const FOLDER_OPTIONS: {
+  id: VersionFolder | BemaniFolder | "dummy1" | "dummy2"
+  label?: string
+  disabled?: boolean
+}[] = [
+  { id: "dummy1", label: "-- Version folders --", disabled: true },
+  { id: "28", label: "jam&fizz" },
+  { id: "27", label: "unilab" },
+  { id: "26", label: "kaimei riddles" },
+  { id: "25", label: "peace" },
+  { id: "24", label: "usaneko" },
+  { id: "23", label: "eclale" },
+  { id: "22", label: "lapistoria" },
+  { id: "21", label: "sunny park" },
+  { id: "20", label: "fantasia" },
+  { id: "19", label: "tune street" },
+  { id: "18", label: "sengoku retsuden" },
+  { id: "17", label: "the movie" },
+  { id: "16", label: "party" },
+  { id: "15", label: "adventure" },
+  { id: "14", label: "fever" },
+  { id: "13", label: "carnival" },
+  { id: "12", label: "iroha" },
+  { id: "11" },
+  { id: "10" },
+  { id: "9" },
+  { id: "8" },
+  { id: "7" },
+  { id: "6" },
+  { id: "5" },
+  { id: "4" },
+  { id: "3" },
+  { id: "2" },
+  { id: "1" },
+  { id: "cs" },
+  { id: "dummy2", label: "-- Bemani folders --", disabled: true },
+  { id: "iidx" },
+  { id: "ddr" },
+  { id: "gitadora" },
+  { id: "jubeat" },
+  { id: "reflec" },
+  { id: "sdvx" },
+  { id: "beatstream" },
+  { id: "museca" },
+  { id: "nostalgia" },
+  { id: "bemani" },
+]
+
+function Select({
+  className,
+  id,
+  label,
+  options,
+  dummyOption,
+  selectedOption,
+  setOption,
+  disabled,
+}: {
+  className?: string
+  id: string
+  label: string
+  options: { id: string; label?: string; disabled?: boolean }[]
+  dummyOption?: string
+  selectedOption: string
+  setOption(id: string): void
+  disabled?: boolean
+}) {
+  return (
+    <div className={className}>
+      <label htmlFor={id}>{label}</label>
+      <select
+        id={id}
+        value={selectedOption}
+        onChange={(event) => setOption(event.target.value)}
+        disabled={disabled}
+      >
+        {dummyOption && <option value="">{dummyOption}</option>}
+        {options.map(({ id, label, disabled }) => {
+          return (
+            <option key={id} value={id} disabled={disabled}>
+              {label || id}
+            </option>
+          )
+        })}
+      </select>
+    </div>
+  )
+}
 
 function range(start: number, stop: number) {
   let realStart: number
@@ -140,8 +222,7 @@ export default class ControlPanel extends React.Component<
         includeDiffsRadio,
         includeDiffs,
         hardestDiff,
-        versionFoldersRadio,
-        versionFolders,
+        folder,
         eemall,
         floorInfection,
         buggedBpms,
@@ -176,8 +257,7 @@ export default class ControlPanel extends React.Component<
       includeDiffsRadio: includeDiffsRadio ?? "all",
       includeDiffs: includeDiffs ?? "enhx",
       hardestDiff: hardestDiff ?? "include",
-      versionFoldersRadio: versionFoldersRadio ?? "all",
-      versionFolders: versionFolders ?? ALL_VERSION_FOLDERS.slice(),
+      folder: folder, // undefined is fine
       eemall: eemall ?? "include",
       floorInfection: floorInfection ?? "include",
       buggedBpms: buggedBpms ?? "include",
@@ -325,7 +405,7 @@ export default class ControlPanel extends React.Component<
   }
 
   onInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { includeDiffs, versionFolders } = this.state
+    const { includeDiffs } = this.state
     const { id, checked } = event.target
     let newState
 
@@ -394,22 +474,6 @@ export default class ControlPanel extends React.Component<
           ? parseIncludeOption("only")
           : parseIncludeOption("include"),
       }
-      this.setState(newState)
-    } else if (id === "includeAllFoldersInput" && checked) {
-      newState = {
-        versionFoldersRadio: "all" as const,
-        versionFolders: ALL_VERSION_FOLDERS.slice(),
-      }
-      this.setState(newState)
-    } else if (id === "includeChooseFoldersInput" && checked) {
-      newState = {
-        versionFoldersRadio: "choose" as const,
-      }
-      this.setState(newState)
-    } else if (/folder(\d+)Input/.test(id)) {
-      const folderNum = Number(id.match(/folder(\d+)Input/)![1])
-      versionFolders![folderNum] = checked
-      newState = { versionFolders }
       this.setState(newState)
     } else if (id === "displayStyleNormalInput") {
       newState = { displayStyle: "normal" as const }
@@ -529,14 +593,6 @@ export default class ControlPanel extends React.Component<
     this.props.onChange(newState)
   }
 
-  onNoneVersionFoldersButtonClick = () => {
-    const newState = {
-      versionFolders: NONE_VERSION_FOLDERS.slice(),
-    }
-    this.setState(newState)
-    this.props.onChange(newState)
-  }
-
   onTextareaChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newState = {
       notepadContents: event.currentTarget.value,
@@ -561,7 +617,7 @@ export default class ControlPanel extends React.Component<
       sranLevelRange,
       includeDiffs,
       hardestDiff,
-      versionFolders,
+      folder,
       eemall,
       floorInfection,
       buggedBpms,
@@ -646,9 +702,8 @@ export default class ControlPanel extends React.Component<
       }
     }
 
-    // Put this late because it's somewhat expensive.
-    if (!versionFolders!.every(Boolean)) {
-      querySegments.push(`ver = ${versionFoldersToQueryValue(versionFolders!)}`)
+    if (folder) {
+      querySegments.push(`folder = ${folder}`)
     }
 
     // Put this last because it's the most expensive condition to evaluate.
@@ -1140,8 +1195,7 @@ export default class ControlPanel extends React.Component<
         includeDiffsRadio: "all",
         includeDiffs: "enhx",
         hardestDiff: "include",
-        versionFoldersRadio: "all",
-        versionFolders: ALL_VERSION_FOLDERS.slice(),
+        folder: undefined,
         eemall: "include",
         floorInfection: "include",
         buggedBpms: "include",
@@ -1164,8 +1218,7 @@ export default class ControlPanel extends React.Component<
       includeDiffsRadio,
       includeDiffs,
       hardestDiff,
-      versionFoldersRadio,
-      versionFolders,
+      folder,
       eemall,
       floorInfection,
       buggedBpms,
@@ -1404,61 +1457,19 @@ export default class ControlPanel extends React.Component<
           )}
 
           <section className={cx(styles.control, styles.includeFolders)}>
-            <label>Folders</label>
-
-            <section className={styles.flex}>
-              <input
-                id="includeAllFoldersInput"
-                type="radio"
-                checked={versionFoldersRadio === "all"}
-                onChange={this.onInputChange}
-              />
-              <label htmlFor="includeAllFoldersInput">All</label>
-            </section>
-
-            <section className={styles.flex}>
-              <input
-                id="includeChooseFoldersInput"
-                type="radio"
-                checked={versionFoldersRadio === "choose"}
-                onChange={this.onInputChange}
-              />
-              <label htmlFor="includeChooseFoldersInput">Choose</label>
-            </section>
-
-            {versionFoldersRadio === "choose" && (
-              <button
-                className={styles.noneFoldersButton}
-                type="button"
-                onClick={this.onNoneVersionFoldersButtonClick}
-              >
-                None
-              </button>
-            )}
+            <Select
+              id="folderSelect"
+              label="Folder"
+              options={FOLDER_OPTIONS}
+              dummyOption="(any)"
+              selectedOption={folder || ""}
+              setOption={(id: VersionFolder | BemaniFolder) => {
+                const newState = { folder: id }
+                this.setState(newState)
+                this.props.onChange(newState)
+              }}
+            />
           </section>
-
-          {versionFoldersRadio === "choose" && (
-            <section className={cx(styles.control, styles.foldersChoose)}>
-              {Array.from(Array(VERSION_FOLDERS.length).keys())
-                .reverse()
-                .map((folderNum) => (
-                  <section className={styles.folderSelect} key={folderNum}>
-                    <input
-                      id={`folder${folderNum}Input`}
-                      type="checkbox"
-                      checked={versionFolders![folderNum]}
-                      onChange={this.onInputChange}
-                    />
-                    <label htmlFor={`folder${folderNum}Input`}>
-                      <FolderPill
-                        songFolder={parseVersionFolder(String(folderNum))}
-                        style="normal"
-                      />
-                    </label>
-                  </section>
-                ))}
-            </section>
-          )}
 
           <section className={styles.control}>
             <select
