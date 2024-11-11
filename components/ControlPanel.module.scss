@@ -144,7 +144,7 @@ select {
   }
 
   &.diffsChoose {
-    margin-top: 0.25rem;
+    margin-top: -0.5rem;
     margin-left: 1rem;
     width: 14rem;
     display: flex;
@@ -166,8 +166,10 @@ select {
 
   &.notepad {
     flex-direction: column;
+    align-items: flex-start;
 
     label {
+      width: 100%;
       display: flex;
       justify-content: space-between;
 
