@@ -126,12 +126,7 @@ export default class RandomizerApp extends React.Component<
 
     // Draw options
     setStorageItemIfNull("count", 5)
-    setStorageItemIfNull("levelMin", 30)
-    setStorageItemIfNull("levelMax", 40)
-    setStorageItemIfNull("levelEmhEnabled", false)
-    setStorageItemIfNull("levelMinEmh", "e")
-    setStorageItemIfNull("levelMaxEmh", "h")
-    setStorageItemIfNull("levelRange", false)
+    // `level` and `levelAdv` should default to null.
     setStorageItemIfNull("sranLevelMin", "01a")
     setStorageItemIfNull("sranLevelMax", "05")
     setStorageItemIfNull("sranLevelRange", false)
@@ -174,12 +169,8 @@ export default class RandomizerApp extends React.Component<
       },
       chartDrawOptions: {
         count: getStorageNumber("count"),
-        levelMin: getStorageNumber("levelMin"),
-        levelMax: getStorageNumber("levelMax"),
-        levelEmhEnabled: getStorageBoolean("levelEmhEnabled"),
-        levelMinEmh: getStorageString("levelMinEmh") as "e" | "m" | "h",
-        levelMaxEmh: getStorageString("levelMaxEmh") as "e" | "m" | "h",
-        levelRange: getStorageBoolean("levelRange"),
+        level: getStorageString("level") || undefined,
+        levelAdv: getStorageString("levelAdv") || undefined,
         sranLevelMin: parseSranLevel(getStorageString("sranLevelMin", "01a")),
         sranLevelMax: parseSranLevel(getStorageString("sranLevelMax", "05")),
         sranLevelRange: getStorageBoolean("sranLevelRange"),

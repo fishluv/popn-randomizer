@@ -3,7 +3,6 @@ import markdownit from "markdown-it"
 import React from "react"
 import ReactModal from "react-modal"
 import {
-  LEVELS,
   parseSranLevel,
   SranLevel,
   SRAN_LEVELS,
@@ -126,26 +125,6 @@ function range(start: number, stop: number) {
   return [...Array.from(Array(size).keys())].map((i) => i + realStart)
 }
 
-function emhToOrd(emh: "e" | "m" | "h") {
-  return ["e", "m", "h"].indexOf(emh)
-}
-
-function emhFromOrd(ord: 0 | 1 | 2): "e" | "m" | "h" {
-  return ["e", "m", "h"][ord] as "e" | "m" | "h"
-}
-
-function minEmh(...emhs: ("e" | "m" | "h")[]) {
-  const ords = emhs.map(emhToOrd) as (0 | 1 | 2)[]
-  const minOrd = Math.min(...ords) as 0 | 1 | 2
-  return emhFromOrd(minOrd)
-}
-
-function maxEmh(...emhs: ("e" | "m" | "h")[]) {
-  const ords = emhs.map(emhToOrd) as (0 | 1 | 2)[]
-  const maxOrd = Math.max(...ords) as 0 | 1 | 2
-  return emhFromOrd(maxOrd)
-}
-
 function normSranLevel(sranLv: string): string {
   return sranLv.replace("a", "-").replace("b", "+").replace(/^0+/, "")
 }
@@ -179,6 +158,44 @@ function sranLevelCategory(sranLv?: SranLevel): string {
   }
 }
 
+// TODO: bring back emh
+function isLevelAdvValid(levelAdv: string) {
+  const tokens = levelAdv
+    .trim()
+    .split(/\b/)
+    .map((s) => s.trim())
+
+  function numInRange(s: string) {
+    const num = Number(s)
+    return num >= 1 && num <= 50
+  }
+
+  if (tokens.length === 1) {
+    return numInRange(tokens[0])
+  }
+
+  if (tokens.length === 2) {
+    if (tokens[0] === "-") {
+      return numInRange(tokens[1])
+    } else if (tokens[1] === "-") {
+      return numInRange(tokens[0])
+    } else {
+      return false
+    }
+  }
+
+  if (tokens.length === 3) {
+    return (
+      numInRange(tokens[0]) &&
+      tokens[1] === "-" &&
+      numInRange(tokens[2]) &&
+      Number(tokens[2]) >= Number(tokens[0])
+    )
+  }
+
+  return false
+}
+
 const DRAW_COUNT_MIN = 1
 const DRAW_COUNT_MAX = 10
 const DRAW_COUNTS = range(DRAW_COUNT_MIN, DRAW_COUNT_MAX + 1)
@@ -210,12 +227,8 @@ export default class ControlPanel extends React.Component<
     const {
       initialDrawOptions: {
         count,
-        levelMin,
-        levelMax,
-        levelEmhEnabled,
-        levelMinEmh,
-        levelMaxEmh,
-        levelRange,
+        level,
+        levelAdv,
         sranLevelMin,
         sranLevelMax,
         sranLevelRange,
@@ -245,19 +258,15 @@ export default class ControlPanel extends React.Component<
     this.state = {
       // Draw options
       count: count || 4,
-      levelMin: levelMin || 30,
-      levelMax: levelMax || 40,
-      levelEmhEnabled: levelEmhEnabled ?? false,
-      levelMinEmh: levelMinEmh ?? "e",
-      levelMaxEmh: levelMaxEmh ?? "h",
-      levelRange: levelRange ?? false,
+      level, // undefined is fine
+      levelAdv, // undefined is fine
       sranLevelMin: sranLevelMin || "01a",
       sranLevelMax: sranLevelMax || "05",
       sranLevelRange: sranLevelRange ?? false,
       includeDiffsRadio: includeDiffsRadio ?? "all",
       includeDiffs: includeDiffs ?? "enhx",
       hardestDiff: hardestDiff ?? "include",
-      folder: folder, // undefined is fine
+      folder, // undefined is fine
       eemall: eemall ?? "include",
       floorInfection: floorInfection ?? "include",
       buggedBpms: buggedBpms ?? "include",
@@ -299,34 +308,6 @@ export default class ControlPanel extends React.Component<
     }
   }
 
-  getNewStateForNewLevelMin = (newMin: number, newMinEmh: "e" | "m" | "h") => {
-    const { levelMax: prevMax, levelMaxEmh: prevMaxEmh } = this.state
-    const newMax = Math.max(prevMax!, newMin)
-    const newMaxEmh =
-      newMin === newMax ? maxEmh(prevMaxEmh!, newMinEmh) : prevMaxEmh
-
-    return {
-      levelMin: newMin,
-      levelMax: newMax,
-      levelMinEmh: newMinEmh,
-      levelMaxEmh: newMaxEmh,
-    }
-  }
-
-  getNewStateForNewLevelMax = (newMax: number, newMaxEmh: "e" | "m" | "h") => {
-    const { levelMin: prevMin, levelMinEmh: prevMinEmh } = this.state
-    const newMin = Math.min(prevMin!, newMax)
-    const newMinEmh =
-      newMin === newMax ? minEmh(prevMinEmh!, newMaxEmh) : prevMinEmh
-
-    return {
-      levelMin: newMin,
-      levelMax: newMax,
-      levelMinEmh: newMinEmh,
-      levelMaxEmh: newMaxEmh,
-    }
-  }
-
   getNewStateForNewSranLevelMin = (newSranMin: string) => {
     const { sranLevelMax: prevSranMax } = this.state
     const newSranMax = newSranMin > prevSranMax! ? newSranMin : prevSranMax!
@@ -348,7 +329,6 @@ export default class ControlPanel extends React.Component<
   }
 
   onSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const { levelMinEmh, levelMaxEmh } = this.state
     const { id, value } = event.target
     let newState
 
@@ -359,10 +339,6 @@ export default class ControlPanel extends React.Component<
       newState = {
         count: Number(value),
       }
-    } else if (id === "levelLowerSelect") {
-      newState = this.getNewStateForNewLevelMin(Number(value), levelMinEmh!)
-    } else if (id === "levelUpperSelect") {
-      newState = this.getNewStateForNewLevelMax(Number(value), levelMaxEmh!)
     } else if (id === "gameVersionSelect") {
       newState = {
         gameVersion: value,
@@ -416,14 +392,8 @@ export default class ControlPanel extends React.Component<
     } else if (id === "showChartDetailsInput") {
       newState = { showChartDetails: checked }
       this.setState(newState)
-    } else if (id === "levelRangeInput") {
-      newState = { levelRange: checked }
-      this.setState(newState)
     } else if (id === "sranLevelRangeInput") {
       newState = { sranLevelRange: checked }
-      this.setState(newState)
-    } else if (id === "isLevelEmhEnabledInput") {
-      newState = { levelEmhEnabled: checked }
       this.setState(newState)
     } else if (id === "isSranModeEnabledInput") {
       newState = { sranModeEnabled: checked }
@@ -512,31 +482,12 @@ export default class ControlPanel extends React.Component<
   }
 
   onLevelButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    const {
-      levelMin: prevMin,
-      levelMax: prevMax,
-      levelMinEmh: prevMinEmh,
-      levelMaxEmh: prevMaxEmh,
-      sranLevelMin: prevSranMin,
-      sranLevelMax: prevSranMax,
-    } = this.state
+    const { sranLevelMin: prevSranMin, sranLevelMax: prevSranMax } = this.state
 
     const { id } = event.currentTarget
     let newState
 
-    if (id === "levelMinDownButton") {
-      const newMin = Math.max(1, prevMin! - 1)
-      newState = this.getNewStateForNewLevelMin(newMin, prevMinEmh!)
-    } else if (id === "levelMinUpButton") {
-      const newMin = Math.min(50, prevMin! + 1)
-      newState = this.getNewStateForNewLevelMin(newMin, prevMinEmh!)
-    } else if (id === "levelMaxDownButton") {
-      const newMax = Math.max(1, prevMax! - 1)
-      newState = this.getNewStateForNewLevelMax(newMax, prevMaxEmh!)
-    } else if (id === "levelMaxUpButton") {
-      const newMax = Math.min(50, prevMax! + 1)
-      newState = this.getNewStateForNewLevelMax(newMax, prevMaxEmh!)
-    } else if (id === "sranLevelMinDownButton") {
+    if (id === "sranLevelMinDownButton") {
       const newSranMin = sranLevelMinusOne(prevSranMin!)
       newState = this.getNewStateForNewSranLevelMin(newSranMin)
     } else if (id === "sranLevelMinUpButton") {
@@ -557,42 +508,6 @@ export default class ControlPanel extends React.Component<
     this.props.onChange(newState)
   }
 
-  onLevelEmhButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    const { levelMin: prevMin, levelMax: prevMax } = this.state
-    const { id } = event.currentTarget
-    let newState: {
-      levelMinEmh?: "e" | "m" | "h"
-      levelMaxEmh?: "e" | "m" | "h"
-    }
-
-    switch (id) {
-      case "levelMinEmhButtonE":
-        newState = this.getNewStateForNewLevelMin(prevMin!, "e")
-        break
-      case "levelMinEmhButtonM":
-        newState = this.getNewStateForNewLevelMin(prevMin!, "m")
-        break
-      case "levelMinEmhButtonH":
-        newState = this.getNewStateForNewLevelMin(prevMin!, "h")
-        break
-      case "levelMaxEmhButtonE":
-        newState = this.getNewStateForNewLevelMax(prevMax!, "e")
-        break
-      case "levelMaxEmhButtonM":
-        newState = this.getNewStateForNewLevelMax(prevMax!, "m")
-        break
-      case "levelMaxEmhButtonH":
-        newState = this.getNewStateForNewLevelMax(prevMax!, "h")
-        break
-      default:
-        console.warn(`ControlPanel: Unknown id ${id}`)
-        return
-    }
-
-    this.setState(newState)
-    this.props.onChange(newState)
-  }
-
   onTextareaChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newState = {
       notepadContents: event.currentTarget.value,
@@ -605,12 +520,8 @@ export default class ControlPanel extends React.Component<
     const { onDraw } = this.props
     const {
       count,
-      levelMin,
-      levelMax,
-      levelEmhEnabled,
-      levelMinEmh,
-      levelMaxEmh,
-      levelRange,
+      level,
+      levelAdv,
       sranModeEnabled,
       sranLevelMin,
       sranLevelMax,
@@ -636,19 +547,19 @@ export default class ControlPanel extends React.Component<
       } else {
         querySegments.push(`srlv = ${sranLevelMin}`)
       }
-    } else {
-      if (levelRange) {
-        querySegments.push(
-          `lv >= ${levelMin}${levelEmhEnabled ? levelMinEmh : ""}`,
-        )
-        querySegments.push(
-          `lv <= ${levelMax}${levelEmhEnabled ? levelMaxEmh : ""}`,
-        )
+    } else if (levelAdv && isLevelAdvValid(levelAdv)) {
+      if (levelAdv.includes("-")) {
+        const [min, max] = levelAdv.split("-").map((s) => s.trim())
+        querySegments.push(`lv >= ${min || 1}`)
+        querySegments.push(`lv <= ${max || 50}`)
       } else {
-        querySegments.push(
-          `lv = ${levelMin}${levelEmhEnabled ? levelMinEmh : ""}`,
-        )
+        querySegments.push(`lv = ${levelAdv}`)
       }
+    } else if (level) {
+      querySegments.push(`lv = ${level}`)
+    } else {
+      // TODO: this shouldn't be necessary
+      querySegments.push("lv >= 1")
     }
 
     if (includeDiffs!.split("").sort().join("") !== "ehnx") {
@@ -728,12 +639,8 @@ export default class ControlPanel extends React.Component<
 
   getLevelControls = () => {
     const {
-      levelMin,
-      levelMax,
-      levelEmhEnabled,
-      levelMinEmh,
-      levelMaxEmh,
-      levelRange,
+      level,
+      levelAdv,
       sranModeEnabled,
       sranLevelMin,
       sranLevelMax,
@@ -828,191 +735,48 @@ export default class ControlPanel extends React.Component<
 
     return (
       <>
-        <section className={cx(styles.control, styles.level)}>
-          <label htmlFor="levelLowerSelect">Level</label>
-
-          <section>
-            <section className={styles.flex}>
-              <button
-                id="levelMinDownButton"
-                className={styles.levelDownButton}
-                type="button"
-                onClick={this.onLevelButtonClick}
-              >
-                <VscTriangleLeft />
-              </button>
-              <select
-                id="levelLowerSelect"
-                className={styles[`level${Math.floor((levelMin ?? 0) / 10)}x`]}
-                value={levelMin}
-                onChange={this.onSelectChange}
-              >
-                {LEVELS.map((level: number) => (
-                  <option value={level} key={level}>
-                    {level}
-                  </option>
-                ))}
-              </select>
-              <button
-                id="levelMinUpButton"
-                className={styles.levelUpButton}
-                type="button"
-                onClick={this.onLevelButtonClick}
-              >
-                <VscTriangleRight />
-              </button>
-            </section>
-
-            {levelEmhEnabled && (
-              <section className={styles.chooseLevelEmh}>
-                <button
-                  id="levelMinEmhButtonE"
-                  className={cx(
-                    styles.levelEmhButton,
-                    styles.easy,
-                    levelMinEmh === "e" ? styles.selected : "",
-                  )}
-                  type="button"
-                  onClick={this.onLevelEmhButtonClick}
-                >
-                  e
-                </button>
-                <button
-                  id="levelMinEmhButtonM"
-                  className={cx(
-                    styles.levelEmhButton,
-                    styles.med,
-                    levelMinEmh === "m" ? styles.selected : "",
-                  )}
-                  type="button"
-                  onClick={this.onLevelEmhButtonClick}
-                >
-                  m
-                </button>
-                <button
-                  id="levelMinEmhButtonH"
-                  className={cx(
-                    styles.levelEmhButton,
-                    styles.hard,
-                    levelMinEmh === "h" ? styles.selected : "",
-                  )}
-                  type="button"
-                  onClick={this.onLevelEmhButtonClick}
-                >
-                  h
-                </button>
-              </section>
-            )}
-          </section>
-
-          {levelRange && (
-            <>
-              <label htmlFor="levelUpperSelect">to</label>
-
-              <section>
-                <section className={styles.flex}>
-                  <button
-                    id="levelMaxDownButton"
-                    className={styles.levelDownButton}
-                    type="button"
-                    onClick={this.onLevelButtonClick}
-                  >
-                    <VscTriangleLeft />
-                  </button>
-                  <select
-                    id="levelUpperSelect"
-                    className={
-                      styles[`level${Math.floor((levelMax ?? 0) / 10)}x`]
-                    }
-                    value={levelMax}
-                    onChange={this.onSelectChange}
-                  >
-                    {LEVELS.map((level: number) => (
-                      <option value={level} key={level}>
-                        {level}
-                      </option>
-                    ))}
-                  </select>
-                  <button
-                    id="levelMaxUpButton"
-                    className={styles.levelUpButton}
-                    type="button"
-                    onClick={this.onLevelButtonClick}
-                  >
-                    <VscTriangleRight />
-                  </button>
-                </section>
-
-                {levelEmhEnabled && (
-                  <section className={styles.chooseLevelEmh}>
-                    <button
-                      id="levelMaxEmhButtonE"
-                      className={cx(
-                        styles.levelEmhButton,
-                        styles.easy,
-                        levelMaxEmh === "e" ? styles.selected : "",
-                      )}
-                      type="button"
-                      onClick={this.onLevelEmhButtonClick}
-                    >
-                      e
-                    </button>
-                    <button
-                      id="levelMaxEmhButtonM"
-                      className={cx(
-                        styles.levelEmhButton,
-                        styles.med,
-                        levelMaxEmh === "m" ? styles.selected : "",
-                      )}
-                      type="button"
-                      onClick={this.onLevelEmhButtonClick}
-                    >
-                      m
-                    </button>
-                    <button
-                      id="levelMaxEmhButtonH"
-                      className={cx(
-                        styles.levelEmhButton,
-                        styles.hard,
-                        levelMaxEmh === "h" ? styles.selected : "",
-                      )}
-                      type="button"
-                      onClick={this.onLevelEmhButtonClick}
-                    >
-                      h
-                    </button>
-                  </section>
-                )}
-              </section>
-            </>
-          )}
-
-          <input
-            id="levelRangeInput"
-            type="checkbox"
-            checked={levelRange}
-            onChange={this.onInputChange}
+        <div className={cx(styles.control, styles.level)}>
+          <Select
+            className={styles.control}
+            id="levelSelect"
+            label="Level"
+            options={Array(50)
+              .fill(0)
+              .map((_, i) => {
+                const lv = String(50 - i)
+                return {
+                  id: lv,
+                  label: lv,
+                }
+              })}
+            dummyOption="(any)"
+            selectedOption={level || ""}
+            setOption={(id) => {
+              const newState = { level: id }
+              this.setState(newState)
+              this.props.onChange(newState)
+            }}
+            disabled={!!levelAdv && isLevelAdvValid(levelAdv)}
           />
-          <label htmlFor="levelRangeInput">Range</label>
-        </section>
-
-        <section className={styles.control}>
+          {" or "}
           <input
-            id="isLevelEmhEnabledInput"
-            type="checkbox"
-            checked={levelEmhEnabled}
-            onChange={this.onInputChange}
+            className={
+              levelAdv
+                ? isLevelAdvValid(levelAdv)
+                  ? styles.levelAdvValid
+                  : styles.levelAdvInvalid
+                : ""
+            }
+            id="levelInput"
+            type="text"
+            value={levelAdv || ""}
+            onChange={(event) => {
+              const newState = { levelAdv: event.target.value }
+              this.setState(newState)
+              this.props.onChange(newState)
+            }}
           />
-          <label htmlFor="isLevelEmhEnabledInput">
-            Filter by easy/medium/hard
-          </label>
-        </section>
-
-        {levelEmhEnabled && (
-          <section className={cx(styles.control, styles.info)}>
-            Only supported for charts level 29+ that have ratings on popn.wiki.
-          </section>
-        )}
+        </div>
       </>
     )
   }
@@ -1059,12 +823,8 @@ export default class ControlPanel extends React.Component<
   getSummaryContents = () => {
     const {
       count,
-      levelMin,
-      levelMax,
-      levelEmhEnabled,
-      levelMinEmh,
-      levelMaxEmh,
-      levelRange,
+      level,
+      levelAdv,
       sranModeEnabled,
       sranLevelMin,
       sranLevelMax,
@@ -1092,26 +852,17 @@ export default class ControlPanel extends React.Component<
       )
     }
 
-    if (!levelRange) {
-      return (
-        <>
-          {count}
-          {" songs, "}
-          {this.getLevel(levelMin!)}
-          {levelEmhEnabled && this.getEmh(levelMinEmh!)}
-        </>
-      )
-    }
-
-    if (levelEmhEnabled) {
-      if (levelMin === levelMax) {
-        if (levelMinEmh === levelMaxEmh) {
+    if (levelAdv && isLevelAdvValid(levelAdv)) {
+      if (levelAdv.includes("-")) {
+        let [min, max] = levelAdv.split("-").map((s) => s.trim())
+        min ||= "1"
+        max ||= "50"
+        if (min === max) {
           return (
             <>
               {count}
               {" songs, "}
-              {this.getLevel(levelMin!)}
-              {this.getEmh(levelMinEmh!)}
+              {min}
             </>
           )
         } else {
@@ -1119,10 +870,9 @@ export default class ControlPanel extends React.Component<
             <>
               {count}
               {" songs, "}
-              {this.getLevel(levelMin!)}
-              {this.getEmh(levelMinEmh!)}
-              {"~"}
-              {this.getEmh(levelMaxEmh!)}
+              {min}
+              {"-"}
+              {max}
             </>
           )
         }
@@ -1131,34 +881,18 @@ export default class ControlPanel extends React.Component<
           <>
             {count}
             {" songs, "}
-            {this.getLevel(levelMin!)}
-            {this.getEmh(levelMinEmh!)}
-            {"~"}
-            {this.getLevel(levelMax!)}
-            {this.getEmh(levelMaxEmh!)}
+            {levelAdv}
           </>
         )
       }
     } else {
-      if (levelMin === levelMax) {
-        return (
-          <>
-            {count}
-            {" songs, "}
-            {this.getLevel(levelMin!)}
-          </>
-        )
-      } else {
-        return (
-          <>
-            {count}
-            {" songs, "}
-            {this.getLevel(levelMin!)}
-            {"~"}
-            {this.getLevel(levelMax!)}
-          </>
-        )
-      }
+      return (
+        <>
+          {count}
+          {" songs, "}
+          {level || "any level"}
+        </>
+      )
     }
   }
 
@@ -1183,12 +917,8 @@ export default class ControlPanel extends React.Component<
       const newState: ChartDrawOptions & Partial<ChartDisplayOptions> = {
         // Draw options
         count: 4,
-        levelMin: 30,
-        levelMax: 40,
-        levelEmhEnabled: false,
-        levelMinEmh: "e",
-        levelMaxEmh: "h",
-        levelRange: false,
+        level: undefined,
+        levelAdv: undefined,
         sranLevelMin: "01a",
         sranLevelMax: "05",
         sranLevelRange: false,
@@ -1296,6 +1026,9 @@ export default class ControlPanel extends React.Component<
               maxWidth: "400px",
               padding: "1rem",
               position: "absolute",
+              display: "flex",
+              flexDirection: "column",
+              gap: "0.5rem",
             },
           }}
         >

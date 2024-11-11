@@ -28,12 +28,8 @@ export const NONE_VERSION_FOLDERS: ReadonlyArray<boolean> = VERSION_FOLDERS.map(
 
 export interface ChartDrawOptions {
   count?: number
-  levelMin?: number
-  levelMax?: number
-  levelEmhEnabled?: boolean
-  levelMinEmh?: "e" | "m" | "h"
-  levelMaxEmh?: "e" | "m" | "h"
-  levelRange?: boolean
+  level?: string
+  levelAdv?: string
   sranLevelMin?: SranLevel
   sranLevelMax?: SranLevel
   sranLevelRange?: boolean

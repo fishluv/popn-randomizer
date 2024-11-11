@@ -113,8 +113,8 @@ select {
 
 .control {
   display: flex;
+  align-items: center;
   column-gap: 0.5rem;
-  margin-bottom: 0.5rem;
 
   label {
     margin-bottom: 0; /* Override browser default. */
@@ -128,13 +128,19 @@ select {
     margin-left: 0.25rem;
   }
 
-  &.level {
-    align-items: baseline;
+  &.draw select {
+    width: 2.5rem;
   }
 
-  &.draw select,
-  &.level select {
-    width: 2.5rem;
+  &.level input {
+    width: 5rem;
+    &.levelAdvValid {
+      background: $n-light;
+    }
+
+    &.levelAdvInvalid {
+      background: $ex-light;
+    }
   }
 
   &.diffsChoose {
@@ -312,5 +318,5 @@ select {
 }
 
 h5.header {
-  margin-top: 1rem;
+  margin: 0.5rem 0 0;
 }
