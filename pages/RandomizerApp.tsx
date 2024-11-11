@@ -126,13 +126,14 @@ export default class RandomizerApp extends React.Component<
 
     // Draw options
     setStorageItemIfNull("count", 5)
-    // `level` and `levelAdv` should default to null.
+    setStorageItemIfNull("level", "")
+    setStorageItemIfNull("levelAdv", "")
     setStorageItemIfNull("sranLevelMin", "01a")
     setStorageItemIfNull("sranLevelMax", "05")
     setStorageItemIfNull("sranLevelRange", false)
     setStorageItemIfNull("includeDiffsRadio", "all")
     setStorageItemIfNull("includeDiffs", "enhx")
-    // `folder` should default to null.
+    setStorageItemIfNull("folder", "")
     setStorageItemIfNull("onlyIncludeHardest", false)
     setStorageItemIfNull("holdNotes", "include")
     setStorageItemIfNull("buggedBpms", "include")
@@ -169,8 +170,8 @@ export default class RandomizerApp extends React.Component<
       },
       chartDrawOptions: {
         count: getStorageNumber("count"),
-        level: getStorageString("level") || undefined,
-        levelAdv: getStorageString("levelAdv") || undefined,
+        level: getStorageString("level") || "",
+        levelAdv: getStorageString("levelAdv") || "",
         sranLevelMin: parseSranLevel(getStorageString("sranLevelMin", "01a")),
         sranLevelMax: parseSranLevel(getStorageString("sranLevelMax", "05")),
         sranLevelRange: getStorageBoolean("sranLevelRange"),
@@ -180,8 +181,7 @@ export default class RandomizerApp extends React.Component<
         includeDiffs: getStorageString("includeDiffs"),
         hardestDiff: parseIncludeOption(getStorageString("hardestDiff")),
         folder:
-          (getStorageString("folder") as VersionFolder | BemaniFolder) ||
-          undefined,
+          (getStorageString("folder") as VersionFolder | BemaniFolder) || "",
         eemall: parseIncludeOption(getStorageString("eemall")),
         floorInfection: parseIncludeOption(getStorageString("floorInfection")),
         buggedBpms: parseIncludeOption(getStorageString("buggedBpms")),
