@@ -4,7 +4,6 @@ import {
   Chart,
   Unilab0731,
   JamFizz0925,
-  parseSranLevel,
   VersionFolder,
   BemaniFolder,
 } from "popn-db-js"
@@ -172,9 +171,8 @@ export default class RandomizerApp extends React.Component<
         count: getStorageNumber("count"),
         level: getStorageString("level") || "",
         levelAdv: getStorageString("levelAdv") || "",
-        sranLevelMin: parseSranLevel(getStorageString("sranLevelMin", "01a")),
-        sranLevelMax: parseSranLevel(getStorageString("sranLevelMax", "05")),
-        sranLevelRange: getStorageBoolean("sranLevelRange"),
+        sranLevel: getStorageString("sranLevel") || "",
+        sranLevelAdv: getStorageString("sranLevelAdv") || "",
         includeDiffsRadio: getStorageString("includeDiffsRadio", "all") as
           | "all"
           | "choose",

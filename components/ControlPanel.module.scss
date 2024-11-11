@@ -132,7 +132,8 @@ select {
     width: 2.5rem;
   }
 
-  &.level input {
+  &.level input,
+  &.sranLevel input {
     width: 5rem;
     &.levelAdvValid {
       background: $n-light;

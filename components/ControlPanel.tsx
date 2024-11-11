@@ -2,13 +2,7 @@ import cx from "classnames"
 import markdownit from "markdown-it"
 import React from "react"
 import ReactModal from "react-modal"
-import {
-  parseSranLevel,
-  SranLevel,
-  SRAN_LEVELS,
-  VersionFolder,
-  BemaniFolder,
-} from "popn-db-js"
+import { SRAN_LEVELS, VersionFolder, BemaniFolder } from "popn-db-js"
 import styles from "./ControlPanel.module.scss"
 import { ChartDisplayOptions } from "./ChartDisplay"
 import { ChartQuerySampleOptions } from "../pages/RandomizerApp"
@@ -125,39 +119,6 @@ function range(start: number, stop: number) {
   return [...Array.from(Array(size).keys())].map((i) => i + realStart)
 }
 
-function normSranLevel(sranLv: string): string {
-  return sranLv.replace("a", "-").replace("b", "+").replace(/^0+/, "")
-}
-
-function sranLevelMinusOne(sranLv: SranLevel): string {
-  const index = SRAN_LEVELS.indexOf(sranLv!)
-  const newIndex = Math.max(0, index - 1)
-  return SRAN_LEVELS[newIndex]
-}
-
-function sranLevelPlusOne(sranLv: SranLevel): string {
-  const index = SRAN_LEVELS.indexOf(sranLv!)
-  const newIndex = Math.min(SRAN_LEVELS.length - 1, index + 1)
-  return SRAN_LEVELS[newIndex]
-}
-
-function sranLevelCategory(sranLv?: SranLevel): string {
-  const num = parseInt(sranLv ?? "0")
-  if (num >= 19) {
-    return "max"
-  } else if (num >= 15) {
-    return "veryhard"
-  } else if (num >= 11) {
-    return "hard"
-  } else if (num >= 7) {
-    return "mid"
-  } else if (num >= 3) {
-    return "easy"
-  } else {
-    return "veryeasy"
-  }
-}
-
 // TODO: bring back emh
 function isLevelAdvValid(levelAdv: string) {
   const tokens = levelAdv
@@ -196,6 +157,41 @@ function isLevelAdvValid(levelAdv: string) {
   return false
 }
 
+function isSranLevelAdvValid(sranLevelAdv: string) {
+  const tokens = sranLevelAdv
+    .trim()
+    .split(/\b/)
+    .map((s) => s.trim())
+
+  function numInRange(s: string) {
+    if (["1a", "1b", "2a", "2b"].includes(s)) {
+      return true
+    }
+    const num = Number(s)
+    return num >= 3 && num <= 19
+  }
+
+  if (tokens.length === 1) {
+    return numInRange(tokens[0])
+  }
+
+  if (tokens.length === 2) {
+    if (tokens[0] === "-") {
+      return numInRange(tokens[1])
+    } else if (tokens[1] === "-") {
+      return numInRange(tokens[0])
+    } else {
+      return false
+    }
+  }
+
+  if (tokens.length === 3) {
+    return numInRange(tokens[0]) && tokens[1] === "-" && numInRange(tokens[2])
+  }
+
+  return false
+}
+
 const DRAW_COUNT_MIN = 1
 const DRAW_COUNT_MAX = 10
 const DRAW_COUNTS = range(DRAW_COUNT_MIN, DRAW_COUNT_MAX + 1)
@@ -229,9 +225,8 @@ export default class ControlPanel extends React.Component<
         count,
         level,
         levelAdv,
-        sranLevelMin,
-        sranLevelMax,
-        sranLevelRange,
+        sranLevel,
+        sranLevelAdv,
         includeDiffsRadio,
         includeDiffs,
         hardestDiff,
@@ -258,15 +253,14 @@ export default class ControlPanel extends React.Component<
     this.state = {
       // Draw options
       count: count || 4,
-      level, // undefined is fine
-      levelAdv, // undefined is fine
-      sranLevelMin: sranLevelMin || "01a",
-      sranLevelMax: sranLevelMax || "05",
-      sranLevelRange: sranLevelRange ?? false,
+      level: level ?? "",
+      levelAdv: levelAdv ?? "",
+      sranLevel: sranLevel ?? "",
+      sranLevelAdv: sranLevelAdv ?? "",
       includeDiffsRadio: includeDiffsRadio ?? "all",
       includeDiffs: includeDiffs ?? "enhx",
       hardestDiff: hardestDiff ?? "include",
-      folder, // undefined is fine
+      folder: folder ?? "",
       eemall: eemall ?? "include",
       floorInfection: floorInfection ?? "include",
       buggedBpms: buggedBpms ?? "include",
@@ -308,26 +302,6 @@ export default class ControlPanel extends React.Component<
     }
   }
 
-  getNewStateForNewSranLevelMin = (newSranMin: string) => {
-    const { sranLevelMax: prevSranMax } = this.state
-    const newSranMax = newSranMin > prevSranMax! ? newSranMin : prevSranMax!
-
-    return {
-      sranLevelMin: parseSranLevel(newSranMin),
-      sranLevelMax: parseSranLevel(newSranMax),
-    }
-  }
-
-  getNewStateForNewSranLevelMax = (newSranMax: string) => {
-    const { sranLevelMin: prevSranMin } = this.state
-    const newSranMin = newSranMax < prevSranMin! ? newSranMax : prevSranMin!
-
-    return {
-      sranLevelMin: parseSranLevel(newSranMin),
-      sranLevelMax: parseSranLevel(newSranMax),
-    }
-  }
-
   onSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const { id, value } = event.target
     let newState
@@ -343,10 +317,6 @@ export default class ControlPanel extends React.Component<
       newState = {
         gameVersion: value,
       }
-    } else if (id === "sranLevelLowerSelect") {
-      newState = this.getNewStateForNewSranLevelMin(value)
-    } else if (id === "sranLevelUpperSelect") {
-      newState = this.getNewStateForNewSranLevelMax(value)
     } else if (id === "holdNotesSelect") {
       newState = {
         holdNotes: parseIncludeOption(value),
@@ -391,9 +361,6 @@ export default class ControlPanel extends React.Component<
       this.setState(newState) // For type safety, can't put this outside the if block.
     } else if (id === "showChartDetailsInput") {
       newState = { showChartDetails: checked }
-      this.setState(newState)
-    } else if (id === "sranLevelRangeInput") {
-      newState = { sranLevelRange: checked }
       this.setState(newState)
     } else if (id === "isSranModeEnabledInput") {
       newState = { sranModeEnabled: checked }
@@ -481,33 +448,6 @@ export default class ControlPanel extends React.Component<
     this.props.onChange(newState)
   }
 
-  onLevelButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    const { sranLevelMin: prevSranMin, sranLevelMax: prevSranMax } = this.state
-
-    const { id } = event.currentTarget
-    let newState
-
-    if (id === "sranLevelMinDownButton") {
-      const newSranMin = sranLevelMinusOne(prevSranMin!)
-      newState = this.getNewStateForNewSranLevelMin(newSranMin)
-    } else if (id === "sranLevelMinUpButton") {
-      const newSranMin = sranLevelPlusOne(prevSranMin!)
-      newState = this.getNewStateForNewSranLevelMin(newSranMin)
-    } else if (id === "sranLevelMaxDownButton") {
-      const newSranMax = sranLevelMinusOne(prevSranMax!)
-      newState = this.getNewStateForNewSranLevelMax(newSranMax)
-    } else if (id === "sranLevelMaxUpButton") {
-      const newSranMax = sranLevelPlusOne(prevSranMax!)
-      newState = this.getNewStateForNewSranLevelMax(newSranMax)
-    } else {
-      console.warn(`onLevelButtonClick unknown id ${id}`)
-      return
-    }
-
-    this.setState(newState)
-    this.props.onChange(newState)
-  }
-
   onTextareaChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     const newState = {
       notepadContents: event.currentTarget.value,
@@ -523,9 +463,8 @@ export default class ControlPanel extends React.Component<
       level,
       levelAdv,
       sranModeEnabled,
-      sranLevelMin,
-      sranLevelMax,
-      sranLevelRange,
+      sranLevel,
+      sranLevelAdv,
       includeDiffs,
       hardestDiff,
       folder,
@@ -541,11 +480,19 @@ export default class ControlPanel extends React.Component<
     const querySegments = []
 
     if (sranModeEnabled) {
-      if (sranLevelRange) {
-        querySegments.push(`srlv >= ${sranLevelMin}`)
-        querySegments.push(`srlv <= ${sranLevelMax}`)
+      if (sranLevelAdv && isSranLevelAdvValid(sranLevelAdv)) {
+        if (sranLevelAdv.includes("-")) {
+          const [min, max] = sranLevelAdv.split("-").map((s) => s.trim())
+          querySegments.push(`srlv >= ${min || "1a"}`)
+          querySegments.push(`srlv <= ${max || "19"}`)
+        } else {
+          querySegments.push(`srlv = ${sranLevelAdv}`)
+        }
+      } else if (sranLevel) {
+        querySegments.push(`srlv = ${sranLevel}`)
       } else {
-        querySegments.push(`srlv = ${sranLevelMin}`)
+        // TODO: maybe this shouldn't be necessary
+        querySegments.push("srlv >= 1a")
       }
     } else if (levelAdv && isLevelAdvValid(levelAdv)) {
       if (levelAdv.includes("-")) {
@@ -558,7 +505,7 @@ export default class ControlPanel extends React.Component<
     } else if (level) {
       querySegments.push(`lv = ${level}`)
     } else {
-      // TODO: this shouldn't be necessary
+      // TODO: maybe this shouldn't be necessary
       querySegments.push("lv >= 1")
     }
 
@@ -638,98 +585,50 @@ export default class ControlPanel extends React.Component<
   }
 
   getLevelControls = () => {
-    const {
-      level,
-      levelAdv,
-      sranModeEnabled,
-      sranLevelMin,
-      sranLevelMax,
-      sranLevelRange,
-    } = this.state
+    const { level, levelAdv, sranModeEnabled, sranLevel, sranLevelAdv } =
+      this.state
 
     if (sranModeEnabled) {
       return (
-        <section className={cx(styles.control, styles.level)}>
-          <label htmlFor="sranLevelLowerSelect">Sran</label>
-
-          <section className={styles.flex}>
-            <button
-              id="sranLevelMinDownButton"
-              className={styles.levelDownButton}
-              type="button"
-              onClick={this.onLevelButtonClick}
-            >
-              <VscTriangleLeft />
-            </button>
-            <select
-              id="sranLevelLowerSelect"
-              className={styles[`sranlevel${sranLevelCategory(sranLevelMin)}`]}
-              value={sranLevelMin!}
-              onChange={this.onSelectChange}
-            >
-              {SRAN_LEVELS.map((sranLv: string) => (
-                <option value={sranLv} key={sranLv}>
-                  {normSranLevel(sranLv)}
-                </option>
-              ))}
-            </select>
-            <button
-              id="sranLevelMinUpButton"
-              className={styles.levelUpButton}
-              type="button"
-              onClick={this.onLevelButtonClick}
-            >
-              <VscTriangleRight />
-            </button>
-          </section>
-
-          {sranLevelRange && (
-            <>
-              <label htmlFor="sranLevelUpperSelect">to</label>
-
-              <section className={styles.flex}>
-                <button
-                  id="sranLevelMaxDownButton"
-                  className={styles.levelDownButton}
-                  type="button"
-                  onClick={this.onLevelButtonClick}
-                >
-                  <VscTriangleLeft />
-                </button>
-                <select
-                  id="sranLevelUpperSelect"
-                  className={
-                    styles[`sranlevel${sranLevelCategory(sranLevelMax)}`]
-                  }
-                  value={sranLevelMax!}
-                  onChange={this.onSelectChange}
-                >
-                  {SRAN_LEVELS.map((sranLv: string) => (
-                    <option value={sranLv} key={sranLv}>
-                      {normSranLevel(sranLv)}
-                    </option>
-                  ))}
-                </select>
-                <button
-                  id="sranLevelMaxUpButton"
-                  className={styles.levelUpButton}
-                  type="button"
-                  onClick={this.onLevelButtonClick}
-                >
-                  <VscTriangleRight />
-                </button>
-              </section>
-            </>
-          )}
-
-          <input
-            id="sranLevelRangeInput"
-            type="checkbox"
-            checked={sranLevelRange}
-            onChange={this.onInputChange}
+        <div className={cx(styles.control, styles.sranLevel)}>
+          <Select
+            className={styles.control}
+            id="sranLevelSelect"
+            label="S乱"
+            options={[
+              ...[...SRAN_LEVELS].reverse().map((val) => ({
+                id: val,
+                label: val.startsWith("0") ? val.slice(1) : val,
+              })),
+            ]}
+            dummyOption="(any)"
+            selectedOption={sranLevel || ""}
+            setOption={(id) => {
+              const newState = { sranLevel: id }
+              this.setState(newState)
+              this.props.onChange(newState)
+            }}
+            disabled={!!sranLevelAdv && isSranLevelAdvValid(sranLevelAdv)}
           />
-          <label htmlFor="sranLevelRangeInput">Range</label>
-        </section>
+          {" or "}
+          <input
+            className={
+              sranLevelAdv
+                ? isSranLevelAdvValid(sranLevelAdv)
+                  ? styles.levelAdvValid
+                  : styles.levelAdvInvalid
+                : ""
+            }
+            id="sranLevelInput"
+            type="text"
+            value={sranLevelAdv || ""}
+            onChange={(event) => {
+              const newState = { sranLevelAdv: event.target.value }
+              this.setState(newState)
+              this.props.onChange(newState)
+            }}
+          />
+        </div>
       )
     }
 
@@ -794,19 +693,6 @@ export default class ControlPanel extends React.Component<
     )
   }
 
-  getSranLevel = (sranLevel: SranLevel) => {
-    return (
-      <span
-        className={cx(
-          styles.sranLevelString,
-          styles[`sranlevel${sranLevelCategory(sranLevel)}`],
-        )}
-      >
-        {normSranLevel(sranLevel)}
-      </span>
-    )
-  }
-
   getEmh = (emh: "e" | "m" | "h") => {
     const longName = {
       e: "easy",
@@ -821,35 +707,57 @@ export default class ControlPanel extends React.Component<
   }
 
   getSummaryContents = () => {
-    const {
-      count,
-      level,
-      levelAdv,
-      sranModeEnabled,
-      sranLevelMin,
-      sranLevelMax,
-      sranLevelRange,
-    } = this.state
+    const { count, level, levelAdv, sranModeEnabled, sranLevel, sranLevelAdv } =
+      this.state
 
     if (sranModeEnabled) {
-      if (!sranLevelRange || sranLevelMin === sranLevelMax) {
+      if (sranLevelAdv && isSranLevelAdvValid(sranLevelAdv)) {
+        if (sranLevelAdv.includes("-")) {
+          let [min, max] = sranLevelAdv.split("-").map((s) => s.trim())
+          min ||= "1a"
+          max ||= "19"
+
+          if (min === max) {
+            return (
+              <>
+                {count}
+                {" charts, S乱 "}
+                {min.startsWith("0") ? min.slice(1) : min}
+              </>
+            )
+          } else {
+            return (
+              <>
+                {count}
+                {" charts, S乱 "}
+                {min.startsWith("0") ? min.slice(1) : min}
+                {"-"}
+                {max.startsWith("0") ? max.slice(1) : max}
+              </>
+            )
+          }
+        } else {
+          return (
+            <>
+              {count}
+              {" charts, S乱 "}
+              {sranLevelAdv}
+            </>
+          )
+        }
+      } else {
         return (
           <>
             {count}
-            {" charts, sran "}
-            {this.getSranLevel(sranLevelMin!)}
+            {" charts, "}
+            {sranLevel
+              ? sranLevel.startsWith("0")
+                ? `S乱 ${sranLevel.slice(1)}`
+                : `S乱 ${sranLevel}`
+              : "any S乱 level"}
           </>
         )
       }
-      return (
-        <>
-          {count}
-          {" charts, sran "}
-          {this.getSranLevel(sranLevelMin!)}
-          {"~"}
-          {this.getSranLevel(sranLevelMax!)}
-        </>
-      )
     }
 
     if (levelAdv && isLevelAdvValid(levelAdv)) {
@@ -857,6 +765,7 @@ export default class ControlPanel extends React.Component<
         let [min, max] = levelAdv.split("-").map((s) => s.trim())
         min ||= "1"
         max ||= "50"
+
         if (min === max) {
           return (
             <>
@@ -917,15 +826,14 @@ export default class ControlPanel extends React.Component<
       const newState: ChartDrawOptions & Partial<ChartDisplayOptions> = {
         // Draw options
         count: 4,
-        level: undefined,
-        levelAdv: undefined,
-        sranLevelMin: "01a",
-        sranLevelMax: "05",
-        sranLevelRange: false,
+        level: "",
+        levelAdv: "",
+        sranLevel: "",
+        sranLevelAdv: "",
         includeDiffsRadio: "all",
         includeDiffs: "enhx",
         hardestDiff: "include",
-        folder: undefined,
+        folder: "",
         eemall: "include",
         floorInfection: "include",
         buggedBpms: "include",

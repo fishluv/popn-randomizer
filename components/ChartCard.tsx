@@ -88,11 +88,9 @@ export default class ChartCard extends React.Component<
     const className = cx(styles.sranLevel, {
       [styles.compact]: displayStyle === "compact",
     })
-    const srlvNorm = sranLevel
-      ? sranLevel.replace("a", "-").replace("b", "+").replace(/^0+/, "")
-      : "—"
+    const srlvNorm = sranLevel ? sranLevel.replace(/^0+/, "") : "—"
 
-    return <span className={className}>sr&nbsp;{srlvNorm}</span>
+    return <span className={className}>S乱&nbsp;{srlvNorm}</span>
   }
 
   renderTitleGenre() {
