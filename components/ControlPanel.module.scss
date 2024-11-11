@@ -158,31 +158,6 @@ select {
     margin-left: 1rem;
   }
 
-  &.includeFolders {
-    .noneFoldersButton {
-      line-height: 1.125rem;
-      margin-left: 0.75rem;
-    }
-  }
-
-  &.foldersChoose {
-    margin-top: 0.25rem;
-    margin-left: 1rem;
-    width: 18rem;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    height: 26.25rem; // = folderheight * 15
-
-    .folderSelect {
-      height: 1.75rem;
-
-      label {
-        margin-left: 0.5rem;
-      }
-    }
-  }
-
   &.notepad {
     flex-direction: column;
 

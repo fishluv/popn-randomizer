@@ -1456,20 +1456,19 @@ export default class ControlPanel extends React.Component<
             </>
           )}
 
-          <section className={cx(styles.control, styles.includeFolders)}>
-            <Select
-              id="folderSelect"
-              label="Folder"
-              options={FOLDER_OPTIONS}
-              dummyOption="(any)"
-              selectedOption={folder || ""}
-              setOption={(id: VersionFolder | BemaniFolder) => {
-                const newState = { folder: id }
-                this.setState(newState)
-                this.props.onChange(newState)
-              }}
-            />
-          </section>
+          <Select
+            className={cx(styles.control)}
+            id="folderSelect"
+            label="Folder"
+            options={FOLDER_OPTIONS}
+            dummyOption="(any)"
+            selectedOption={folder || ""}
+            setOption={(id: VersionFolder | BemaniFolder) => {
+              const newState = { folder: id }
+              this.setState(newState)
+              this.props.onChange(newState)
+            }}
+          />
 
           <section className={styles.control}>
             <select
