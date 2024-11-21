@@ -584,104 +584,6 @@ export default class ControlPanel extends React.Component<
     }
   }
 
-  getLevelControls = () => {
-    const { level, levelAdv, sranModeEnabled, sranLevel, sranLevelAdv } =
-      this.state
-
-    if (sranModeEnabled) {
-      return (
-        <div className={cx(styles.control, styles.sranLevel)}>
-          <Select
-            className={styles.control}
-            id="sranLevelSelect"
-            label="S乱"
-            options={[
-              ...[...SRAN_LEVELS].reverse().map((val) => ({
-                id: val,
-                label: val.startsWith("0") ? val.slice(1) : val,
-              })),
-            ]}
-            dummyOption="(any)"
-            selectedOption={sranLevel || ""}
-            setOption={(id) => {
-              const newState = { sranLevel: id }
-              this.setState(newState)
-              this.props.onChange(newState)
-            }}
-            disabled={!!sranLevelAdv && isSranLevelAdvValid(sranLevelAdv)}
-          />
-          {" or "}
-          <input
-            className={
-              sranLevelAdv
-                ? isSranLevelAdvValid(sranLevelAdv)
-                  ? styles.levelAdvValid
-                  : styles.levelAdvInvalid
-                : ""
-            }
-            id="sranLevelInput"
-            type="text"
-            placeholder="range"
-            value={sranLevelAdv || ""}
-            onChange={(event) => {
-              const newState = { sranLevelAdv: event.target.value }
-              this.setState(newState)
-              this.props.onChange(newState)
-            }}
-          />
-        </div>
-      )
-    }
-
-    return (
-      <>
-        <div className={cx(styles.control, styles.level)}>
-          <Select
-            className={styles.control}
-            id="levelSelect"
-            label="Level"
-            options={Array(50)
-              .fill(0)
-              .map((_, i) => {
-                const lv = String(50 - i)
-                return {
-                  id: lv,
-                  label: lv,
-                }
-              })}
-            dummyOption="(any)"
-            selectedOption={level || ""}
-            setOption={(id) => {
-              const newState = { level: id }
-              this.setState(newState)
-              this.props.onChange(newState)
-            }}
-            disabled={!!levelAdv && isLevelAdvValid(levelAdv)}
-          />
-          {" or "}
-          <input
-            className={
-              levelAdv
-                ? isLevelAdvValid(levelAdv)
-                  ? styles.levelAdvValid
-                  : styles.levelAdvInvalid
-                : ""
-            }
-            id="levelInput"
-            type="text"
-            placeholder="range"
-            value={levelAdv || ""}
-            onChange={(event) => {
-              const newState = { levelAdv: event.target.value }
-              this.setState(newState)
-              this.props.onChange(newState)
-            }}
-          />
-        </div>
-      </>
-    )
-  }
-
   getLevel = (level: number) => {
     return (
       <span
@@ -855,6 +757,11 @@ export default class ControlPanel extends React.Component<
     const { extraClass } = this.props
     const {
       count,
+      level,
+      levelAdv,
+      sranModeEnabled,
+      sranLevel,
+      sranLevelAdv,
       includeDiffsRadio,
       includeDiffs,
       hardestDiff,
@@ -865,7 +772,6 @@ export default class ControlPanel extends React.Component<
       holdNotes,
       omnimix,
       lively,
-      sranModeEnabled,
       gameVersion,
       preferGenre,
       displayStyle,
@@ -1006,7 +912,196 @@ export default class ControlPanel extends React.Component<
             </section>
           </section>
 
-          {this.getLevelControls()}
+          {sranModeEnabled ? (
+            <div className={cx(styles.control, styles.sranLevel)}>
+              <label htmlFor="sranLevelSelect">S乱</label>
+
+              <div className={styles.flex}>
+                <button
+                  disabled={
+                    !sranLevel ||
+                    (!!sranLevelAdv && isSranLevelAdvValid(sranLevelAdv))
+                  }
+                  onClick={() => {
+                    if (!sranLevel || sranLevel === "01a") return
+
+                    let newSranLevel
+                    if (sranLevel === "01b") {
+                      newSranLevel = "01a"
+                    } else if (sranLevel === "02a") {
+                      newSranLevel = "01b"
+                    } else if (sranLevel === "02b") {
+                      newSranLevel = "02a"
+                    } else if (sranLevel === "03") {
+                      newSranLevel = "02b"
+                    } else {
+                      newSranLevel = String(Number(sranLevel) - 1).padStart(
+                        2,
+                        "0",
+                      )
+                    }
+
+                    const newState = {
+                      sranLevel: newSranLevel,
+                    }
+                    this.setState(newState)
+                    this.props.onChange(newState)
+                  }}
+                >
+                  <VscTriangleLeft />
+                </button>
+                <select
+                  id="sranLevelSelect"
+                  value={sranLevel}
+                  onChange={(event) => {
+                    const newSranLevel = event.target.value
+                    const newState = { sranLevel: newSranLevel }
+                    this.setState(newState)
+                    this.props.onChange(newState)
+                  }}
+                  disabled={!!sranLevelAdv && isSranLevelAdvValid(sranLevelAdv)}
+                >
+                  <option value="">{"1–19"}</option>
+                  {[...SRAN_LEVELS].reverse().map((srlv) => (
+                    <option key={srlv} value={srlv}>
+                      {srlv}
+                    </option>
+                  ))}
+                </select>
+                <button
+                  disabled={
+                    !sranLevel ||
+                    (!!sranLevelAdv && isSranLevelAdvValid(sranLevelAdv))
+                  }
+                  onClick={() => {
+                    if (!sranLevel || sranLevel === "19") return
+
+                    let newSranLevel
+                    if (sranLevel === "01a") {
+                      newSranLevel = "01b"
+                    } else if (sranLevel === "01b") {
+                      newSranLevel = "02a"
+                    } else if (sranLevel === "02a") {
+                      newSranLevel = "02b"
+                    } else if (sranLevel === "02b") {
+                      newSranLevel = "03"
+                    } else {
+                      newSranLevel = String(Number(sranLevel) + 1).padStart(
+                        2,
+                        "0",
+                      )
+                    }
+
+                    const newState = {
+                      sranLevel: newSranLevel,
+                    }
+                    this.setState(newState)
+                    this.props.onChange(newState)
+                  }}
+                >
+                  <VscTriangleRight />
+                </button>
+              </div>
+
+              {" or "}
+
+              <input
+                className={
+                  sranLevelAdv
+                    ? isSranLevelAdvValid(sranLevelAdv)
+                      ? styles.levelAdvValid
+                      : styles.levelAdvInvalid
+                    : ""
+                }
+                id="sranLevelInput"
+                type="text"
+                placeholder="range"
+                value={sranLevelAdv || ""}
+                onChange={(event) => {
+                  const newState = { sranLevelAdv: event.target.value }
+                  this.setState(newState)
+                  this.props.onChange(newState)
+                }}
+              />
+            </div>
+          ) : (
+            <div className={cx(styles.control, styles.level)}>
+              <label htmlFor="levelSelect">Level</label>
+
+              <div className={styles.flex}>
+                <button
+                  disabled={!level || (!!levelAdv && isLevelAdvValid(levelAdv))}
+                  onClick={() => {
+                    if (!level) return
+                    const newState = {
+                      level: String(Math.max(1, Number(level) - 1)),
+                    }
+                    this.setState(newState)
+                    this.props.onChange(newState)
+                  }}
+                >
+                  <VscTriangleLeft />
+                </button>
+                <select
+                  id="levelSelect"
+                  value={level}
+                  onChange={(event) => {
+                    const newLevel = event.target.value
+                    const newState = { level: newLevel }
+                    this.setState(newState)
+                    this.props.onChange(newState)
+                  }}
+                  disabled={!!levelAdv && isLevelAdvValid(levelAdv)}
+                >
+                  <option value="">any</option>
+                  {Array(50)
+                    .fill(0)
+                    .map((_, i) => {
+                      const lv = String(50 - i)
+                      return (
+                        <option key={lv} value={lv}>
+                          {lv}
+                        </option>
+                      )
+                    })}
+                </select>
+                <button
+                  disabled={!level || (!!levelAdv && isLevelAdvValid(levelAdv))}
+                  onClick={() => {
+                    if (!level) return
+                    const newState = {
+                      level: String(Math.min(50, Number(level) + 1)),
+                    }
+                    this.setState(newState)
+                    this.props.onChange(newState)
+                  }}
+                >
+                  <VscTriangleRight />
+                </button>
+              </div>
+
+              {" or "}
+
+              <input
+                className={
+                  levelAdv
+                    ? isLevelAdvValid(levelAdv)
+                      ? styles.levelAdvValid
+                      : styles.levelAdvInvalid
+                    : ""
+                }
+                id="levelInput"
+                type="text"
+                placeholder="range"
+                value={levelAdv || ""}
+                onChange={(event) => {
+                  const newState = { levelAdv: event.target.value }
+                  this.setState(newState)
+                  this.props.onChange(newState)
+                }}
+              />
+            </div>
+          )}
 
           <section className={styles.control}>
             <input

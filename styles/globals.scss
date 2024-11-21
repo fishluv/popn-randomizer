@@ -22,3 +22,14 @@ input, textarea {
   border-radius: 4px;
   border-style: solid;
 }
+
+.flex {
+  display: flex;
+  align-items: center;
+}
+
+.flexColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
