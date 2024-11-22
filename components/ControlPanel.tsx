@@ -941,6 +941,7 @@ export default class ControlPanel extends React.Component<
                 </button>
 
                 <select
+                  className={sranLevel ? styles.changed : ""}
                   id="sranLevelSelect"
                   value={sranLevel}
                   onChange={(event) => {
@@ -1081,6 +1082,7 @@ export default class ControlPanel extends React.Component<
                 </button>
 
                 <select
+                  className={level ? styles.changed : ""}
                   id="levelSelect"
                   value={level}
                   onChange={(event) => {
@@ -1288,7 +1290,11 @@ export default class ControlPanel extends React.Component<
           )}
 
           <Select
-            className={cx(styles.control)}
+            className={cx(
+              styles.control,
+              styles.folder,
+              folder ? styles.changed : "",
+            )}
             id="folderSelect"
             label="Folder"
             options={FOLDER_OPTIONS}
@@ -1304,7 +1310,13 @@ export default class ControlPanel extends React.Component<
           <section className={styles.control}>
             <select
               id="holdNotesSelect"
-              className={styles[holdNotes!]}
+              className={
+                holdNotes === "exclude"
+                  ? styles.changed
+                  : holdNotes === "only"
+                  ? styles.changed2
+                  : ""
+              }
               value={holdNotes}
               onChange={this.onSelectChange}
             >
@@ -1316,7 +1328,13 @@ export default class ControlPanel extends React.Component<
           <section className={styles.control}>
             <select
               id="buggedBpmsSelect"
-              className={styles[buggedBpms!]}
+              className={
+                buggedBpms === "exclude"
+                  ? styles.changed
+                  : buggedBpms === "only"
+                  ? styles.changed2
+                  : ""
+              }
               value={buggedBpms}
               onChange={this.onSelectChange}
             >
@@ -1328,7 +1346,13 @@ export default class ControlPanel extends React.Component<
           <section className={styles.control}>
             <select
               id="eemallSelect"
-              className={styles[eemall!]}
+              className={
+                eemall === "exclude"
+                  ? styles.changed
+                  : eemall === "only"
+                  ? styles.changed2
+                  : ""
+              }
               value={eemall}
               onChange={this.onSelectChange}
             >
@@ -1340,7 +1364,13 @@ export default class ControlPanel extends React.Component<
           <section className={styles.control}>
             <select
               id="floorInfectionSelect"
-              className={styles[floorInfection!]}
+              className={
+                floorInfection === "exclude"
+                  ? styles.changed
+                  : floorInfection === "only"
+                  ? styles.changed2
+                  : ""
+              }
               value={floorInfection}
               onChange={this.onSelectChange}
             >
@@ -1354,7 +1384,13 @@ export default class ControlPanel extends React.Component<
               <section className={styles.control}>
                 <select
                   id="omnimixSelect"
-                  className={styles[omnimix!]}
+                  className={
+                    omnimix === "include"
+                      ? styles.changed
+                      : omnimix === "only"
+                      ? styles.changed2
+                      : ""
+                  }
                   value={omnimix}
                   onChange={this.onSelectChange}
                 >
@@ -1366,7 +1402,13 @@ export default class ControlPanel extends React.Component<
               <section className={styles.control}>
                 <select
                   id="livelySelect"
-                  className={styles[lively!]}
+                  className={
+                    lively === "include"
+                      ? styles.changed
+                      : lively === "only"
+                      ? styles.changed2
+                      : ""
+                  }
                   value={lively}
                   onChange={this.onSelectChange}
                 >

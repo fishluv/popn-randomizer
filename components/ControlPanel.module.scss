@@ -92,17 +92,12 @@ select {
     background: #cceefd;
   }
 
-  &.include {
-    background: $n-light;
+  &.changed {
+    background: $h-light;
   }
 
-  &.exclude {
+  &.changed2 {
     background: $h-bright;
-    color: white;
-  }
-
-  &.only {
-    background: $ex-bright;
     color: white;
   }
 }
@@ -130,16 +125,21 @@ select {
 
   &.draw select {
     width: 2.5rem;
+    background: $e-light;
   }
 
   &.level, &.sranLevel {
+    select.changed:enabled {
+      background: $h-light;
+    }
+
     input {
       &.levelAdvValid {
-        background: $n-light;
+        background: $h-light;
       }
 
       &.levelAdvInvalid {
-        background: $ex-light;
+        text-decoration: underline $ex-bright 3px;
       }
     }
   }
@@ -168,6 +168,10 @@ select {
   &.hardestDiff {
     margin-top: -0.5rem;
     margin-left: 1rem;
+  }
+
+  &.folder.changed select {
+    background: $h-light;
   }
 
   &.notepad {
