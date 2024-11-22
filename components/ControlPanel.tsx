@@ -1308,7 +1308,7 @@ export default class ControlPanel extends React.Component<
             >
               {includeOptions()}
             </select>
-            <label htmlFor="holdNotesSelect">Long pop-kuns</label>
+            <label htmlFor="holdNotesSelect">Hold notes</label>
           </section>
 
           <section className={styles.control}>
