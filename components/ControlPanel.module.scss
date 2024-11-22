@@ -133,10 +133,6 @@ select {
   }
 
   &.level, &.sranLevel {
-    select, input {
-      height: 26px;
-    }
-
     input {
       &.levelAdvValid {
         background: $n-light;
@@ -203,6 +199,10 @@ select {
   &.info {
     margin-top: -0.5rem;
     margin-left: 0.5rem;
+  }
+
+  .selectWithIncDec {
+    gap: 2px;
   }
 }
 

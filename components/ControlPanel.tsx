@@ -887,7 +887,7 @@ export default class ControlPanel extends React.Component<
           <section className={cx(styles.control, styles.draw)}>
             <label htmlFor="drawCountSelect">Draw</label>
 
-            <section className={styles.flex}>
+            <section className={cx(styles.flex, styles.selectWithIncDec)}>
               <button
                 id="drawCountDownButton"
                 type="button"
@@ -895,6 +895,7 @@ export default class ControlPanel extends React.Component<
               >
                 <VscTriangleLeft />
               </button>
+
               <select
                 id="drawCountSelect"
                 value={count}
@@ -906,6 +907,7 @@ export default class ControlPanel extends React.Component<
                   </option>
                 ))}
               </select>
+
               <button
                 id="drawCountUpButton"
                 type="button"
@@ -920,7 +922,7 @@ export default class ControlPanel extends React.Component<
             <div className={cx(styles.control, styles.sranLevel)}>
               <label htmlFor="sranLevelSelect">S乱</label>
 
-              <div className={styles.flex}>
+              <div className={cx(styles.flex, styles.selectWithIncDec)}>
                 <button
                   disabled={
                     !sranLevel ||
@@ -982,7 +984,7 @@ export default class ControlPanel extends React.Component<
 
               {" or "}
 
-              <div className={styles.flex}>
+              <div className={cx(styles.flex, styles.selectWithIncDec)}>
                 <button
                   disabled={!sranLevelAdv || !isSranLevelAdvValid(sranLevelAdv)}
                   onClick={() => {
@@ -1063,7 +1065,7 @@ export default class ControlPanel extends React.Component<
             <div className={cx(styles.control, styles.level)}>
               <label htmlFor="levelSelect">Level</label>
 
-              <div className={styles.flex}>
+              <div className={cx(styles.flex, styles.selectWithIncDec)}>
                 <button
                   disabled={!level || (!!levelAdv && isLevelAdvValid(levelAdv))}
                   onClick={() => {
@@ -1119,7 +1121,7 @@ export default class ControlPanel extends React.Component<
 
               {" or "}
 
-              <div className={styles.flex}>
+              <div className={cx(styles.flex, styles.selectWithIncDec)}>
                 <button
                   disabled={!levelAdv || !isLevelAdvValid(levelAdv)}
                   onClick={() => {
