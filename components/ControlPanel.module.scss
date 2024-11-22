@@ -148,12 +148,9 @@ select {
     }
   }
 
-  &.level input {
-    width: 3.5rem;
-  }
-
+  &.level input,
   &.sranLevel input {
-    width: 5rem;
+    width: 3.5rem;
   }
 
   &.diffsChoose {

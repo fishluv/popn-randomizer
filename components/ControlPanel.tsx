@@ -982,24 +982,82 @@ export default class ControlPanel extends React.Component<
 
               {" or "}
 
-              <input
-                className={
-                  sranLevelAdv
-                    ? isSranLevelAdvValid(sranLevelAdv)
-                      ? styles.levelAdvValid
-                      : styles.levelAdvInvalid
-                    : ""
-                }
-                id="sranLevelInput"
-                type="text"
-                placeholder="range"
-                value={sranLevelAdv || ""}
-                onChange={(event) => {
-                  const newState = { sranLevelAdv: event.target.value }
-                  this.setState(newState)
-                  this.props.onChange(newState)
-                }}
-              />
+              <div className={styles.flex}>
+                <button
+                  disabled={!sranLevelAdv || !isSranLevelAdvValid(sranLevelAdv)}
+                  onClick={() => {
+                    let newSranLevelAdv
+                    const parts = sranLevelAdv!.split("-").map((s) => s.trim())
+                    if (parts.length === 1) {
+                      newSranLevelAdv = String(
+                        Math.max(1, Number(parts[0]) - 1),
+                      )
+                    } else {
+                      if (parts[0] !== "") {
+                        parts[0] = String(Math.max(1, Number(parts[0]) - 1))
+                      }
+                      if (parts[1] !== "") {
+                        parts[1] = String(Math.max(1, Number(parts[1]) - 1))
+                      }
+                      newSranLevelAdv = parts.join("-")
+                    }
+                    const newState = {
+                      sranLevelAdv: newSranLevelAdv,
+                    }
+                    this.setState(newState)
+                    this.props.onChange(newState)
+                  }}
+                >
+                  <VscTriangleLeft />
+                </button>
+
+                <input
+                  className={
+                    sranLevelAdv
+                      ? isSranLevelAdvValid(sranLevelAdv)
+                        ? styles.levelAdvValid
+                        : styles.levelAdvInvalid
+                      : ""
+                  }
+                  id="sranLevelInput"
+                  type="text"
+                  placeholder="range"
+                  value={sranLevelAdv || ""}
+                  onChange={(event) => {
+                    const newState = { sranLevelAdv: event.target.value }
+                    this.setState(newState)
+                    this.props.onChange(newState)
+                  }}
+                />
+
+                <button
+                  disabled={!sranLevelAdv || !isSranLevelAdvValid(sranLevelAdv)}
+                  onClick={() => {
+                    let newSranLevelAdv
+                    const parts = sranLevelAdv!.split("-").map((s) => s.trim())
+                    if (parts.length === 1) {
+                      newSranLevelAdv = String(
+                        Math.min(19, Number(parts[0]) + 1),
+                      )
+                    } else {
+                      if (parts[0] !== "") {
+                        parts[0] = String(Math.min(19, Number(parts[0]) + 1))
+                      }
+                      if (parts[1] !== "") {
+                        parts[1] = String(Math.min(19, Number(parts[1]) + 1))
+                      }
+                      newSranLevelAdv = parts.join("-")
+                    }
+                    const newState = {
+                      sranLevelAdv: newSranLevelAdv,
+                    }
+                    this.setState(newState)
+                    this.props.onChange(newState)
+                  }}
+                >
+                  <VscTriangleRight />
+                </button>
+              </div>
             </div>
           ) : (
             <div className={cx(styles.control, styles.level)}>
