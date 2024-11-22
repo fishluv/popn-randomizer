@@ -2,7 +2,7 @@ import cx from "classnames"
 import markdownit from "markdown-it"
 import React from "react"
 import ReactModal from "react-modal"
-import { SRAN_LEVELS, VersionFolder, BemaniFolder } from "popn-db-js"
+import { VersionFolder, BemaniFolder } from "popn-db-js"
 import styles from "./ControlPanel.module.scss"
 import { ChartDisplayOptions } from "./ChartDisplay"
 import { ChartQuerySampleOptions } from "../pages/RandomizerApp"
@@ -119,6 +119,10 @@ function range(start: number, stop: number) {
   return [...Array.from(Array(size).keys())].map((i) => i + realStart)
 }
 
+function between(num: string | number, min: number, max: number) {
+  return Number(num) >= min && Number(num) <= max
+}
+
 // TODO: bring back emh
 function isLevelAdvValid(levelAdv: string) {
   const tokens = levelAdv
@@ -127,8 +131,7 @@ function isLevelAdvValid(levelAdv: string) {
     .map((s) => s.trim())
 
   function numInRange(s: string) {
-    const num = Number(s)
-    return num >= 1 && num <= 50
+    return between(s, 1, 50)
   }
 
   if (tokens.length === 1) {
@@ -164,11 +167,7 @@ function isSranLevelAdvValid(sranLevelAdv: string) {
     .map((s) => s.trim())
 
   function numInRange(s: string) {
-    if (["1a", "1b", "2a", "2b"].includes(s)) {
-      return true
-    }
-    const num = Number(s)
-    return num >= 3 && num <= 19
+    return between(s, 1, 19)
   }
 
   if (tokens.length === 1) {
@@ -186,7 +185,12 @@ function isSranLevelAdvValid(sranLevelAdv: string) {
   }
 
   if (tokens.length === 3) {
-    return numInRange(tokens[0]) && tokens[1] === "-" && numInRange(tokens[2])
+    return (
+      numInRange(tokens[0]) &&
+      tokens[1] === "-" &&
+      numInRange(tokens[2]) &&
+      Number(tokens[2]) >= Number(tokens[0])
+    )
   }
 
   return false
@@ -483,7 +487,7 @@ export default class ControlPanel extends React.Component<
       if (sranLevelAdv && isSranLevelAdvValid(sranLevelAdv)) {
         if (sranLevelAdv.includes("-")) {
           const [min, max] = sranLevelAdv.split("-").map((s) => s.trim())
-          querySegments.push(`srlv >= ${min || "1a"}`)
+          querySegments.push(`srlv >= ${min || "1"}`)
           querySegments.push(`srlv <= ${max || "19"}`)
         } else {
           querySegments.push(`srlv = ${sranLevelAdv}`)
@@ -492,7 +496,7 @@ export default class ControlPanel extends React.Component<
         querySegments.push(`srlv = ${sranLevel}`)
       } else {
         // TODO: maybe this shouldn't be necessary
-        querySegments.push("srlv >= 1a")
+        querySegments.push("srlv >= 1")
       }
     } else if (levelAdv && isLevelAdvValid(levelAdv)) {
       if (levelAdv.includes("-")) {
@@ -618,7 +622,7 @@ export default class ControlPanel extends React.Component<
       if (sranLevelAdv && isSranLevelAdvValid(sranLevelAdv)) {
         if (sranLevelAdv.includes("-")) {
           let [min, max] = sranLevelAdv.split("-").map((s) => s.trim())
-          min ||= "1a"
+          min ||= "1"
           max ||= "19"
 
           if (min === max) {
@@ -923,26 +927,9 @@ export default class ControlPanel extends React.Component<
                     (!!sranLevelAdv && isSranLevelAdvValid(sranLevelAdv))
                   }
                   onClick={() => {
-                    if (!sranLevel || sranLevel === "01a") return
-
-                    let newSranLevel
-                    if (sranLevel === "01b") {
-                      newSranLevel = "01a"
-                    } else if (sranLevel === "02a") {
-                      newSranLevel = "01b"
-                    } else if (sranLevel === "02b") {
-                      newSranLevel = "02a"
-                    } else if (sranLevel === "03") {
-                      newSranLevel = "02b"
-                    } else {
-                      newSranLevel = String(Number(sranLevel) - 1).padStart(
-                        2,
-                        "0",
-                      )
-                    }
-
+                    if (!sranLevel) return
                     const newState = {
-                      sranLevel: newSranLevel,
+                      sranLevel: String(Math.max(1, Number(sranLevel) - 1)),
                     }
                     this.setState(newState)
                     this.props.onChange(newState)
@@ -950,6 +937,7 @@ export default class ControlPanel extends React.Component<
                 >
                   <VscTriangleLeft />
                 </button>
+
                 <select
                   id="sranLevelSelect"
                   value={sranLevel}
@@ -962,38 +950,27 @@ export default class ControlPanel extends React.Component<
                   disabled={!!sranLevelAdv && isSranLevelAdvValid(sranLevelAdv)}
                 >
                   <option value="">{"1–19"}</option>
-                  {[...SRAN_LEVELS].reverse().map((srlv) => (
-                    <option key={srlv} value={srlv}>
-                      {srlv.startsWith("0") ? srlv.slice(1) : srlv}
-                    </option>
-                  ))}
+                  {Array(19)
+                    .fill(0)
+                    .map((_, i) => {
+                      const srlv = String(19 - i)
+                      return (
+                        <option key={srlv} value={srlv}>
+                          {srlv}
+                        </option>
+                      )
+                    })}
                 </select>
+
                 <button
                   disabled={
                     !sranLevel ||
                     (!!sranLevelAdv && isSranLevelAdvValid(sranLevelAdv))
                   }
                   onClick={() => {
-                    if (!sranLevel || sranLevel === "19") return
-
-                    let newSranLevel
-                    if (sranLevel === "01a") {
-                      newSranLevel = "01b"
-                    } else if (sranLevel === "01b") {
-                      newSranLevel = "02a"
-                    } else if (sranLevel === "02a") {
-                      newSranLevel = "02b"
-                    } else if (sranLevel === "02b") {
-                      newSranLevel = "03"
-                    } else {
-                      newSranLevel = String(Number(sranLevel) + 1).padStart(
-                        2,
-                        "0",
-                      )
-                    }
-
+                    if (!sranLevel) return
                     const newState = {
-                      sranLevel: newSranLevel,
+                      sranLevel: String(Math.min(50, Number(sranLevel) + 1)),
                     }
                     this.setState(newState)
                     this.props.onChange(newState)
