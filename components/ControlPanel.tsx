@@ -964,7 +964,7 @@ export default class ControlPanel extends React.Component<
                   <option value="">{"1–19"}</option>
                   {[...SRAN_LEVELS].reverse().map((srlv) => (
                     <option key={srlv} value={srlv}>
-                      {srlv}
+                      {srlv.startsWith("0") ? srlv.slice(1) : srlv}
                     </option>
                   ))}
                 </select>
