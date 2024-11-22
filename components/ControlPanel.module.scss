@@ -132,16 +132,28 @@ select {
     width: 2.5rem;
   }
 
-  &.level input,
-  &.sranLevel input {
-    width: 5rem;
-    &.levelAdvValid {
-      background: $n-light;
+  &.level, &.sranLevel {
+    select, input {
+      height: 26px;
     }
 
-    &.levelAdvInvalid {
-      background: $ex-light;
+    input {
+      &.levelAdvValid {
+        background: $n-light;
+      }
+
+      &.levelAdvInvalid {
+        background: $ex-light;
+      }
     }
+  }
+
+  &.level input {
+    width: 3.5rem;
+  }
+
+  &.sranLevel input {
+    width: 5rem;
   }
 
   &.diffsChoose {

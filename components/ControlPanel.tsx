@@ -1042,6 +1042,7 @@ export default class ControlPanel extends React.Component<
                 >
                   <VscTriangleLeft />
                 </button>
+
                 <select
                   id="levelSelect"
                   value={level}
@@ -1065,6 +1066,7 @@ export default class ControlPanel extends React.Component<
                       )
                     })}
                 </select>
+
                 <button
                   disabled={!level || (!!levelAdv && isLevelAdvValid(levelAdv))}
                   onClick={() => {
@@ -1082,24 +1084,78 @@ export default class ControlPanel extends React.Component<
 
               {" or "}
 
-              <input
-                className={
-                  levelAdv
-                    ? isLevelAdvValid(levelAdv)
-                      ? styles.levelAdvValid
-                      : styles.levelAdvInvalid
-                    : ""
-                }
-                id="levelInput"
-                type="text"
-                placeholder="range"
-                value={levelAdv || ""}
-                onChange={(event) => {
-                  const newState = { levelAdv: event.target.value }
-                  this.setState(newState)
-                  this.props.onChange(newState)
-                }}
-              />
+              <div className={styles.flex}>
+                <button
+                  disabled={!levelAdv || !isLevelAdvValid(levelAdv)}
+                  onClick={() => {
+                    let newLevelAdv
+                    const parts = levelAdv!.split("-").map((s) => s.trim())
+                    if (parts.length === 1) {
+                      newLevelAdv = String(Math.max(1, Number(parts[0]) - 1))
+                    } else {
+                      if (parts[0] !== "") {
+                        parts[0] = String(Math.max(1, Number(parts[0]) - 1))
+                      }
+                      if (parts[1] !== "") {
+                        parts[1] = String(Math.max(1, Number(parts[1]) - 1))
+                      }
+                      newLevelAdv = parts.join("-")
+                    }
+                    const newState = {
+                      levelAdv: newLevelAdv,
+                    }
+                    this.setState(newState)
+                    this.props.onChange(newState)
+                  }}
+                >
+                  <VscTriangleLeft />
+                </button>
+
+                <input
+                  className={
+                    levelAdv
+                      ? isLevelAdvValid(levelAdv)
+                        ? styles.levelAdvValid
+                        : styles.levelAdvInvalid
+                      : ""
+                  }
+                  id="levelInput"
+                  type="text"
+                  placeholder="range"
+                  value={levelAdv || ""}
+                  onChange={(event) => {
+                    const newState = { levelAdv: event.target.value }
+                    this.setState(newState)
+                    this.props.onChange(newState)
+                  }}
+                />
+
+                <button
+                  disabled={!levelAdv || !isLevelAdvValid(levelAdv)}
+                  onClick={() => {
+                    let newLevelAdv
+                    const parts = levelAdv!.split("-").map((s) => s.trim())
+                    if (parts.length === 1) {
+                      newLevelAdv = String(Math.min(50, Number(parts[0]) + 1))
+                    } else {
+                      if (parts[0] !== "") {
+                        parts[0] = String(Math.min(50, Number(parts[0]) + 1))
+                      }
+                      if (parts[1] !== "") {
+                        parts[1] = String(Math.min(50, Number(parts[1]) + 1))
+                      }
+                      newLevelAdv = parts.join("-")
+                    }
+                    const newState = {
+                      levelAdv: newLevelAdv,
+                    }
+                    this.setState(newState)
+                    this.props.onChange(newState)
+                  }}
+                >
+                  <VscTriangleRight />
+                </button>
+              </div>
             </div>
           )}
 

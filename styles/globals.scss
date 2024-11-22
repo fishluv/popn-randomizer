@@ -17,10 +17,11 @@ select {
   padding: 2px 0;
 }
 
-input, textarea {
+input[type=text], textarea {
   border-color: #ddd;
   border-radius: 4px;
   border-style: solid;
+  box-shadow: 2px 2px 2px #aaa;
 }
 
 .flex {
