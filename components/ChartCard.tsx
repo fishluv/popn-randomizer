@@ -320,18 +320,18 @@ export default class ChartCard extends React.Component<
 
     return (
       <div className={rootClass} onClick={this.onClick}>
-        <div className={cx(diffStyle, styles.bannerTitleGenre)}>
-          {this.renderTitleGenre()}
+        {this.renderTitleGenre()}
 
-          <div className={bannerClass}>{this.getBannerImage(160, 40)}</div>
+        <div className={bannerClass}>{this.getBannerImage(160, 40)}</div>
 
-          <div className={styles.levels}>
-            {this.renderDiffLevel()}
-            {this.renderSranLevel()}
-          </div>
+        <div className={cx(styles.diffStripe, diffStyle)} />
 
-          {this.getFolderPill("compact")}
+        <div className={styles.levels}>
+          {this.renderDiffLevel()}
+          {this.renderSranLevel()}
         </div>
+
+        {this.getFolderPill("compact")}
       </div>
     )
   }
