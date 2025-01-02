@@ -1076,14 +1076,19 @@ export default class ControlPanel extends React.Component<
             </div>
           )}
 
-          <section className={styles.control}>
+          <section className={cx(styles.control, styles.sranModeEnabled)}>
             <input
               id="isSranModeEnabledInput"
               type="checkbox"
               checked={sranModeEnabled}
               onChange={this.onInputChange}
             />
-            <label htmlFor="isSranModeEnabledInput">S乱 mode</label>
+            <label
+              htmlFor="isSranModeEnabledInput"
+              className={sranModeEnabled ? styles.changed : ""}
+            >
+              S乱 mode
+            </label>
           </section>
 
           <section className={cx(styles.control, styles.includeDiffs)}>

@@ -93,11 +93,11 @@ select {
   }
 
   &.changed {
-    background: $h-light;
+    background: $n-light;
   }
 
   &.changed2 {
-    background: $h-bright;
+    background: $n-bright;
     color: white;
   }
 }
@@ -125,17 +125,16 @@ select {
 
   &.draw select {
     width: 2.5rem;
-    background: $e-light;
   }
 
   &.level, &.sranLevel {
     select.changed:enabled {
-      background: $h-light;
+      background: $n-light;
     }
 
     input {
       &.levelAdvValid {
-        background: $h-light;
+        background: $n-light;
       }
 
       &.levelAdvInvalid {
@@ -147,6 +146,12 @@ select {
   &.level input,
   &.sranLevel input {
     width: 3.5rem;
+  }
+
+  &.sranModeEnabled {
+    label.changed {
+      background: $n-light;
+    }
   }
 
   &.diffsChoose {
@@ -171,7 +176,7 @@ select {
   }
 
   &.folder.changed select {
-    background: $h-light;
+    background: $n-light;
   }
 
   &.notepad {
