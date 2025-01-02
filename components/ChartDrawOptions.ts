@@ -16,9 +16,7 @@ export function parseIncludeOption(s: string): IncludeOption {
 
 export interface ChartDrawOptions {
   count?: number
-  level?: string
   levelAdv?: string
-  sranLevel?: string
   sranLevelAdv?: string
   includeDiffsRadio?: "all" | "choose"
   includeDiffs?: string

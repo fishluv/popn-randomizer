@@ -125,9 +125,7 @@ export default class RandomizerApp extends React.Component<
 
     // Draw options
     setStorageItemIfNull("count", 5)
-    setStorageItemIfNull("level", "")
     setStorageItemIfNull("levelAdv", "")
-    setStorageItemIfNull("sranLevel", "")
     setStorageItemIfNull("sranLevelAdv", "")
     setStorageItemIfNull("includeDiffsRadio", "all")
     setStorageItemIfNull("includeDiffs", "enhx")
@@ -168,10 +166,13 @@ export default class RandomizerApp extends React.Component<
       },
       chartDrawOptions: {
         count: getStorageNumber("count"),
-        level: getStorageString("level") || "",
-        levelAdv: getStorageString("levelAdv") || "",
-        sranLevel: getStorageString("sranLevel") || "",
-        sranLevelAdv: getStorageString("sranLevelAdv") || "",
+        // TODO: Remove this temp backwards compatibility by end of month.
+        levelAdv:
+          getStorageString("level") || getStorageString("levelAdv") || "",
+        sranLevelAdv:
+          getStorageString("sranLevel") ||
+          getStorageString("sranLevelAdv") ||
+          "",
         includeDiffsRadio: getStorageString("includeDiffsRadio", "all") as
           | "all"
           | "choose",

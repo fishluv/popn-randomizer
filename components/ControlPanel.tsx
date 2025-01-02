@@ -227,9 +227,7 @@ export default class ControlPanel extends React.Component<
     const {
       initialDrawOptions: {
         count,
-        level,
         levelAdv,
-        sranLevel,
         sranLevelAdv,
         includeDiffsRadio,
         includeDiffs,
@@ -257,9 +255,7 @@ export default class ControlPanel extends React.Component<
     this.state = {
       // Draw options
       count: count || 4,
-      level: level ?? "",
       levelAdv: levelAdv ?? "",
-      sranLevel: sranLevel ?? "",
       sranLevelAdv: sranLevelAdv ?? "",
       includeDiffsRadio: includeDiffsRadio ?? "all",
       includeDiffs: includeDiffs ?? "enhx",
@@ -464,10 +460,8 @@ export default class ControlPanel extends React.Component<
     const { onDraw } = this.props
     const {
       count,
-      level,
       levelAdv,
       sranModeEnabled,
-      sranLevel,
       sranLevelAdv,
       includeDiffs,
       hardestDiff,
@@ -484,33 +478,39 @@ export default class ControlPanel extends React.Component<
     const querySegments = []
 
     if (sranModeEnabled) {
-      if (sranLevelAdv && isSranLevelAdvValid(sranLevelAdv)) {
-        if (sranLevelAdv.includes("-")) {
-          const [min, max] = sranLevelAdv.split("-").map((s) => s.trim())
-          querySegments.push(`srlv >= ${min || "1"}`)
-          querySegments.push(`srlv <= ${max || "19"}`)
+      if (sranLevelAdv) {
+        if (isSranLevelAdvValid(sranLevelAdv)) {
+          if (sranLevelAdv.includes("-")) {
+            const [min, max] = sranLevelAdv.split("-").map((s) => s.trim())
+            querySegments.push(`srlv >= ${min || "1"}`)
+            querySegments.push(`srlv <= ${max || "19"}`)
+          } else {
+            querySegments.push(`srlv = ${sranLevelAdv}`)
+          }
         } else {
-          querySegments.push(`srlv = ${sranLevelAdv}`)
+          window.alert("S乱 level input is invalid.")
+          return
         }
-      } else if (sranLevel) {
-        querySegments.push(`srlv = ${sranLevel}`)
       } else {
-        // TODO: maybe this shouldn't be necessary
         querySegments.push("srlv >= 1")
       }
-    } else if (levelAdv && isLevelAdvValid(levelAdv)) {
-      if (levelAdv.includes("-")) {
-        const [min, max] = levelAdv.split("-").map((s) => s.trim())
-        querySegments.push(`lv >= ${min || 1}`)
-        querySegments.push(`lv <= ${max || 50}`)
-      } else {
-        querySegments.push(`lv = ${levelAdv}`)
-      }
-    } else if (level) {
-      querySegments.push(`lv = ${level}`)
     } else {
-      // TODO: maybe this shouldn't be necessary
-      querySegments.push("lv >= 1")
+      if (levelAdv) {
+        if (isLevelAdvValid(levelAdv)) {
+          if (levelAdv.includes("-")) {
+            const [min, max] = levelAdv.split("-").map((s) => s.trim())
+            querySegments.push(`lv >= ${min || 1}`)
+            querySegments.push(`lv <= ${max || 50}`)
+          } else {
+            querySegments.push(`lv = ${levelAdv}`)
+          }
+        } else {
+          window.alert("Level input is invalid.")
+          return
+        }
+      } else {
+        querySegments.push("lv >= 1")
+      }
     }
 
     if (includeDiffs!.split("").sort().join("") !== "ehnx") {
@@ -615,32 +615,80 @@ export default class ControlPanel extends React.Component<
   }
 
   getSummaryContents = () => {
-    const { count, level, levelAdv, sranModeEnabled, sranLevel, sranLevelAdv } =
-      this.state
+    const { count, levelAdv, sranModeEnabled, sranLevelAdv } = this.state
 
     if (sranModeEnabled) {
-      if (sranLevelAdv && isSranLevelAdvValid(sranLevelAdv)) {
-        if (sranLevelAdv.includes("-")) {
-          let [min, max] = sranLevelAdv.split("-").map((s) => s.trim())
+      if (sranLevelAdv) {
+        if (isSranLevelAdvValid(sranLevelAdv)) {
+          if (sranLevelAdv.includes("-")) {
+            let [min, max] = sranLevelAdv.split("-").map((s) => s.trim())
+            min ||= "1"
+            max ||= "19"
+
+            if (min === max) {
+              return (
+                <>
+                  {count}
+                  {" charts, S乱 "}
+                  {min.startsWith("0") ? min.slice(1) : min}
+                </>
+              )
+            } else {
+              return (
+                <>
+                  {count}
+                  {" charts, S乱 "}
+                  {min.startsWith("0") ? min.slice(1) : min}
+                  {"-"}
+                  {max.startsWith("0") ? max.slice(1) : max}
+                </>
+              )
+            }
+          } else {
+            return (
+              <>
+                {count}
+                {" charts, S乱 "}
+                {sranLevelAdv}
+              </>
+            )
+          }
+        } else {
+          return "S乱 level is invalid"
+        }
+      } else {
+        return (
+          <>
+            {count}
+            {" charts, any S乱 level"}
+          </>
+        )
+      }
+    }
+
+    if (levelAdv) {
+      if (isLevelAdvValid(levelAdv)) {
+        if (levelAdv.includes("-")) {
+          let [min, max] = levelAdv.split("-").map((s) => s.trim())
           min ||= "1"
-          max ||= "19"
+          max ||= "50"
 
           if (min === max) {
             return (
               <>
                 {count}
-                {" charts, S乱 "}
-                {min.startsWith("0") ? min.slice(1) : min}
+                {" charts, "}
+                {min}
               </>
             )
           } else {
             return (
               <>
                 {count}
-                {" charts, S乱 "}
-                {min.startsWith("0") ? min.slice(1) : min}
+                {" charts, "}
+                {min}
                 {"-"}
-                {max.startsWith("0") ? max.slice(1) : max}
+                {max}
               </>
             )
           }
@@ -648,66 +696,20 @@ export default class ControlPanel extends React.Component<
           return (
             <>
               {count}
-              {" charts, S乱 "}
-              {sranLevelAdv}
+              {" charts, "}
+              {levelAdv}
             </>
           )
         }
       } else {
-        return (
-          <>
-            {count}
-            {" charts, "}
-            {sranLevel
-              ? sranLevel.startsWith("0")
-                ? `S乱 ${sranLevel.slice(1)}`
-                : `S乱 ${sranLevel}`
-              : "any S乱 level"}
-          </>
-        )
-      }
-    }
-
-    if (levelAdv && isLevelAdvValid(levelAdv)) {
-      if (levelAdv.includes("-")) {
-        let [min, max] = levelAdv.split("-").map((s) => s.trim())
-        min ||= "1"
-        max ||= "50"
-
-        if (min === max) {
-          return (
-            <>
-              {count}
-              {" charts, "}
-              {min}
-            </>
-          )
-        } else {
-          return (
-            <>
-              {count}
-              {" charts, "}
-              {min}
-              {"-"}
-              {max}
-            </>
-          )
-        }
-      } else {
-        return (
-          <>
-            {count}
-            {" charts, "}
-            {levelAdv}
-          </>
-        )
+        return "Level is invalid"
       }
     } else {
       return (
         <>
           {count}
           {" charts, "}
-          {level || "any level"}
+          {"any level"}
         </>
       )
     }
@@ -734,9 +736,7 @@ export default class ControlPanel extends React.Component<
       const newState: ChartDrawOptions & Partial<ChartDisplayOptions> = {
         // Draw options
         count: 4,
-        level: "",
         levelAdv: "",
-        sranLevel: "",
         sranLevelAdv: "",
         includeDiffsRadio: "all",
         includeDiffs: "enhx",
@@ -761,10 +761,8 @@ export default class ControlPanel extends React.Component<
     const { extraClass } = this.props
     const {
       count,
-      level,
       levelAdv,
       sranModeEnabled,
-      sranLevel,
       sranLevelAdv,
       includeDiffsRadio,
       includeDiffs,
@@ -924,69 +922,6 @@ export default class ControlPanel extends React.Component<
 
               <div className={cx(styles.flex, styles.selectWithIncDec)}>
                 <button
-                  disabled={
-                    !sranLevel ||
-                    (!!sranLevelAdv && isSranLevelAdvValid(sranLevelAdv))
-                  }
-                  onClick={() => {
-                    if (!sranLevel) return
-                    const newState = {
-                      sranLevel: String(Math.max(1, Number(sranLevel) - 1)),
-                    }
-                    this.setState(newState)
-                    this.props.onChange(newState)
-                  }}
-                >
-                  <VscTriangleLeft />
-                </button>
-
-                <select
-                  className={sranLevel ? styles.changed : ""}
-                  id="sranLevelSelect"
-                  value={sranLevel}
-                  onChange={(event) => {
-                    const newSranLevel = event.target.value
-                    const newState = { sranLevel: newSranLevel }
-                    this.setState(newState)
-                    this.props.onChange(newState)
-                  }}
-                  disabled={!!sranLevelAdv && isSranLevelAdvValid(sranLevelAdv)}
-                >
-                  <option value="">{"1–19"}</option>
-                  {Array(19)
-                    .fill(0)
-                    .map((_, i) => {
-                      const srlv = String(19 - i)
-                      return (
-                        <option key={srlv} value={srlv}>
-                          {srlv}
-                        </option>
-                      )
-                    })}
-                </select>
-
-                <button
-                  disabled={
-                    !sranLevel ||
-                    (!!sranLevelAdv && isSranLevelAdvValid(sranLevelAdv))
-                  }
-                  onClick={() => {
-                    if (!sranLevel) return
-                    const newState = {
-                      sranLevel: String(Math.min(50, Number(sranLevel) + 1)),
-                    }
-                    this.setState(newState)
-                    this.props.onChange(newState)
-                  }}
-                >
-                  <VscTriangleRight />
-                </button>
-              </div>
-
-              {" or "}
-
-              <div className={cx(styles.flex, styles.selectWithIncDec)}>
-                <button
                   disabled={!sranLevelAdv || !isSranLevelAdvValid(sranLevelAdv)}
                   onClick={() => {
                     let newSranLevelAdv
@@ -1024,7 +959,7 @@ export default class ControlPanel extends React.Component<
                   }
                   id="sranLevelInput"
                   type="text"
-                  placeholder="range"
+                  placeholder="1-19"
                   value={sranLevelAdv || ""}
                   onChange={(event) => {
                     const newState = { sranLevelAdv: event.target.value }
@@ -1068,63 +1003,6 @@ export default class ControlPanel extends React.Component<
 
               <div className={cx(styles.flex, styles.selectWithIncDec)}>
                 <button
-                  disabled={!level || (!!levelAdv && isLevelAdvValid(levelAdv))}
-                  onClick={() => {
-                    if (!level) return
-                    const newState = {
-                      level: String(Math.max(1, Number(level) - 1)),
-                    }
-                    this.setState(newState)
-                    this.props.onChange(newState)
-                  }}
-                >
-                  <VscTriangleLeft />
-                </button>
-
-                <select
-                  className={level ? styles.changed : ""}
-                  id="levelSelect"
-                  value={level}
-                  onChange={(event) => {
-                    const newLevel = event.target.value
-                    const newState = { level: newLevel }
-                    this.setState(newState)
-                    this.props.onChange(newState)
-                  }}
-                  disabled={!!levelAdv && isLevelAdvValid(levelAdv)}
-                >
-                  <option value="">any</option>
-                  {Array(50)
-                    .fill(0)
-                    .map((_, i) => {
-                      const lv = String(50 - i)
-                      return (
-                        <option key={lv} value={lv}>
-                          {lv}
-                        </option>
-                      )
-                    })}
-                </select>
-
-                <button
-                  disabled={!level || (!!levelAdv && isLevelAdvValid(levelAdv))}
-                  onClick={() => {
-                    if (!level) return
-                    const newState = {
-                      level: String(Math.min(50, Number(level) + 1)),
-                    }
-                    this.setState(newState)
-                    this.props.onChange(newState)
-                  }}
-                >
-                  <VscTriangleRight />
-                </button>
-              </div>
-
-              {" or "}
-
-              <div className={cx(styles.flex, styles.selectWithIncDec)}>
-                <button
                   disabled={!levelAdv || !isLevelAdvValid(levelAdv)}
                   onClick={() => {
                     let newLevelAdv
@@ -1160,7 +1038,7 @@ export default class ControlPanel extends React.Component<
                   }
                   id="levelInput"
                   type="text"
-                  placeholder="range"
+                  placeholder="1-50"
                   value={levelAdv || ""}
                   onChange={(event) => {
                     const newState = { levelAdv: event.target.value }
