@@ -123,16 +123,24 @@ select {
     margin-left: 0.25rem;
   }
 
-  &.draw select {
-    width: 2.5rem;
+  &.draw {
+    label {
+      width: 2.5rem;
+    }
+
+    select {
+      width: 2.5rem;
+    }
   }
 
   &.level, &.sranLevel {
-    select.changed:enabled {
-      background: $n-light;
+    > label {
+      width: 2.5rem;
     }
 
-    input {
+    input[type="text"] {
+      width: 3.5rem;
+
       &.levelAdvValid {
         background: $n-light;
       }
@@ -143,12 +151,9 @@ select {
     }
   }
 
-  &.level input,
-  &.sranLevel input {
-    width: 3.5rem;
-  }
-
   &.sranModeEnabled {
+    margin-left: 0.75rem;
+
     label.changed {
       background: $n-light;
     }
