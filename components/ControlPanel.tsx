@@ -1320,6 +1320,7 @@ export default class ControlPanel extends React.Component<
             >
               <option value="jamfizz_0925">Jam&Fizz 0925 + extras</option>
               <option value="unilab_0731">UniLab 0731</option>
+              <option value="unilab_0905">UniLab 0905</option>
             </select>
           </section>
 
