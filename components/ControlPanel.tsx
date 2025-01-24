@@ -677,7 +677,7 @@ export default class ControlPanel extends React.Component<
             return (
               <>
                 {count}
-                {" charts, "}
+                {" charts, lv "}
                 {min}
               </>
             )
@@ -685,7 +685,7 @@ export default class ControlPanel extends React.Component<
             return (
               <>
                 {count}
-                {" charts, "}
+                {" charts, lv "}
                 {min}
                 {"-"}
                 {max}
@@ -696,7 +696,7 @@ export default class ControlPanel extends React.Component<
           return (
             <>
               {count}
-              {" charts, "}
+              {" charts, lv "}
               {levelAdv}
             </>
           )
