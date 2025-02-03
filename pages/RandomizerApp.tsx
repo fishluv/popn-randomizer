@@ -2,7 +2,6 @@ import React from "react"
 import { Toaster } from "react-hot-toast"
 import {
   Chart,
-  Unilab0905,
   Unilab0731,
   JamFizz0925,
   VersionFolder,
@@ -81,12 +80,10 @@ function serializeChartSets(chartSets: Chart[][]): string {
 
 function getDatabase(gameVersion: string) {
   switch (gameVersion) {
-    // temp for mag '25
-    case "unilab_0905":
-      return Unilab0905
     // versions with extras
     case "unilab_0913":
     case "unilab_1220":
+    case "unilab_0905":
     case "unilab_1218":
     case "jamfizz_0925":
       return JamFizz0925
