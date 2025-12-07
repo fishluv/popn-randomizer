@@ -3,7 +3,7 @@ import { Toaster } from "react-hot-toast"
 import {
   Chart,
   Unilab0731,
-  JamFizz0925,
+  JamFizz0603,
   VersionFolder,
   BemaniFolder,
 } from "popn-db-js"
@@ -86,7 +86,8 @@ function getDatabase(gameVersion: string) {
     case "unilab_0905":
     case "unilab_1218":
     case "jamfizz_0925":
-      return JamFizz0925
+    case "jamfizz_0603":
+      return JamFizz0603
     // versions without extras
     case "kaimei_0613":
     case "unilab_0411":
@@ -138,6 +139,12 @@ export default class RandomizerApp extends React.Component<
     setStorageItemIfNull("omnimix", "exclude")
     setStorageItemIfNull("lively", "exclude")
     setStorageItemIfNull("gameVersion", "unilab_0731")
+
+    // Migration for when a game version is replaced with a newer one
+    if (getStorageString("gameVersion") === "jamfizz_0925") {
+      setStorageItem("gameVersion", "jamfizz_0603")
+    }
+
     // Display options
     setStorageItemIfNull("sranModeEnabled", false)
     setStorageItemIfNull("preferGenre", false)
