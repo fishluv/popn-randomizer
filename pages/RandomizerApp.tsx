@@ -28,9 +28,16 @@ import {
 
 type RandomizerAppProps = Record<string, never>
 
+export interface ChartDataSet {
+  charts: Chart[]
+  // TODO: Temporarily nullable for backwards compatibility
+  drawnAt: number | null
+  gameVersion: string | null
+}
+
 interface RandomizerAppState {
   isDoneLoading: boolean
-  chartDataSets: Chart[][]
+  chartDataSets: ChartDataSet[]
   chartDrawOptions: Partial<ChartDrawOptions>
   chartDisplayOptions: ChartDisplayOptions
 }
@@ -45,7 +52,7 @@ const MAX_DRAWN_CHARTS = 1000
 
 function deserializeChartSets(
   chartSetsJson: string,
-): Chart[][] {
+): ChartDataSet[] {
   try {
     const parsed = JSON.parse(chartSetsJson)
     if (!Array.isArray(parsed)) {
@@ -56,29 +63,40 @@ function deserializeChartSets(
     // Note the reverse iteration order and the unshift:
     // Chart sets are stored and serialized earliest-first but displayed latest-first.
 
-    const deserializedChartSets: Chart[][] = []
+    const deserializedChartSets: ChartDataSet[] = []
     let deserializedChartCount = 0
     for (let nextItem of parsed.toReversed()) {
       if (nextItem === undefined || nextItem === null || (!Array.isArray(nextItem) && !Array.isArray(nextItem.charts))) {
         break
       }
 
-      let nextChartIds: string[]
-      let nextDatabase
+      let chartIds: string[]
+      let drawnAt: number | null
+      let gameVersion: string | null
+
       if (Array.isArray(nextItem)) { // Compatibility for old serialization format
-        nextChartIds = nextItem
-        nextDatabase = JamFizz0603 // Fallback
-      } else {
-        nextChartIds = nextItem.charts
-        nextDatabase = getDatabase(nextItem.gameVersion)
+        chartIds = nextItem
+        drawnAt = null
+        gameVersion = null
+      } else { // TODO: Better typing of nextItem
+        chartIds = nextItem.charts
+        // TODO: Better parsing
+        drawnAt = nextItem.drawnAt
+        gameVersion = nextItem.gameVersion
       }
-      if ((deserializedChartCount + nextChartIds.length) > MAX_DRAWN_CHARTS) {
+      if ((deserializedChartCount + chartIds.length) > MAX_DRAWN_CHARTS) {
         break
       }
 
-      const nextCharts = nextDatabase.findCharts(...nextChartIds).filter((c) => c !== null) as Chart[]
-      deserializedChartSets.unshift(nextCharts)
-      deserializedChartCount += nextItem.length
+      const database = getDatabase(gameVersion || "jamfizz_0603")
+      const charts = database.findCharts(...chartIds).filter((c) => c !== null) as Chart[]
+
+      deserializedChartSets.unshift({
+        charts,
+        drawnAt,
+        gameVersion,
+      })
+      deserializedChartCount += chartIds.length
     }
 
     return deserializedChartSets
@@ -91,11 +109,13 @@ function deserializeChartSets(
   }
 }
 
-function serializeChartSets(chartSets: Chart[][]): string {
-  const chartIdSets: string[][] = chartSets.map((set) =>
-    set.map((chart) => chart.id),
-  )
-  return JSON.stringify(chartIdSets)
+function serializeChartSets(chartSets: ChartDataSet[]): string {
+  const convertedSets = chartSets.map(({charts, drawnAt, gameVersion}) => ({
+    charts: charts.map((chart) => chart.id),
+    drawnAt,
+    gameVersion,
+  }))
+  return JSON.stringify(convertedSets)
 }
 
 function getDatabase(gameVersion: string) {
@@ -223,7 +243,7 @@ export default class RandomizerApp extends React.Component<
 
   handleUnload = (event: BeforeUnloadEvent) => {
     const { chartDataSets } = this.state
-    const drawnChartCount = chartDataSets.reduce((currCount, nextSet) => currCount + nextSet.length, 0)
+    const drawnChartCount = chartDataSets.reduce((currCount, nextSet) => currCount + nextSet.charts.length, 0)
     if (drawnChartCount > MAX_DRAWN_CHARTS) {
       event.preventDefault()
     }
@@ -231,15 +251,18 @@ export default class RandomizerApp extends React.Component<
 
   onControlPanelDraw = (querySampleOptions: ChartQuerySampleOptions) => {
     console.log(querySampleOptions)
-    const database = getDatabase(querySampleOptions.gameVersion)
-    const newChartDataSet = database.sampleQueriedCharts(querySampleOptions)
+    const newChartDataSet = {
+      charts: getDatabase(querySampleOptions.gameVersion).sampleQueriedCharts(querySampleOptions),
+      drawnAt: Date.now(),
+      gameVersion: querySampleOptions.gameVersion,
+    } 
 
     this.setState((prevState) => {
-      const newChartSets = [...prevState.chartDataSets, newChartDataSet]
+      const newChartDataSets = [...prevState.chartDataSets, newChartDataSet]
 
-      setStorageItem("drawnChartSets", serializeChartSets(newChartSets))
+      setStorageItem("drawnChartSets", serializeChartSets(newChartDataSets))
       return {
-        chartDataSets: newChartSets,
+        chartDataSets: newChartDataSets,
       }
     })
   }

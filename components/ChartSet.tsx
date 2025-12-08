@@ -4,20 +4,20 @@ import cx from "classnames"
 import ChartCard from "./ChartCard"
 import styles from "./ChartSet.module.scss"
 import { ChartDisplayOptions } from "./ChartDisplay"
-import { Chart } from "popn-db-js"
 import { FaRegCopy } from "react-icons/fa"
+import { ChartDataSet } from "../pages/RandomizerApp"
 
 interface ChartSetProps {
   extraClass?: string
   index: number
-  charts: Chart[]
+  chartDataSet: ChartDataSet
   chartDisplayOptions: ChartDisplayOptions
 }
 
 export default function ChartSet({
   extraClass,
   index,
-  charts,
+  chartDataSet: { charts },
   chartDisplayOptions,
 }: ChartSetProps) {
   const cycleClassname = styles[`cycle${index % 4}`]

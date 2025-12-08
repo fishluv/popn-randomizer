@@ -1,13 +1,13 @@
 import cx from "classnames"
-import { Chart } from "popn-db-js"
 import React from "react"
 import ChartSet from "./ChartSet"
 import styles from "./SetList.module.scss"
 import { ChartDisplayOptions } from "./ChartDisplay"
+import { ChartDataSet } from "../pages/RandomizerApp"
 
 interface SetListProps {
   extraClass?: string
-  chartDataSets: Chart[][]
+  chartDataSets: ChartDataSet[]
   chartDisplayOptions: ChartDisplayOptions
 }
 
@@ -22,7 +22,7 @@ export default function SetList({
         <ChartSet
           key={index}
           extraClass={styles.borderBetween}
-          charts={chartDataSet}
+          chartDataSet={chartDataSet}
           index={index}
           chartDisplayOptions={chartDisplayOptions}
         />
