@@ -104,21 +104,6 @@ function Select({
   )
 }
 
-function range(start: number, stop: number) {
-  let realStart: number
-  let realStop: number
-  if (stop === undefined) {
-    realStart = 0
-    realStop = start
-  } else {
-    realStart = start
-    realStop = stop
-  }
-
-  const size = realStop - realStart
-  return [...Array.from(Array(size).keys())].map((i) => i + realStart)
-}
-
 function between(num: string | number, min: number, max: number) {
   return Number(num) >= min && Number(num) <= max
 }
@@ -196,9 +181,7 @@ function isSranLevelAdvValid(sranLevelAdv: string) {
   return false
 }
 
-const DRAW_COUNT_MIN = 1
-const DRAW_COUNT_MAX = 10
-const DRAW_COUNTS = range(DRAW_COUNT_MIN, DRAW_COUNT_MAX + 1)
+const DRAW_COUNTS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
 
 interface ControlPanelOptions {
   isMoreControlsOpen: boolean
@@ -428,14 +411,15 @@ export default class ControlPanel extends React.Component<
 
   onDrawCountButtonClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     const { count: prevCount } = this.state
-    let newState
+    const prevCountIdx = DRAW_COUNTS.indexOf(prevCount!)
+    let newCountIdx
 
     switch (event.currentTarget.id) {
       case "drawCountDownButton":
-        newState = { count: Math.max(1, prevCount! - 1) }
+        newCountIdx = Math.max(0, prevCountIdx - 1)
         break
       case "drawCountUpButton":
-        newState = { count: Math.min(10, prevCount! + 1) }
+        newCountIdx = Math.min(DRAW_COUNTS.length - 1, prevCountIdx + 1)
         break
       default:
         console.warn(
@@ -444,6 +428,7 @@ export default class ControlPanel extends React.Component<
         return
     }
 
+    const newState = { count: DRAW_COUNTS[newCountIdx] }
     this.setState(newState)
     this.props.onChange(newState)
   }
