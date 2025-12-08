@@ -41,6 +41,8 @@ export interface ChartQuerySampleOptions {
   gameVersion: string
 }
 
+const MAX_DRAWN_CHARTS = 1000
+
 function deserializeChartSets(
   chartSetsJson: string,
   gameVersion: string,
@@ -53,13 +55,23 @@ function deserializeChartSets(
       return []
     }
 
-    // Max is 20 sets and 10 charts per set.
-    const sets: string[][] = parsed
-      .filter(Array.isArray)
-      .slice(parsed.length - 20)
+    // Cull for max drawn charts. Keep latest chart sets.
+    // Note the reverse iteration order and the unshift:
+    // Chart sets are stored and serialized earliest-first but displayed latest-first.
+    let deserializedChartIdSets: string[][] = []
+    let deserializedChartCount = 0
+    for (let nextSet of parsed.toReversed()) {
+      if (!Array.isArray(nextSet)) {
+        break
+      }
+      if ((deserializedChartCount + nextSet.length) > MAX_DRAWN_CHARTS) {
+        break
+      }
+      deserializedChartIdSets.unshift(nextSet)
+      deserializedChartCount += nextSet.length
+    }
 
-    return sets.map((set) => {
-      const chartIds = set.filter((s) => typeof s === "string").slice(0, 10)
+    return deserializedChartIdSets.map((chartIds) => {
       const charts = database.findCharts(...chartIds)
       return charts.filter((c) => c !== null) as Chart[]
     })
@@ -204,8 +216,8 @@ export default class RandomizerApp extends React.Component<
 
   handleUnload = (event: BeforeUnloadEvent) => {
     const { chartDataSets } = this.state
-    // Max 20 sets.
-    if (chartDataSets.length > 20) {
+    const drawnChartCount = chartDataSets.reduce((currCount, nextSet) => currCount + nextSet.length, 0)
+    if (drawnChartCount > MAX_DRAWN_CHARTS) {
       event.preventDefault()
     }
   }
