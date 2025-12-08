@@ -77,8 +77,9 @@ function deserializeChartSets(
     })
   } catch (e) {
     console.error(`Error deserializing chart sets: ${e}`)
-    setStorageItem("drawnChartSets", "[]")
-    console.info("Reset chart sets.")
+    // Comment out for now. If an error happens, we want to be able to repro.
+    // setStorageItem("drawnChartSets", "[]")
+    // console.info("Reset chart sets.")
     return []
   }
 }
