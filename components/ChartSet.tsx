@@ -17,7 +17,7 @@ interface ChartSetProps {
 export default function ChartSet({
   extraClass,
   index,
-  chartDataSet: { charts },
+  chartDataSet: { charts, drawnAt },
   chartDisplayOptions,
 }: ChartSetProps) {
   const cycleClassname = styles[`cycle${index % 4}`]
@@ -73,6 +73,12 @@ export default function ChartSet({
       <div className={styles.cardsContainer}>
         {chartCardsMarkup.length ? chartCardsMarkup : noCharts}
       </div>
+
+      {chartDisplayOptions.showDrawnAt && drawnAt && (
+        <div className={styles.info}>
+          {new Date(drawnAt).toLocaleString()}
+        </div>
+      )}
     </section>
   )
 }

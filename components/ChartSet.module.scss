@@ -2,7 +2,7 @@
 
 .ChartSet {
   position: relative;
-  padding: 0.5rem 0;
+  padding: 0.5rem;
   border: 0.25rem solid black;
   border-width: 0.25rem 0 0;
   min-width: 320px;
@@ -69,5 +69,12 @@
       vertical-align: top;
       margin: 0.5rem;
     }
+  }
+
+  .info {
+    color: grey;
+    font-size: 0.75rem;
+    font-style: italic;
+    text-align: right;
   }
 }

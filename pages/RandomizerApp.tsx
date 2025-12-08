@@ -154,6 +154,7 @@ export default class RandomizerApp extends React.Component<
         preferGenre: false,
         showChartDetails: false,
         displayStyle: "normal",
+        showDrawnAt: false,
         notepadContents: "",
         assetsUrl: "",
       },
@@ -206,6 +207,7 @@ export default class RandomizerApp extends React.Component<
         preferGenre: getStorageBoolean("preferGenre"),
         showChartDetails: getStorageBoolean("showChartDetails"),
         displayStyle: parseChartDisplayStyle(getStorageString("displayStyle")),
+        showDrawnAt: getStorageBoolean("showDrawnAt"),
         notepadContents: getStorageString("notepadContents").trim(),
         // Currently not configurable in the UI.
         assetsUrl: "https://popn-assets.pages.dev/assets",

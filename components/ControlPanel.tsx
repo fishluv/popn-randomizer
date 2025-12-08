@@ -229,6 +229,7 @@ export default class ControlPanel extends React.Component<
         preferGenre,
         showChartDetails,
         displayStyle,
+        showDrawnAt,
         notepadContents,
         assetsUrl, // Currently not configurable in UI.
       },
@@ -256,6 +257,7 @@ export default class ControlPanel extends React.Component<
       preferGenre: preferGenre ?? false,
       showChartDetails: showChartDetails ?? false,
       displayStyle: displayStyle ?? "normal",
+      showDrawnAt: showDrawnAt ?? false,
       notepadContents: notepadContents ?? "",
       assetsUrl: assetsUrl || "https://popn-assets.pages.dev/assets",
       // Control panel state
@@ -344,6 +346,9 @@ export default class ControlPanel extends React.Component<
       this.setState(newState) // For type safety, can't put this outside the if block.
     } else if (id === "showChartDetailsInput") {
       newState = { showChartDetails: checked }
+      this.setState(newState)
+    } else if (id === "showDrawnAtInput") {
+      newState = { showDrawnAt: checked }
       this.setState(newState)
     } else if (id === "isSranModeEnabledInput") {
       newState = { sranModeEnabled: checked }
@@ -762,6 +767,7 @@ export default class ControlPanel extends React.Component<
       gameVersion,
       preferGenre,
       displayStyle,
+      showDrawnAt,
       notepadContents,
       isMoreControlsOpen,
     } = this.state
@@ -1350,6 +1356,16 @@ export default class ControlPanel extends React.Component<
               {preferGenre ? "genre" : "title"}
             </section>
           )}
+
+          <section className={styles.control}>
+            <input
+              id="showDrawnAtInput"
+              type="checkbox"
+              checked={showDrawnAt}
+              onChange={this.onInputChange}
+            />
+            <label htmlFor="showDrawnAtInput">Show draw timestamp</label>
+          </section>
 
           <section className={cx(styles.control, styles.notepad)}>
             <label>
