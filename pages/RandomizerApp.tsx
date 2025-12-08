@@ -45,10 +45,7 @@ const MAX_DRAWN_CHARTS = 1000
 
 function deserializeChartSets(
   chartSetsJson: string,
-  gameVersion: string,
 ): Chart[][] {
-  const database = getDatabase(gameVersion)
-
   try {
     const parsed = JSON.parse(chartSetsJson)
     if (!Array.isArray(parsed)) {
@@ -58,23 +55,33 @@ function deserializeChartSets(
     // Cull for max drawn charts. Keep latest chart sets.
     // Note the reverse iteration order and the unshift:
     // Chart sets are stored and serialized earliest-first but displayed latest-first.
-    let deserializedChartIdSets: string[][] = []
+
+    const deserializedChartSets: Chart[][] = []
     let deserializedChartCount = 0
-    for (let nextSet of parsed.toReversed()) {
-      if (!Array.isArray(nextSet)) {
+    for (let nextItem of parsed.toReversed()) {
+      if (nextItem === undefined || nextItem === null || (!Array.isArray(nextItem) && !Array.isArray(nextItem.charts))) {
         break
       }
-      if ((deserializedChartCount + nextSet.length) > MAX_DRAWN_CHARTS) {
+
+      let nextChartIds: string[]
+      let nextDatabase
+      if (Array.isArray(nextItem)) { // Compatibility for old serialization format
+        nextChartIds = nextItem
+        nextDatabase = JamFizz0603 // Fallback
+      } else {
+        nextChartIds = nextItem.charts
+        nextDatabase = getDatabase(nextItem.gameVersion)
+      }
+      if ((deserializedChartCount + nextChartIds.length) > MAX_DRAWN_CHARTS) {
         break
       }
-      deserializedChartIdSets.unshift(nextSet)
-      deserializedChartCount += nextSet.length
+
+      const nextCharts = nextDatabase.findCharts(...nextChartIds).filter((c) => c !== null) as Chart[]
+      deserializedChartSets.unshift(nextCharts)
+      deserializedChartCount += nextItem.length
     }
 
-    return deserializedChartIdSets.map((chartIds) => {
-      const charts = database.findCharts(...chartIds)
-      return charts.filter((c) => c !== null) as Chart[]
-    })
+    return deserializedChartSets
   } catch (e) {
     console.error(`Error deserializing chart sets: ${e}`)
     // Comment out for now. If an error happens, we want to be able to repro.
@@ -173,7 +180,6 @@ export default class RandomizerApp extends React.Component<
       isDoneLoading: true,
       chartDataSets: deserializeChartSets(
         getStorageString("drawnChartSets"),
-        gameVersion,
       ),
       chartDisplayOptions: {
         sranModeEnabled: getStorageBoolean("sranModeEnabled"),
