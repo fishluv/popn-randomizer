@@ -75,9 +75,7 @@ export default function ChartSet({
       </div>
 
       {chartDisplayOptions.showDrawnAt && drawnAt && (
-        <div className={styles.info}>
-          {new Date(drawnAt).toLocaleString()}
-        </div>
+        <div className={styles.info}>{new Date(drawnAt).toLocaleString()}</div>
       )}
     </section>
   )
