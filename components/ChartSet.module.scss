@@ -4,38 +4,38 @@
   position: relative;
   padding: 0.5rem;
   border: 0.25rem solid black;
-  border-width: 0.25rem 0 0;
+  border-width: 0.25rem 0 0 0.25rem;
   min-width: 320px;
 
   &.cycle0 {
-    border-color: $ex-bright;
+    border-color: $ex-light;
 
     .triangle {
-      border-right-color: $ex-bright;
+      border-right-color: $ex-light;
     }
   }
 
   &.cycle1 {
-    border-color: $h-bright;
+    border-color: $h-light;
 
     .triangle {
-      border-right-color: $h-bright;
+      border-right-color: $h-light;
     }
   }
 
   &.cycle2 {
-    border-color: $n-bright;
+    border-color: $n-light;
 
     .triangle {
-      border-right-color: $n-bright;
+      border-right-color: $n-light;
     }
   }
 
   &.cycle3 {
-    border-color: $e-bright;
+    border-color: $e-light;
 
     .triangle {
-      border-right-color: $e-bright;
+      border-right-color: $e-light;
     }
   }
 
