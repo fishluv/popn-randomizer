@@ -819,7 +819,7 @@ export default class ControlPanel extends React.Component<
 
         <ReactModal
           isOpen={isMoreControlsOpen}
-          contentLabel="More controls modal"
+          contentLabel="Randomizer controls modal"
           onRequestClose={this.closeMoreControls}
           style={{
             overlay: { zIndex: 10 },
@@ -853,7 +853,7 @@ export default class ControlPanel extends React.Component<
               <button
                 className={cx(styles.iconButton, styles.clearButton)}
                 type="button"
-                title="Clear drawn charts"
+                title="Clear all drawn charts"
                 onClick={this.onClearClick}
               >
                 <FaTrash />

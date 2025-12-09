@@ -1,6 +1,19 @@
 .SetList {
   display: flex;
   flex-direction: column-reverse;
+
+  .chartSetAndButton {
+    position: relative;
+
+    .moreButton {
+      position: absolute;
+      top: 1.0rem;
+      right: 0;
+      width: 2rem;
+      height: 2rem;
+      line-height: 0.8;
+    }
+  }
 }
 
 .borderBetween {
