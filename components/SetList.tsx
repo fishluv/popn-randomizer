@@ -8,6 +8,7 @@ import { ChartDisplayOptions } from "./ChartDisplay"
 import { ChartDataSet } from "../pages/RandomizerApp"
 import { FaArrowDown, FaRegCopy, FaTrash } from "react-icons/fa"
 import { FiMoreVertical } from "react-icons/fi"
+import ChartCard from "./ChartCard"
 
 ReactModal.setAppElement("#app")
 
@@ -109,6 +110,8 @@ export default class SetList extends React.Component<
   render() {
     const { extraClass, chartDataSets, chartDisplayOptions } = this.props
     const { openedChartSetIndex } = this.state
+    const openedCharts = chartDataSets[openedChartSetIndex]?.charts ?? []
+    const openedChartSetDrawnAt = chartDataSets[openedChartSetIndex]?.drawnAt
 
     return (
       <section className={cx(extraClass, styles.SetList)}>
@@ -147,7 +150,8 @@ export default class SetList extends React.Component<
 
               margin: "0 auto",
               padding: "1rem",
-              width: "300px",
+              minWidth: "220px",
+              maxWidth: "320px",
               height: "fit-content",
 
               background: "#fdfdfd",
@@ -158,37 +162,59 @@ export default class SetList extends React.Component<
             },
           }}
         >
-          <>
-            <div>
-              <button
-                className={styles.iconButton}
-                title="Copy chart set to clipboard"
-                onClick={this.onCopyClick}
-              >
-                <FaRegCopy /> Copy to clipboard
-              </button>
+          <div className={styles.chartSetModal}>
+            <div className={styles.firstChart}>
+              {openedCharts.length ? (
+                <>
+                  <ChartCard
+                    chartData={openedCharts[0]}
+                    chartDisplayOptions={{
+                      ...chartDisplayOptions,
+                      displayStyle: "compact",
+                    }}
+                  />
+                  {openedCharts.length > 1 && (
+                    <span className={styles.plusMore}>
+                      {`+ ${openedCharts.length - 1} more`}
+                    </span>
+                  )}
+                </>
+              ) : (
+                "No charts drawn"
+              )}
             </div>
-            <div>
-              <button
-                className={styles.iconButton}
-                title="Delete chart set"
-                onClick={this.onDeleteClick}
-              >
-                <FaTrash /> Delete
-              </button>
-            </div>
-            <div>
-              <button
-                className={styles.iconButton}
-                title="Delete all following chart sets"
-                onClick={this.onDeleteFollowingClick}
-                disabled={openedChartSetIndex >= chartDataSets.length - 1}
-              >
-                <FaTrash />
-                <FaArrowDown /> Delete following
-              </button>
-            </div>
-          </>
+
+            {chartDisplayOptions.showDrawnAt && openedChartSetDrawnAt && (
+              <span className={styles.drawnAt}>
+                {new Date(openedChartSetDrawnAt).toLocaleString()}
+              </span>
+            )}
+
+            <button
+              title="Copy chart set to clipboard"
+              onClick={this.onCopyClick}
+            >
+              <FaRegCopy /> Copy to clipboard
+            </button>
+
+            <button
+              className={styles.delete}
+              title="Delete chart set"
+              onClick={this.onDeleteClick}
+            >
+              <FaTrash /> Delete
+            </button>
+
+            <button
+              className={styles.delete}
+              title="Delete all following chart sets"
+              onClick={this.onDeleteFollowingClick}
+              disabled={openedChartSetIndex >= chartDataSets.length - 1}
+            >
+              <FaTrash />
+              <FaArrowDown className={styles.downArrow} /> Delete following
+            </button>
+          </div>
         </ReactModal>
       </section>
     )
