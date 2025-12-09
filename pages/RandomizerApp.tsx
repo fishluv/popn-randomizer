@@ -158,7 +158,6 @@ export default class RandomizerApp extends React.Component<
       chartDisplayOptions: {
         sranModeEnabled: false,
         preferGenre: false,
-        showChartDetails: false,
         displayStyle: "normal",
         showDrawnAt: false,
         notepadContents: "",
@@ -209,7 +208,6 @@ export default class RandomizerApp extends React.Component<
       chartDisplayOptions: {
         sranModeEnabled: getStorageBoolean("sranModeEnabled"),
         preferGenre: getStorageBoolean("preferGenre"),
-        showChartDetails: getStorageBoolean("showChartDetails"),
         displayStyle: parseChartDisplayStyle(getStorageString("displayStyle")),
         showDrawnAt: getStorageBoolean("showDrawnAt"),
         notepadContents: getStorageString("notepadContents").trim(),

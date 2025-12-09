@@ -229,7 +229,6 @@ export default class ControlPanel extends React.Component<
       initialDisplayOptions: {
         sranModeEnabled,
         preferGenre,
-        showChartDetails,
         displayStyle,
         showDrawnAt,
         notepadContents,
@@ -257,7 +256,6 @@ export default class ControlPanel extends React.Component<
       // Display options
       sranModeEnabled: sranModeEnabled ?? false,
       preferGenre: preferGenre ?? false,
-      showChartDetails: showChartDetails ?? false,
       displayStyle: displayStyle ?? "normal",
       showDrawnAt: showDrawnAt ?? false,
       notepadContents: notepadContents ?? "",
@@ -346,9 +344,6 @@ export default class ControlPanel extends React.Component<
     if (id === "displayGenreInput") {
       newState = { preferGenre: checked }
       this.setState(newState) // For type safety, can't put this outside the if block.
-    } else if (id === "showChartDetailsInput") {
-      newState = { showChartDetails: checked }
-      this.setState(newState)
     } else if (id === "showDrawnAtInput") {
       newState = { showDrawnAt: checked }
       this.setState(newState)

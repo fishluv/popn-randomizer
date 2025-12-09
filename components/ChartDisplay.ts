@@ -13,7 +13,6 @@ export function parseChartDisplayStyle(s: string): ChartDisplayStyle {
 export interface ChartDisplayOptions {
   sranModeEnabled: boolean // TODO: Move to ChartDrawOptions
   preferGenre: boolean
-  showChartDetails: boolean
   displayStyle: ChartDisplayStyle
   showDrawnAt: boolean
   notepadContents: string
