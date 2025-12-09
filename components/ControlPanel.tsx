@@ -2,13 +2,14 @@ import cx from "classnames"
 import markdownit from "markdown-it"
 import React from "react"
 import ReactModal from "react-modal"
+import toast from "react-hot-toast"
 import { VersionFolder, BemaniFolder } from "popn-db-js"
 import styles from "./ControlPanel.module.scss"
 import { ChartDisplayOptions } from "./ChartDisplay"
-import { ChartQuerySampleOptions } from "../pages/RandomizerApp"
+import { ChartQuerySampleOptions, getDatabase } from "../pages/RandomizerApp"
 import { ChartDrawOptions, parseIncludeOption } from "./ChartDrawOptions"
 import { BsGithub } from "react-icons/bs"
-import { FaTrash } from "react-icons/fa"
+import { FaCalculator, FaTrash } from "react-icons/fa"
 import { RiSettings3Fill } from "react-icons/ri"
 import { VscTriangleLeft, VscTriangleRight } from "react-icons/vsc"
 
@@ -443,10 +444,8 @@ export default class ControlPanel extends React.Component<
     this.props.onChange(newState)
   }
 
-  onDrawClick = () => {
-    const { onDraw } = this.props
+  buildQuery = (): string => {
     const {
-      count,
       levelAdv,
       sranModeEnabled,
       sranLevelAdv,
@@ -475,8 +474,7 @@ export default class ControlPanel extends React.Component<
             querySegments.push(`srlv = ${sranLevelAdv}`)
           }
         } else {
-          window.alert("S乱 level input is invalid.")
-          return
+          console.error(`S乱 level input ${sranLevelAdv} is invalid. Ignoring.`)
         }
       } else {
         querySegments.push("srlv >= 1")
@@ -492,8 +490,7 @@ export default class ControlPanel extends React.Component<
             querySegments.push(`lv = ${levelAdv}`)
           }
         } else {
-          window.alert("Level input is invalid.")
-          return
+          console.error(`Level input ${levelAdv} is invalid. Ignoring.`)
         }
       } else {
         querySegments.push("lv >= 1")
@@ -560,9 +557,23 @@ export default class ControlPanel extends React.Component<
       querySegments.push("hardest")
     }
 
+    return querySegments.join(", ")
+  }
+
+  onCalculateClick = () => {
+    const { gameVersion } = this.state
+    const query = this.buildQuery()
+    const totalChartCount = getDatabase(gameVersion!).queryCharts(query).length
+    toast(`Drawing from ${totalChartCount} charts total`)
+  }
+
+  onDrawClick = () => {
+    const { onDraw } = this.props
+    const { count, gameVersion } = this.state
+
     onDraw({
       count: count!,
-      query: querySegments.join(", "),
+      query: this.buildQuery(),
       gameVersion: gameVersion!,
     })
   }
@@ -869,7 +880,17 @@ export default class ControlPanel extends React.Component<
             </section>
           </section>
 
-          <h5 className={styles.header}>Draw options</h5>
+          <h5 className={styles.header}>
+            Draw options
+            <button
+              className={styles.iconButton}
+              title="Calculate draw pool size"
+              onClick={this.onCalculateClick}
+            >
+              <FaCalculator />
+            </button>
+          </h5>
+
           <section className={cx(styles.control, styles.draw)}>
             <label htmlFor="drawCountSelect">Draw</label>
 

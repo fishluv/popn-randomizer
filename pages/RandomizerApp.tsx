@@ -121,7 +121,7 @@ function serializeChartSets(chartSets: ChartDataSet[]): string {
   return JSON.stringify(convertedSets)
 }
 
-function getDatabase(gameVersion: string) {
+export function getDatabase(gameVersion: string) {
   switch (gameVersion) {
     // versions with extras
     case "unilab_0913":
