@@ -822,7 +822,7 @@ export default class ControlPanel extends React.Component<
           contentLabel="Randomizer controls modal"
           onRequestClose={this.closeMoreControls}
           style={{
-            overlay: { zIndex: 10 },
+            overlay: { zIndex: 20 },
             content: {
               background: "#fdfdfd",
               border: "none",

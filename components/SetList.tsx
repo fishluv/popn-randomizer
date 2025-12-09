@@ -143,7 +143,7 @@ export default class SetList extends React.Component<
           contentLabel="Chart set controls modal"
           onRequestClose={() => this.setState({ openedChartSetIndex: -1 })}
           style={{
-            overlay: { zIndex: 10 },
+            overlay: { zIndex: 20 },
             content: {
               position: "absolute",
               top: "30%",
