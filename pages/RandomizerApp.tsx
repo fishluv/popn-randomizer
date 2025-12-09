@@ -37,7 +37,7 @@ export interface ChartDataSet {
 
 interface RandomizerAppState {
   isDoneLoading: boolean
-  chartDataSets: ChartDataSet[]
+  chartDataSets: ChartDataSet[] // Newest first.
   chartDrawOptions: Partial<ChartDrawOptions>
   chartDisplayOptions: ChartDisplayOptions
 }
@@ -57,13 +57,10 @@ function deserializeChartSets(chartSetsJson: string): ChartDataSet[] {
       return []
     }
 
-    // Cull for max drawn charts. Keep latest chart sets.
-    // Note the reverse iteration order and the unshift:
-    // Chart sets are stored and serialized earliest-first but displayed latest-first.
-
+    // Cull for max drawn charts. Keep newest chart sets.
     const deserializedChartSets: ChartDataSet[] = []
     let deserializedChartCount = 0
-    for (let nextItem of parsed.toReversed()) {
+    for (let nextItem of parsed) {
       if (
         nextItem === undefined ||
         nextItem === null ||
@@ -97,7 +94,7 @@ function deserializeChartSets(chartSetsJson: string): ChartDataSet[] {
         .findCharts(...chartIds)
         .filter((c) => c !== null) as Chart[]
 
-      deserializedChartSets.unshift({
+      deserializedChartSets.push({
         charts,
         drawnAt,
         gameVersion,
@@ -267,7 +264,7 @@ export default class RandomizerApp extends React.Component<
     }
 
     this.setState((prevState) => {
-      const newChartDataSets = [...prevState.chartDataSets, newChartDataSet]
+      const newChartDataSets = [newChartDataSet, ...prevState.chartDataSets]
 
       setStorageItem("drawnChartSets", serializeChartSets(newChartDataSets))
       return {
