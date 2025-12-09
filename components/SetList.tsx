@@ -6,7 +6,7 @@ import ChartSet from "./ChartSet"
 import styles from "./SetList.module.scss"
 import { ChartDisplayOptions } from "./ChartDisplay"
 import { ChartDataSet } from "../pages/RandomizerApp"
-import { FaRegCopy } from "react-icons/fa"
+import { FaArrowDown, FaRegCopy, FaTrash } from "react-icons/fa"
 import { FiMoreVertical } from "react-icons/fi"
 
 ReactModal.setAppElement("#app")
@@ -15,6 +15,8 @@ interface SetListProps {
   extraClass?: string
   chartDataSets: ChartDataSet[]
   chartDisplayOptions: ChartDisplayOptions
+  onDeleteChartSet(deleteIndex: number): void
+  onDeleteChartSetsAfter(deleteAfterIndex: number): void
 }
 
 interface SetListState {
@@ -33,7 +35,7 @@ export default class SetList extends React.Component<
     }
   }
 
-  onCopyButtonClick = async () => {
+  onCopyClick = async () => {
     const { chartDataSets } = this.props
     const { openedChartSetIndex } = this.state
     const { charts } = chartDataSets[openedChartSetIndex]
@@ -57,6 +59,51 @@ export default class SetList extends React.Component<
         .join("\n") + "\n"
     await navigator.clipboard.writeText(chartsDump)
     toast(`Copied chart set:\n\n${chartsDump}`)
+  }
+
+  onDeleteClick = () => {
+    const { chartDataSets, onDeleteChartSet } = this.props
+    const { openedChartSetIndex } = this.state
+
+    if (
+      openedChartSetIndex < 0 ||
+      openedChartSetIndex >= chartDataSets.length
+    ) {
+      return
+    }
+
+    if (
+      window.confirm(
+        `Delete this chart set? (${chartDataSets[openedChartSetIndex].charts.length} charts)`,
+      )
+    ) {
+      onDeleteChartSet(openedChartSetIndex)
+      this.setState({ openedChartSetIndex: -1 })
+    }
+  }
+
+  onDeleteFollowingClick = () => {
+    const { chartDataSets, onDeleteChartSetsAfter } = this.props
+    const { openedChartSetIndex } = this.state
+
+    // Note the length-1. Last chart set doesn't have any following chart sets.
+    if (
+      openedChartSetIndex < 0 ||
+      openedChartSetIndex >= chartDataSets.length - 1
+    ) {
+      return
+    }
+
+    if (
+      window.confirm(
+        `Delete all following chart sets? (${
+          chartDataSets.length - 1 - openedChartSetIndex
+        } chart sets)`,
+      )
+    ) {
+      onDeleteChartSetsAfter(openedChartSetIndex)
+      this.setState({ openedChartSetIndex: -1 })
+    }
   }
 
   render() {
@@ -112,9 +159,35 @@ export default class SetList extends React.Component<
           }}
         >
           <>
-            <button title="More actions" onClick={this.onCopyButtonClick}>
-              <FaRegCopy /> Copy to clipboard
-            </button>
+            <div>
+              <button
+                className={styles.iconButton}
+                title="Copy chart set to clipboard"
+                onClick={this.onCopyClick}
+              >
+                <FaRegCopy /> Copy to clipboard
+              </button>
+            </div>
+            <div>
+              <button
+                className={styles.iconButton}
+                title="Delete chart set"
+                onClick={this.onDeleteClick}
+              >
+                <FaTrash /> Delete
+              </button>
+            </div>
+            <div>
+              <button
+                className={styles.iconButton}
+                title="Delete all following chart sets"
+                onClick={this.onDeleteFollowingClick}
+                disabled={openedChartSetIndex >= chartDataSets.length - 1}
+              >
+                <FaTrash />
+                <FaArrowDown /> Delete following
+              </button>
+            </div>
           </>
         </ReactModal>
       </section>

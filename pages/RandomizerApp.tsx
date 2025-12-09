@@ -292,6 +292,31 @@ export default class RandomizerApp extends React.Component<
     })
   }
 
+  onDeleteChartSet = (deleteIndex: number) => {
+    this.setState(({ chartDataSets }) => {
+      const newChartDataSets = [
+        ...chartDataSets.slice(0, deleteIndex),
+        ...chartDataSets.slice(deleteIndex + 1),
+      ]
+
+      setStorageItem("drawnChartSets", serializeChartSets(newChartDataSets))
+      return {
+        chartDataSets: newChartDataSets,
+      }
+    })
+  }
+
+  onDeleteChartSetsAfter = (deleteAfterIndex: number) => {
+    this.setState(({ chartDataSets }) => {
+      const newChartDataSets = chartDataSets.slice(0, deleteAfterIndex + 1)
+
+      setStorageItem("drawnChartSets", serializeChartSets(newChartDataSets))
+      return {
+        chartDataSets: newChartDataSets,
+      }
+    })
+  }
+
   render() {
     const {
       isDoneLoading,
@@ -316,6 +341,8 @@ export default class RandomizerApp extends React.Component<
               extraClass={styles.setList}
               chartDataSets={chartDataSets}
               chartDisplayOptions={chartDisplayOptions}
+              onDeleteChartSet={this.onDeleteChartSet}
+              onDeleteChartSetsAfter={this.onDeleteChartSetsAfter}
             />
             <Toaster position="bottom-center" />
           </section>
