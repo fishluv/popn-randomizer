@@ -213,13 +213,8 @@ export default class RandomizerApp extends React.Component<
       },
       chartDrawOptions: {
         count: getStorageNumber("count"),
-        // TODO: Remove this temp backwards compatibility by end of month.
-        levelAdv:
-          getStorageString("level") || getStorageString("levelAdv") || "",
-        sranLevelAdv:
-          getStorageString("sranLevel") ||
-          getStorageString("sranLevelAdv") ||
-          "",
+        levelAdv: getStorageString("levelAdv") || "",
+        sranLevelAdv: getStorageString("sranLevelAdv") || "",
         includeDiffsRadio: getStorageString("includeDiffsRadio", "all") as
           | "all"
           | "choose",
