@@ -170,6 +170,7 @@ export default class ChartCard extends React.Component<
         alt={`Banner for ${title}`}
         width={width}
         height={height}
+        loading="lazy"
       />
     )
   }
