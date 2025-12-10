@@ -140,6 +140,7 @@ export default class SetList extends React.Component<
         ))}
 
         <ReactModal
+          id="chartSetModal" // Used to suppress keyboard shortcuts in ControlPanel.
           isOpen={openedChartSetIndex >= 0}
           contentLabel="Chart set controls modal"
           onRequestClose={() => this.setState({ openedChartSetIndex: -1 })}

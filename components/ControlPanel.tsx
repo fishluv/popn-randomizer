@@ -276,7 +276,7 @@ export default class ControlPanel extends React.Component<
 
   handleKeyPress = (event: KeyboardEvent) => {
     const { isMoreControlsOpen } = this.state
-    if (isMoreControlsOpen) return
+    if (isMoreControlsOpen || document.getElementById("chartSetModal")) return
 
     const { key, repeat } = event
     if (repeat) return
