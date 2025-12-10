@@ -564,7 +564,9 @@ export default class ControlPanel extends React.Component<
     const { gameVersion } = this.state
     const query = this.buildQuery()
     const totalChartCount = getDatabase(gameVersion!).queryCharts(query).length
-    toast(`Drawing from ${totalChartCount} charts total`)
+    toast(`Drawing from ${totalChartCount} charts total`, {
+      position: "top-center",
+    })
   }
 
   onDrawClick = () => {
