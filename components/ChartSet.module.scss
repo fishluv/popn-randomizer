@@ -3,8 +3,9 @@
 .ChartSet {
   position: relative;
   padding: 0.5rem 1rem 0.5rem 0.5rem;
-  border: 0.25rem solid black;
-  border-width: 0.25rem 0 0 0.25rem;
+  border-color: grey;
+  border-style: solid;
+  border-width: 0.375rem 0 0 0.375rem;
   min-width: 320px;
 
   &.cycle0 {
@@ -43,7 +44,7 @@
     position: absolute;
     top: -1rem;
     left: -1rem;
-    border: 1rem solid black;
+    border: 1rem solid grey;
     border-top-color: transparent;
     border-bottom-color: transparent;
     border-left-color: transparent;
