@@ -7,18 +7,18 @@ import { ChartDataSet } from "../pages/RandomizerApp"
 
 interface ChartSetProps {
   extraClass?: string
-  index: number
+  colorIndex: number
   chartDataSet: ChartDataSet
   chartDisplayOptions: ChartDisplayOptions
 }
 
 export default function ChartSet({
   extraClass,
-  index,
+  colorIndex,
   chartDataSet: { charts, drawnAt },
   chartDisplayOptions,
 }: ChartSetProps) {
-  const cycleClassname = styles[`cycle${index % 4}`]
+  const cycleClassname = styles[`cycle${colorIndex % 4}`]
   const rootClassname = cx(extraClass, styles.ChartSet, cycleClassname)
 
   const noCharts = <span>No charts</span>

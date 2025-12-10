@@ -124,7 +124,8 @@ export default class SetList extends React.Component<
             <ChartSet
               extraClass={styles.borderBetween}
               chartDataSet={chartDataSet}
-              index={index}
+              // Colors should be reverse order so they don't change as new chart sets are drawn.
+              colorIndex={chartDataSets.length - 1 - index}
               chartDisplayOptions={chartDisplayOptions}
             />
 
