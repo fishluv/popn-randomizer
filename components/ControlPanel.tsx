@@ -530,7 +530,7 @@ export default class ControlPanel extends React.Component<
       querySegments.push("-floorinfection")
     }
 
-    if (gameVersion === "jamfizz_0603") {
+    if (gameVersion === "jamfizz_0924") {
       // These are only supported for newest non-Eagle datecodes.
 
       if (omnimix === "only") {
@@ -1281,7 +1281,7 @@ export default class ControlPanel extends React.Component<
             <label htmlFor="floorInfectionSelect">FLOOR INFECTION</label>
           </section>
 
-          {gameVersion === "jamfizz_0603" && (
+          {gameVersion === "jamfizz_0924" && (
             <>
               <section className={styles.control}>
                 <select
@@ -1329,7 +1329,7 @@ export default class ControlPanel extends React.Component<
               value={gameVersion}
               onChange={this.onSelectChange}
             >
-              <option value="jamfizz_0603">Jam&Fizz 0603 + extras</option>
+              <option value="jamfizz_0924">Jam&Fizz 0924 + extras</option>
               <option value="unilab_0731">UniLab 0731</option>
             </select>
           </section>

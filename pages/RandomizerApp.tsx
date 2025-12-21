@@ -3,7 +3,7 @@ import { Toaster } from "react-hot-toast"
 import {
   Chart,
   Unilab0731,
-  JamFizz0603,
+  JamFizz0924,
   VersionFolder,
   BemaniFolder,
 } from "popn-db-js"
@@ -89,7 +89,7 @@ function deserializeChartSets(chartSetsJson: string): ChartDataSet[] {
         break
       }
 
-      const database = getDatabase(gameVersion || "jamfizz_0603")
+      const database = getDatabase(gameVersion || "jamfizz_0924")
       const charts = database
         .findCharts(...chartIds)
         .filter((c) => c !== null) as Chart[]
@@ -130,7 +130,8 @@ export function getDatabase(gameVersion: string) {
     case "unilab_1218":
     case "jamfizz_0925":
     case "jamfizz_0603":
-      return JamFizz0603
+    case "jamfizz_0924":
+      return JamFizz0924
     // versions without extras
     case "kaimei_0613":
     case "unilab_0411":
@@ -185,7 +186,7 @@ export default class RandomizerApp extends React.Component<
 
     // Migration for when a game version is replaced with a newer one
     if (getStorageString("gameVersion") === "jamfizz_0925") {
-      setStorageItem("gameVersion", "jamfizz_0603")
+      setStorageItem("gameVersion", "jamfizz_0924")
     }
 
     // Display options
