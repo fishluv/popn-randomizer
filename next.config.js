@@ -6,6 +6,7 @@ const gitSha = require("child_process")
 
 /** @type {import('next').NextConfig} */
 module.exports = {
+  output: "export",
   env: {
     GIT_SHA: gitSha,
   },

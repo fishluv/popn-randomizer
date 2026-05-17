@@ -287,7 +287,7 @@ export default class ChartCard extends React.Component<
           <span className={styles.item}>
             <IoMusicalNotesOutline size="0.875rem" />
             <span>{notes || "?"}</span>
-            {holdNotes > 0 && <span className={styles.holdsPill}>L</span>}
+            {(holdNotes ?? 0) > 0 && <span className={styles.holdsPill}>L</span>}
           </span>
 
           <span className={styles.item}>

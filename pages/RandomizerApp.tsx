@@ -60,7 +60,7 @@ function deserializeChartSets(chartSetsJson: string): ChartDataSet[] {
     // Cull for max drawn charts. Keep newest chart sets.
     const deserializedChartSets: ChartDataSet[] = []
     let deserializedChartCount = 0
-    for (let nextItem of parsed) {
+    for (const nextItem of parsed) {
       if (
         nextItem === undefined ||
         nextItem === null ||
