@@ -253,7 +253,7 @@ export default class ControlPanel extends React.Component<
       holdNotes: holdNotes ?? "include",
       omnimix: omnimix ?? "exclude",
       lively: lively ?? "exclude",
-      gameVersion: gameVersion || "unilab_0731",
+      gameVersion: gameVersion || "highcheers_2605",
       // Display options
       sranModeEnabled: sranModeEnabled ?? false,
       preferGenre: preferGenre ?? false,
@@ -1329,6 +1329,7 @@ export default class ControlPanel extends React.Component<
               value={gameVersion}
               onChange={this.onSelectChange}
             >
+              <option value="highcheers_2605">High☆Cheers!!</option>
               <option value="jamfizz_0924">Jam&Fizz 0924 + extras</option>
               <option value="unilab_0731">UniLab 0731</option>
             </select>
