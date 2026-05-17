@@ -22,6 +22,7 @@ const FOLDER_OPTIONS: {
   disabled?: boolean
 }[] = [
   { id: "dummy1", label: "-- Version folders --", disabled: true },
+  { id: "29", label: "high cheers" },
   { id: "28", label: "jam&fizz" },
   { id: "27", label: "unilab" },
   { id: "26", label: "kaimei riddles" },
