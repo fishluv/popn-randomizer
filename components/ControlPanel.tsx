@@ -1316,6 +1316,20 @@ export default class ControlPanel extends React.Component<
             <label htmlFor="floorInfectionSelect">FLOOR INFECTION</label>
           </section>
 
+          <section className={styles.control}>
+            <label htmlFor="gameVersionSelect">Game data</label>
+            <select
+              id="gameVersionSelect"
+              className={gameVersion ? styles[gameVersion] : ""}
+              value={gameVersion}
+              onChange={this.onSelectChange}
+            >
+              <option value="highcheers_2605">High☆Cheers!!</option>
+              <option value="jamfizz_0924">Jam&Fizz 0924 + extras</option>
+              <option value="unilab_0731">UniLab 0731</option>
+            </select>
+          </section>
+
           {gameVersion === "jamfizz_0924" && (
             <>
               <section className={styles.control}>
@@ -1355,20 +1369,6 @@ export default class ControlPanel extends React.Component<
               </section>
             </>
           )}
-
-          <section className={styles.control}>
-            <label htmlFor="gameVersionSelect">Game data</label>
-            <select
-              id="gameVersionSelect"
-              className={gameVersion ? styles[gameVersion] : ""}
-              value={gameVersion}
-              onChange={this.onSelectChange}
-            >
-              <option value="highcheers_2605">High☆Cheers!!</option>
-              <option value="jamfizz_0924">Jam&Fizz 0924 + extras</option>
-              <option value="unilab_0731">UniLab 0731</option>
-            </select>
-          </section>
 
           {gameVersion === "highcheers_2605" && (
             <>
