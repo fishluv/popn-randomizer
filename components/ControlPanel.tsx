@@ -226,6 +226,8 @@ export default class ControlPanel extends React.Component<
         holdNotes,
         omnimix,
         lively,
+        unlocks,
+        naRemovals,
         gameVersion,
       },
       initialDisplayOptions: {
@@ -254,6 +256,8 @@ export default class ControlPanel extends React.Component<
       holdNotes: holdNotes ?? "include",
       omnimix: omnimix ?? "exclude",
       lively: lively ?? "exclude",
+      unlocks: unlocks ?? "include",
+      naRemovals: naRemovals ?? "include",
       gameVersion: gameVersion || "highcheers_2605",
       // Display options
       sranModeEnabled: sranModeEnabled ?? false,
@@ -327,6 +331,14 @@ export default class ControlPanel extends React.Component<
     } else if (id === "livelySelect") {
       newState = {
         lively: parseIncludeOption(value),
+      }
+    } else if (id === "unlockSelect") {
+      newState = {
+        unlocks: parseIncludeOption(value),
+      }
+    } else if (id === "naRemovalsSelect") {
+      newState = {
+        naRemovals: parseIncludeOption(value),
       }
     } else {
       console.warn(`ControlPanel: Unknown id ${id}`)
@@ -459,6 +471,8 @@ export default class ControlPanel extends React.Component<
       holdNotes,
       omnimix,
       lively,
+      unlocks,
+      naRemovals,
       gameVersion,
     } = this.state
 
@@ -546,6 +560,22 @@ export default class ControlPanel extends React.Component<
       }
       if (lively === "exclude") {
         querySegments.push("-lively")
+      }
+    }
+
+    if (gameVersion === "highcheers_2605") {
+      if (unlocks === "only") {
+        querySegments.push("unlock")
+      }
+      if (unlocks === "exclude") {
+        querySegments.push("-unlock")
+      }
+
+      if (naRemovals === "only") {
+        querySegments.push("naremoval")
+      }
+      if (naRemovals === "exclude") {
+        querySegments.push("-naremoval")
       }
     }
 
@@ -749,6 +779,8 @@ export default class ControlPanel extends React.Component<
         holdNotes: "include",
         omnimix: "exclude",
         lively: "exclude",
+        unlocks: "include",
+        naRemovals: "include",
         // Display options
         sranModeEnabled: false,
         // Don't reset game version or display options.
@@ -775,6 +807,8 @@ export default class ControlPanel extends React.Component<
       holdNotes,
       omnimix,
       lively,
+      unlocks,
+      naRemovals,
       gameVersion,
       preferGenre,
       displayStyle,
@@ -1335,6 +1369,46 @@ export default class ControlPanel extends React.Component<
               <option value="unilab_0731">UniLab 0731</option>
             </select>
           </section>
+
+          {gameVersion === "highcheers_2605" && (
+            <>
+              <section className={styles.control}>
+                <select
+                  id="unlockSelect"
+                  className={
+                    unlocks === "exclude"
+                      ? styles.changed
+                      : unlocks === "only"
+                      ? styles.changed2
+                      : ""
+                  }
+                  value={unlocks}
+                  onChange={this.onSelectChange}
+                >
+                  {includeOptions()}
+                </select>
+                <label htmlFor="unlockSelect">Unlocks</label>
+              </section>
+
+              <section className={styles.control}>
+                <select
+                  id="naRemovalsSelect"
+                  className={
+                    naRemovals === "exclude"
+                      ? styles.changed
+                      : naRemovals === "only"
+                      ? styles.changed2
+                      : ""
+                  }
+                  value={naRemovals}
+                  onChange={this.onSelectChange}
+                >
+                  {includeOptions()}
+                </select>
+                <label htmlFor="naRemovalsSelect">NA removals</label>
+              </section>
+            </>
+          )}
 
           <h5 className={styles.header}>Display options</h5>
 

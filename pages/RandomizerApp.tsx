@@ -185,6 +185,8 @@ export default class RandomizerApp extends React.Component<
     setStorageItemIfNull("floorInfection", "include")
     setStorageItemIfNull("omnimix", "exclude")
     setStorageItemIfNull("lively", "exclude")
+    setStorageItemIfNull("unlocks", "include")
+    setStorageItemIfNull("naRemovals", "include")
 
     if (!["highcheers_2605", "jamfizz_0924", "unilab_0731"].includes(getStorageString("gameVersion"))) {
       setStorageItem("gameVersion", "highcheers_2605")
@@ -230,6 +232,8 @@ export default class RandomizerApp extends React.Component<
         holdNotes: parseIncludeOption(getStorageString("holdNotes")),
         omnimix: parseIncludeOption(getStorageString("omnimix")),
         lively: parseIncludeOption(getStorageString("lively")),
+        unlocks: parseIncludeOption(getStorageString("unlocks")),
+        naRemovals: parseIncludeOption(getStorageString("naRemovals")),
         gameVersion,
       },
     })

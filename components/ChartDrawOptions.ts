@@ -28,5 +28,7 @@ export interface ChartDrawOptions {
   holdNotes?: IncludeOption
   omnimix?: IncludeOption
   lively?: IncludeOption
+  unlocks?: IncludeOption
+  naRemovals?: IncludeOption
   gameVersion?: string
 }
