@@ -1307,7 +1307,12 @@ export default class ControlPanel extends React.Component<
                 checked={includeDiffsRadio === "choose"}
                 onChange={this.onInputChange}
               />
-              <label htmlFor="includeChooseDiffsInput">Choose</label>
+              <label
+                htmlFor="includeChooseDiffsInput"
+                className={includeDiffsRadio === "choose" ? styles.changed : ""}
+              >
+                Choose
+              </label>
             </section>
           </section>
 
@@ -1321,7 +1326,12 @@ export default class ControlPanel extends React.Component<
                     checked={includeDiffs!.includes("e")}
                     onChange={this.onInputChange}
                   />
-                  <label htmlFor="includeEasyInput">easy</label>
+                  <label
+                    htmlFor="includeEasyInput"
+                    className={!includeDiffs!.includes("e") ? styles.changed : ""}
+                  >
+                    easy
+                  </label>
                 </div>
 
                 <div className={styles.diffContainer}>
@@ -1331,7 +1341,12 @@ export default class ControlPanel extends React.Component<
                     checked={includeDiffs!.includes("n")}
                     onChange={this.onInputChange}
                   />
-                  <label htmlFor="includeNormalInput">normal</label>
+                  <label
+                    htmlFor="includeNormalInput"
+                    className={!includeDiffs!.includes("n") ? styles.changed : ""}
+                  >
+                    normal
+                  </label>
                 </div>
 
                 <div className={styles.diffContainer}>
@@ -1341,7 +1356,12 @@ export default class ControlPanel extends React.Component<
                     checked={includeDiffs!.includes("h")}
                     onChange={this.onInputChange}
                   />
-                  <label htmlFor="includeHyperInput">hyper</label>
+                  <label
+                    htmlFor="includeHyperInput"
+                    className={!includeDiffs!.includes("h") ? styles.changed : ""}
+                  >
+                    hyper
+                  </label>
                 </div>
 
                 <div className={styles.diffContainer}>
@@ -1351,7 +1371,12 @@ export default class ControlPanel extends React.Component<
                     checked={includeDiffs!.includes("x")}
                     onChange={this.onInputChange}
                   />
-                  <label htmlFor="includeExInput">ex</label>
+                  <label
+                    htmlFor="includeExInput"
+                    className={!includeDiffs!.includes("x") ? styles.changed : ""}
+                  >
+                    ex
+                  </label>
                 </div>
               </section>
               <section className={cx(styles.control, styles.hardestDiff)}>
@@ -1361,7 +1386,10 @@ export default class ControlPanel extends React.Component<
                   checked={hardestDiff === "only"}
                   onChange={this.onInputChange}
                 />
-                <label htmlFor="onlyIncludeHardestInput">
+                <label
+                  htmlFor="onlyIncludeHardestInput"
+                  className={hardestDiff === "only" ? styles.changed : ""}
+                >
                   Only song&apos;s hardest
                 </label>
               </section>
