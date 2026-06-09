@@ -760,7 +760,7 @@ export default class ControlPanel extends React.Component<
               return (
                 <>
                   {count}
-                  {" charts, S乱 "}
+                  {" charts: S乱 "}
                   {min.startsWith("0") ? min.slice(1) : min}
                 </>
               )
@@ -768,7 +768,7 @@ export default class ControlPanel extends React.Component<
               return (
                 <>
                   {count}
-                  {" charts, S乱 "}
+                  {" charts: S乱 "}
                   {min.startsWith("0") ? min.slice(1) : min}
                   {"-"}
                   {max.startsWith("0") ? max.slice(1) : max}
@@ -779,7 +779,7 @@ export default class ControlPanel extends React.Component<
             return (
               <>
                 {count}
-                {" charts, S乱 "}
+                {" charts: S乱 "}
                 {sranLevelAdv}
               </>
             )
@@ -791,7 +791,7 @@ export default class ControlPanel extends React.Component<
         return (
           <>
             {count}
-            {" charts, any S乱 level"}
+            {" charts: any S乱 level"}
           </>
         )
       }
@@ -833,7 +833,7 @@ export default class ControlPanel extends React.Component<
             return (
               <>
                 {count}
-                {" charts, lv "}
+                {" charts: lv "}
                 {min}
               </>
             )
@@ -841,7 +841,7 @@ export default class ControlPanel extends React.Component<
             return (
               <>
                 {count}
-                {" charts, lv "}
+                {" charts: lv "}
                 {min}
                 {"-"}
                 {max}
@@ -852,7 +852,7 @@ export default class ControlPanel extends React.Component<
           return (
             <>
               {count}
-              {" charts, lv "}
+              {" charts: lv "}
               {levelAdv}
             </>
           )
@@ -864,7 +864,7 @@ export default class ControlPanel extends React.Component<
       return (
         <>
           {count}
-          {" charts, "}
+          {" charts: "}
           {"any level"}
         </>
       )
