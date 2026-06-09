@@ -11,7 +11,6 @@ export function parseChartDisplayStyle(s: string): ChartDisplayStyle {
 }
 
 export interface ChartDisplayOptions {
-  sranModeEnabled: boolean // TODO: Move to ChartDrawOptions
   preferGenre: boolean
   displayStyle: ChartDisplayStyle
   showDrawnAt: boolean

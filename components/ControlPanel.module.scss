@@ -95,15 +95,6 @@ select {
   &.unilab_0731 {
     background: #def;
   }
-
-  &.changed {
-    background: $n-light;
-  }
-
-  &.changed2 {
-    background: $n-bright;
-    color: white;
-  }
 }
 
 .flex {
@@ -137,29 +128,14 @@ select {
     }
   }
 
-  &.level, &.sranLevel {
+  &.level,
+  &.sranLevel {
     > label {
       width: 2.5rem;
     }
 
     input[type="text"] {
       width: 3.5rem;
-
-      &.levelAdvValid {
-        background: $n-light;
-      }
-
-      &.levelAdvInvalid {
-        text-decoration: underline $ex-bright 3px;
-      }
-    }
-  }
-
-  &.sranModeEnabled {
-    margin-left: 0.75rem;
-
-    label.changed {
-      background: $n-light;
     }
   }
 
@@ -214,9 +190,9 @@ select {
     }
   }
 
+  &.subcontrol,
   &.info {
     margin-top: -0.5rem;
-    margin-left: 0.5rem;
   }
 
   .selectWithIncDec {
@@ -358,4 +334,18 @@ h5.header {
     font-size: 1rem;
     height: 1.875rem;
   }
+}
+
+.changed {
+  background: $n-light;
+}
+
+.changed2 {
+  background: $n-bright;
+  color: white;
+}
+
+.invalid {
+  background: $ex-light;
+  text-decoration: underline $ex-bright 3px;
 }

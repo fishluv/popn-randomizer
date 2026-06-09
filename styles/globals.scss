@@ -10,6 +10,14 @@ button {
   &:active:enabled {
     transform: scale(90%);
   }
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+
+code {
+  align-self: end;
 }
 
 select {
@@ -19,9 +27,14 @@ select {
   padding: 2px 0;
 }
 
-input[type=text], textarea {
+input[type="text"],
+textarea {
   border-radius: 4px;
   border: 2px solid #ddd;
+
+  &:disabled {
+    cursor: not-allowed;
+  }
 }
 
 .flex {

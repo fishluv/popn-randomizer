@@ -10,6 +10,7 @@ interface ChartSetProps {
   colorIndex: number
   chartDataSet: ChartDataSet
   chartDisplayOptions: ChartDisplayOptions
+  showSranLevel: boolean
 }
 
 export default function ChartSet({
@@ -17,6 +18,7 @@ export default function ChartSet({
   colorIndex,
   chartDataSet: { charts, drawnAt },
   chartDisplayOptions,
+  showSranLevel,
 }: ChartSetProps) {
   const cycleClassname = styles[`cycle${colorIndex % 4}`]
   const rootClassname = cx(extraClass, styles.ChartSet, cycleClassname)
@@ -29,6 +31,7 @@ export default function ChartSet({
       extraClass={styles.card}
       chartData={chartData}
       chartDisplayOptions={chartDisplayOptions}
+      showSranLevel={showSranLevel}
     />
   ))
 

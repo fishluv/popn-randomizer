@@ -30,5 +30,7 @@ export interface ChartDrawOptions {
   lively?: IncludeOption
   unlocks?: IncludeOption
   naRemovals?: IncludeOption
+  weightedDistInput?: string
+  levelMode?: "normal" | "weighted" | "sran"
   gameVersion?: string
 }

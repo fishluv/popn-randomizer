@@ -32,6 +32,7 @@ interface ChartCardProps {
   chartData: Chart
   isVetoed?: boolean
   chartDisplayOptions: ChartDisplayOptions
+  showSranLevel: boolean
 }
 
 interface ChartCardState {
@@ -78,10 +79,11 @@ export default class ChartCard extends React.Component<
   renderSranLevel() {
     const {
       chartData: { sranLevel },
-      chartDisplayOptions: { sranModeEnabled, displayStyle },
+      chartDisplayOptions: { displayStyle },
+      showSranLevel,
     } = this.props
 
-    if (!sranModeEnabled) {
+    if (!showSranLevel) {
       return null
     }
 
@@ -93,14 +95,12 @@ export default class ChartCard extends React.Component<
   }
 
   renderTitleGenre() {
-    const {
-      chartDisplayOptions: { sranModeEnabled },
-    } = this.props
+    const { showSranLevel } = this.props
 
     const sortChar = this.getTitleOrGenreSortChar()
 
     const className = cx(styles.titleGenre, {
-      [styles.withSranLevel]: sranModeEnabled,
+      [styles.withSranLevel]: showSranLevel,
     })
 
     return (

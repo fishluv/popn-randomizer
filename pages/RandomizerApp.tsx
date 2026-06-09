@@ -47,6 +47,7 @@ export interface ChartQuerySampleOptions {
   count: number
   query: string
   gameVersion: string
+  levelDistribution?: [number, number][]
 }
 
 const MAX_DRAWN_CHARTS = 1000
@@ -157,7 +158,6 @@ export default class RandomizerApp extends React.Component<
       isDoneLoading: false,
       chartDataSets: [],
       chartDisplayOptions: {
-        sranModeEnabled: false,
         preferGenre: false,
         displayStyle: "normal",
         showDrawnAt: false,
@@ -187,13 +187,14 @@ export default class RandomizerApp extends React.Component<
     setStorageItemIfNull("lively", "exclude")
     setStorageItemIfNull("unlocks", "include")
     setStorageItemIfNull("naRemovals", "include")
+    setStorageItemIfNull("weightedDistInput", "")
+    setStorageItemIfNull("levelMode", "normal")
 
     if (!["highcheers_2605", "jamfizz_0924", "unilab_0731"].includes(getStorageString("gameVersion"))) {
       setStorageItem("gameVersion", "highcheers_2605")
     }
 
     // Display options
-    setStorageItemIfNull("sranModeEnabled", false)
     setStorageItemIfNull("preferGenre", false)
     setStorageItemIfNull("showChartDetails", false)
     setStorageItemIfNull("displayStyle", "normal")
@@ -207,7 +208,6 @@ export default class RandomizerApp extends React.Component<
       isDoneLoading: true,
       chartDataSets: deserializeChartSets(getStorageString("drawnChartSets")),
       chartDisplayOptions: {
-        sranModeEnabled: getStorageBoolean("sranModeEnabled"),
         preferGenre: getStorageBoolean("preferGenre"),
         displayStyle: parseChartDisplayStyle(getStorageString("displayStyle")),
         showDrawnAt: getStorageBoolean("showDrawnAt"),
@@ -234,6 +234,8 @@ export default class RandomizerApp extends React.Component<
         lively: parseIncludeOption(getStorageString("lively")),
         unlocks: parseIncludeOption(getStorageString("unlocks")),
         naRemovals: parseIncludeOption(getStorageString("naRemovals")),
+        weightedDistInput: getStorageString("weightedDistInput"),
+        levelMode: getStorageString("levelMode") as "normal" | "weighted" | "sran",
         gameVersion,
       },
     })
@@ -285,6 +287,10 @@ export default class RandomizerApp extends React.Component<
     this.setState((prevState) => ({
       chartDisplayOptions: {
         ...prevState.chartDisplayOptions,
+        ...newControlPanelState,
+      },
+      chartDrawOptions: {
+        ...prevState.chartDrawOptions,
         ...newControlPanelState,
       },
     }))
@@ -342,6 +348,7 @@ export default class RandomizerApp extends React.Component<
               extraClass={styles.setList}
               chartDataSets={chartDataSets}
               chartDisplayOptions={chartDisplayOptions}
+              showSranLevel={chartDrawOptions.levelMode === "sran"}
               onDeleteChartSet={this.onDeleteChartSet}
               onDeleteChartSetsAfter={this.onDeleteChartSetsAfter}
             />

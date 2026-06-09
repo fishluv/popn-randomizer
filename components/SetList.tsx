@@ -16,6 +16,7 @@ interface SetListProps {
   extraClass?: string
   chartDataSets: ChartDataSet[]
   chartDisplayOptions: ChartDisplayOptions
+  showSranLevel: boolean
   onDeleteChartSet(deleteIndex: number): void
   onDeleteChartSetsAfter(deleteAfterIndex: number): void
 }
@@ -108,7 +109,7 @@ export default class SetList extends React.Component<
   }
 
   render() {
-    const { extraClass, chartDataSets, chartDisplayOptions } = this.props
+    const { extraClass, chartDataSets, chartDisplayOptions, showSranLevel } = this.props
     const { openedChartSetIndex } = this.state
     const openedCharts = chartDataSets[openedChartSetIndex]?.charts ?? []
     const openedChartSetDrawnAt = chartDataSets[openedChartSetIndex]?.drawnAt
@@ -127,6 +128,7 @@ export default class SetList extends React.Component<
               // Colors should be reverse order so they don't change as new chart sets are drawn.
               colorIndex={chartDataSets.length - 1 - index}
               chartDisplayOptions={chartDisplayOptions}
+              showSranLevel={showSranLevel}
             />
 
             <button
@@ -174,6 +176,7 @@ export default class SetList extends React.Component<
                       ...chartDisplayOptions,
                       displayStyle: "compact",
                     }}
+                    showSranLevel={showSranLevel}
                   />
                   {openedCharts.length > 1 && (
                     <span className={styles.plusMore}>

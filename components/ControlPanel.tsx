@@ -183,6 +183,41 @@ function isSranLevelAdvValid(sranLevelAdv: string) {
   return false
 }
 
+function parseWeightedDistInput(input: string | undefined): [number, number][] | null {
+  if (input === undefined) return null
+  const entries = input.split(",").map((s) => s.trim()).filter(Boolean)
+  if (entries.length === 0) return null
+  const result: [number, number][] = []
+  const seenLevels = new Set<number>()
+  for (const entry of entries) {
+    const parts = entry.split(":").map((s) => s.trim())
+    if (parts.length !== 2) return null
+    const level = Number(parts[0])
+    const weight = Number(parts[1])
+    if (!Number.isInteger(level) || level < 1 || level > 50) return null
+    if (isNaN(weight) || weight <= 0) return null
+    if (seenLevels.has(level)) return null
+    seenLevels.add(level)
+    result.push([level, weight])
+  }
+  return result
+}
+
+function weightStyle(weight: number, distinctWeights: number[]): React.CSSProperties {
+  const n = distinctWeights.length
+  if (n <= 1) return {}
+  if (n === 2) return weight === distinctWeights[1] ? { fontWeight: "bolder" } : {}
+  if (n === 3) {
+    if (weight === distinctWeights[2]) return { fontWeight: "bolder" }
+    if (weight === distinctWeights[0]) return { fontWeight: "lighter" }
+    return {}
+  }
+  const bucketSize = Math.floor(n / 3)
+  if (weight >= distinctWeights[n - bucketSize]) return { fontWeight: "bolder" }
+  if (weight <= distinctWeights[bucketSize - 1]) return { fontWeight: "lighter" }
+  return {}
+}
+
 const DRAW_COUNTS = [
   1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100,
 ]
@@ -228,10 +263,11 @@ export default class ControlPanel extends React.Component<
         lively,
         unlocks,
         naRemovals,
+        weightedDistInput,
+        levelMode,
         gameVersion,
       },
       initialDisplayOptions: {
-        sranModeEnabled,
         preferGenre,
         displayStyle,
         showDrawnAt,
@@ -258,9 +294,10 @@ export default class ControlPanel extends React.Component<
       lively: lively ?? "exclude",
       unlocks: unlocks ?? "include",
       naRemovals: naRemovals ?? "include",
+      weightedDistInput: weightedDistInput ?? "",
+      levelMode: levelMode ?? "normal",
       gameVersion: gameVersion || "highcheers_2605",
       // Display options
-      sranModeEnabled: sranModeEnabled ?? false,
       preferGenre: preferGenre ?? false,
       displayStyle: displayStyle ?? "normal",
       showDrawnAt: showDrawnAt ?? false,
@@ -361,8 +398,48 @@ export default class ControlPanel extends React.Component<
     } else if (id === "showDrawnAtInput") {
       newState = { showDrawnAt: checked }
       this.setState(newState)
-    } else if (id === "isSranModeEnabledInput") {
-      newState = { sranModeEnabled: checked }
+    } else if (id === "levelModeNormalInput" && checked) {
+      newState = { levelMode: "normal" as const }
+      this.setState(newState)
+    } else if (id === "levelModeWeightedInput" && checked) {
+      const { levelAdv, weightedDistInput } = this.state
+      let autoInput: string | undefined
+
+      if (!weightedDistInput) {
+        const levelToUse = levelAdv && isLevelAdvValid(levelAdv) ? levelAdv : "1-50"
+        const tokens = levelToUse.trim().split(/\b/).map((s) => s.trim())
+        let levels: number[]
+        if (tokens.length === 1) {
+          levels = [Number(tokens[0])]
+        } else {
+          let min: number, max: number
+          if (tokens[0] === "-") {
+            min = 1
+            max = Number(tokens[1])
+          } else if (tokens[1] === "-" && tokens.length === 2) {
+            min = Number(tokens[0])
+            max = 50
+          } else {
+            min = Number(tokens[0])
+            max = Number(tokens[2])
+          }
+          const rangeSize = max - min + 1
+          if (rangeSize <= 3) {
+            levels = Array.from({ length: rangeSize }, (_, i) => min + i)
+          } else {
+            levels = Array.from({ length: 3 }, (_, i) => max - 2 + i)
+          }
+        }
+        autoInput = levels.map((l, i) => `${l}:${i === 1 ? "3" : "1"}`).join(", ")
+      }
+
+      newState = {
+        levelMode: "weighted" as const,
+        ...(autoInput !== undefined ? { weightedDistInput: autoInput } : {}),
+      }
+      this.setState(newState)
+    } else if (id === "levelModeSranInput" && checked) {
+      newState = { levelMode: "sran" as const }
       this.setState(newState)
     } else if (id === "includeAllDiffsInput" && checked) {
       newState = {
@@ -459,9 +536,10 @@ export default class ControlPanel extends React.Component<
 
   buildQuery = (): string => {
     const {
+      levelMode,
       levelAdv,
-      sranModeEnabled,
       sranLevelAdv,
+      weightedDistInput,
       includeDiffs,
       hardestDiff,
       folder,
@@ -478,7 +556,7 @@ export default class ControlPanel extends React.Component<
 
     const querySegments = []
 
-    if (sranModeEnabled) {
+    if (levelMode === "sran") {
       if (sranLevelAdv) {
         if (isSranLevelAdvValid(sranLevelAdv)) {
           if (sranLevelAdv.includes("-")) {
@@ -494,6 +572,8 @@ export default class ControlPanel extends React.Component<
       } else {
         querySegments.push("srlv >= 1")
       }
+    } else if (levelMode === "weighted" && parseWeightedDistInput(weightedDistInput ?? "")) {
+      // level filtering handled by levelDistribution in sampleQueriedCharts
     } else {
       if (levelAdv) {
         if (isLevelAdvValid(levelAdv)) {
@@ -592,22 +672,42 @@ export default class ControlPanel extends React.Component<
   }
 
   onCalculateClick = () => {
-    const { gameVersion } = this.state
+    const { levelMode, weightedDistInput, gameVersion } = this.state
     const query = this.buildQuery()
-    const totalChartCount = getDatabase(gameVersion!).queryCharts(query).length
-    toast(`Drawing from ${totalChartCount} charts total`, {
+    const db = getDatabase(gameVersion!)
+
+    if (levelMode === "weighted") {
+      const dist = parseWeightedDistInput(weightedDistInput ?? "")
+      if (dist) {
+        const totalChartCount = dist.reduce((sum, [level]) => {
+          // In practice, query should never be empty. But theoretically it could be.
+          const levelQuery = query ? `${query}, lv = ${level}` : `lv = ${level}`
+          return sum + db.queryCharts(levelQuery).length
+        }, 0)
+        toast(`Drawing from ${totalChartCount} charts total`, { position: "top-center" })
+        return
+      }
+    }
+
+    toast(`Drawing from ${db.queryCharts(query).length} charts total`, {
       position: "top-center",
     })
   }
 
   onDrawClick = () => {
     const { onDraw } = this.props
-    const { count, gameVersion } = this.state
+    const { count, levelMode, weightedDistInput, gameVersion } = this.state
+
+    const levelDistribution =
+      levelMode === "weighted"
+        ? parseWeightedDistInput(weightedDistInput ?? "") ?? undefined
+        : undefined
 
     onDraw({
       count: count!,
       query: this.buildQuery(),
       gameVersion: gameVersion!,
+      ...(levelDistribution ? { levelDistribution } : {}),
     })
   }
 
@@ -646,9 +746,9 @@ export default class ControlPanel extends React.Component<
   }
 
   getSummaryContents = () => {
-    const { count, levelAdv, sranModeEnabled, sranLevelAdv } = this.state
+    const { count, levelAdv, levelMode, sranLevelAdv, weightedDistInput } = this.state
 
-    if (sranModeEnabled) {
+    if (levelMode === "sran") {
       if (sranLevelAdv) {
         if (isSranLevelAdvValid(sranLevelAdv)) {
           if (sranLevelAdv.includes("-")) {
@@ -685,7 +785,7 @@ export default class ControlPanel extends React.Component<
             )
           }
         } else {
-          return "S乱 level is invalid"
+          return "S乱 level is invalid, fix settings"
         }
       } else {
         return (
@@ -694,6 +794,31 @@ export default class ControlPanel extends React.Component<
             {" charts, any S乱 level"}
           </>
         )
+      }
+    }
+
+    if (levelMode === "weighted") {
+      const dist = parseWeightedDistInput(weightedDistInput)
+      if (dist) {
+        const sorted = [...dist].sort(([level1], [level2]) => level1 - level2)
+        const distinctWeights = [...new Set(sorted.map(([, weight]) => weight))].sort((a, b) => a - b)
+
+        return (
+          <>
+            {count}
+            {" charts: lv "}
+            {sorted.map(([level, weight], i) => (
+              <React.Fragment key={level}>
+                {i > 0 && ", "}
+                <span style={weightStyle(weight, distinctWeights)}>
+                  {`${level}[${weight}]`}
+                </span>
+              </React.Fragment>
+            ))}
+          </>
+        )
+      } else {
+        return "Weighted distribution is invalid, fix settings"
       }
     }
 
@@ -733,7 +858,7 @@ export default class ControlPanel extends React.Component<
           )
         }
       } else {
-        return "Level is invalid"
+        return "Level is invalid, fix settings"
       }
     } else {
       return (
@@ -781,8 +906,8 @@ export default class ControlPanel extends React.Component<
         lively: "exclude",
         unlocks: "include",
         naRemovals: "include",
-        // Display options
-        sranModeEnabled: false,
+        levelMode: "normal",
+        weightedDistInput: "",
         // Don't reset game version or display options.
       }
       this.setState(newState)
@@ -793,9 +918,9 @@ export default class ControlPanel extends React.Component<
   render() {
     const { extraClass } = this.props
     const {
+      levelMode,
       count,
       levelAdv,
-      sranModeEnabled,
       sranLevelAdv,
       includeDiffsRadio,
       includeDiffs,
@@ -809,6 +934,7 @@ export default class ControlPanel extends React.Component<
       lively,
       unlocks,
       naRemovals,
+      weightedDistInput,
       gameVersion,
       preferGenre,
       displayStyle,
@@ -818,6 +944,10 @@ export default class ControlPanel extends React.Component<
     } = this.state
 
     const rootClassName = cx(extraClass, styles.ControlPanel)
+    const settingsInvalid =
+      (levelMode === "normal" && !!levelAdv && !isLevelAdvValid(levelAdv)) ||
+      (levelMode === "weighted" && !parseWeightedDistInput(weightedDistInput)) ||
+      (levelMode === "sran" && !!sranLevelAdv && !isSranLevelAdvValid(sranLevelAdv))
 
     function includeOptions() {
       return (
@@ -836,6 +966,7 @@ export default class ControlPanel extends React.Component<
             <button
               type="button"
               title="(shortcut: d)"
+              disabled={settingsInvalid}
               onClick={this.onDrawClick}
             >
               Draw
@@ -922,6 +1053,7 @@ export default class ControlPanel extends React.Component<
             <button
               className={styles.iconButton}
               title="Calculate draw pool size"
+              disabled={settingsInvalid}
               onClick={this.onCalculateClick}
             >
               <FaCalculator />
@@ -962,188 +1094,198 @@ export default class ControlPanel extends React.Component<
             </section>
           </section>
 
-          <div className={cx(styles.control, styles.level)}>
-            <label htmlFor="levelInput">
-              {sranModeEnabled ? "S乱" : "Level"}
-            </label>
-
-            <div className={cx(styles.flex, styles.selectWithIncDec)}>
-              {sranModeEnabled ? (
-                <>
-                  <button
-                    disabled={
-                      !sranLevelAdv || !isSranLevelAdvValid(sranLevelAdv)
-                    }
-                    onClick={() => {
-                      let newSranLevelAdv
-                      const parts = sranLevelAdv!
-                        .split("-")
-                        .map((s) => s.trim())
-                      if (parts.length === 1) {
-                        newSranLevelAdv = String(
-                          Math.max(1, Number(parts[0]) - 1),
-                        )
-                      } else {
-                        if (parts[0] !== "") {
-                          parts[0] = String(Math.max(1, Number(parts[0]) - 1))
-                        }
-                        if (parts[1] !== "") {
-                          parts[1] = String(Math.max(1, Number(parts[1]) - 1))
-                        }
-                        newSranLevelAdv = parts.join("-")
-                      }
-                      const newState = {
-                        sranLevelAdv: newSranLevelAdv,
-                      }
-                      this.setState(newState)
-                      this.props.onChange(newState)
-                    }}
-                  >
-                    <VscTriangleLeft />
-                  </button>
-
-                  <input
-                    className={
-                      sranLevelAdv
-                        ? isSranLevelAdvValid(sranLevelAdv)
-                          ? styles.levelAdvValid
-                          : styles.levelAdvInvalid
-                        : ""
-                    }
-                    id="levelInput"
-                    type="text"
-                    placeholder="1-19"
-                    value={sranLevelAdv || ""}
-                    onChange={(event) => {
-                      const newState = { sranLevelAdv: event.target.value }
-                      this.setState(newState)
-                      this.props.onChange(newState)
-                    }}
-                  />
-
-                  <button
-                    disabled={
-                      !sranLevelAdv || !isSranLevelAdvValid(sranLevelAdv)
-                    }
-                    onClick={() => {
-                      let newSranLevelAdv
-                      const parts = sranLevelAdv!
-                        .split("-")
-                        .map((s) => s.trim())
-                      if (parts.length === 1) {
-                        newSranLevelAdv = String(
-                          Math.min(19, Number(parts[0]) + 1),
-                        )
-                      } else {
-                        if (parts[0] !== "") {
-                          parts[0] = String(Math.min(19, Number(parts[0]) + 1))
-                        }
-                        if (parts[1] !== "") {
-                          parts[1] = String(Math.min(19, Number(parts[1]) + 1))
-                        }
-                        newSranLevelAdv = parts.join("-")
-                      }
-                      const newState = {
-                        sranLevelAdv: newSranLevelAdv,
-                      }
-                      this.setState(newState)
-                      this.props.onChange(newState)
-                    }}
-                  >
-                    <VscTriangleRight />
-                  </button>
-                </>
-              ) : (
-                <>
-                  <button
-                    disabled={!levelAdv || !isLevelAdvValid(levelAdv)}
-                    onClick={() => {
-                      let newLevelAdv
-                      const parts = levelAdv!.split("-").map((s) => s.trim())
-                      if (parts.length === 1) {
-                        newLevelAdv = String(Math.max(1, Number(parts[0]) - 1))
-                      } else {
-                        if (parts[0] !== "") {
-                          parts[0] = String(Math.max(1, Number(parts[0]) - 1))
-                        }
-                        if (parts[1] !== "") {
-                          parts[1] = String(Math.max(1, Number(parts[1]) - 1))
-                        }
-                        newLevelAdv = parts.join("-")
-                      }
-                      const newState = {
-                        levelAdv: newLevelAdv,
-                      }
-                      this.setState(newState)
-                      this.props.onChange(newState)
-                    }}
-                  >
-                    <VscTriangleLeft />
-                  </button>
-
-                  <input
-                    className={
-                      levelAdv
-                        ? isLevelAdvValid(levelAdv)
-                          ? styles.levelAdvValid
-                          : styles.levelAdvInvalid
-                        : ""
-                    }
-                    id="levelInput"
-                    type="text"
-                    placeholder="1-50"
-                    value={levelAdv || ""}
-                    onChange={(event) => {
-                      const newState = { levelAdv: event.target.value }
-                      this.setState(newState)
-                      this.props.onChange(newState)
-                    }}
-                  />
-
-                  <button
-                    disabled={!levelAdv || !isLevelAdvValid(levelAdv)}
-                    onClick={() => {
-                      let newLevelAdv
-                      const parts = levelAdv!.split("-").map((s) => s.trim())
-                      if (parts.length === 1) {
-                        newLevelAdv = String(Math.min(50, Number(parts[0]) + 1))
-                      } else {
-                        if (parts[0] !== "") {
-                          parts[0] = String(Math.min(50, Number(parts[0]) + 1))
-                        }
-                        if (parts[1] !== "") {
-                          parts[1] = String(Math.min(50, Number(parts[1]) + 1))
-                        }
-                        newLevelAdv = parts.join("-")
-                      }
-                      const newState = {
-                        levelAdv: newLevelAdv,
-                      }
-                      this.setState(newState)
-                      this.props.onChange(newState)
-                    }}
-                  >
-                    <VscTriangleRight />
-                  </button>
-                </>
-              )}
-            </div>
-
-            <section className={cx(styles.control, styles.sranModeEnabled)}>
+          <section className={styles.control}>
+            <span>Level</span>
+            <section className={styles.flex}>
               <input
-                id="isSranModeEnabledInput"
-                type="checkbox"
-                checked={sranModeEnabled}
+                id="levelModeNormalInput"
+                type="radio"
+                checked={levelMode === "normal"}
+                onChange={this.onInputChange}
+              />
+              <label htmlFor="levelModeNormalInput">Normal</label>
+            </section>
+            <section className={styles.flex}>
+              <input
+                id="levelModeWeightedInput"
+                type="radio"
+                checked={levelMode === "weighted"}
                 onChange={this.onInputChange}
               />
               <label
-                htmlFor="isSranModeEnabledInput"
-                className={sranModeEnabled ? styles.changed : ""}
+                htmlFor="levelModeWeightedInput"
+                className={levelMode === "weighted" ? styles.changed : ""}
               >
-                S乱 mode
+                Weighted
               </label>
             </section>
-          </div>
+            <section className={styles.flex}>
+              <input
+                id="levelModeSranInput"
+                type="radio"
+                checked={levelMode === "sran"}
+                onChange={this.onInputChange}
+              />
+              <label
+                htmlFor="levelModeSranInput"
+                className={levelMode === "sran" ? styles.changed : ""}
+              >
+                S乱
+              </label>
+            </section>
+          </section>
+
+          {levelMode === "normal" ? (
+            <div className={cx(styles.control, styles.subcontrol, styles.level)}>
+              <div className={cx(styles.flex, styles.selectWithIncDec)}>
+                <button
+                  onClick={() => {
+                    if (!levelAdv || !isLevelAdvValid(levelAdv)) return
+                    let newLevelAdv
+                    const parts = levelAdv!.split("-").map((s) => s.trim())
+                    if (parts.length === 1) {
+                      newLevelAdv = String(Math.max(1, Number(parts[0]) - 1))
+                    } else {
+                      if (parts[0] !== "") parts[0] = String(Math.max(1, Number(parts[0]) - 1))
+                      if (parts[1] !== "") parts[1] = String(Math.max(1, Number(parts[1]) - 1))
+                      newLevelAdv = parts.join("-")
+                    }
+                    const newState = { levelAdv: newLevelAdv }
+                    this.setState(newState)
+                    this.props.onChange(newState)
+                  }}
+                >
+                  <VscTriangleLeft />
+                </button>
+                <input
+                  className={
+                    levelAdv
+                      ? isLevelAdvValid(levelAdv)
+                        ? styles.changed
+                        : styles.invalid
+                      : ""
+                  }
+                  type="text"
+                  placeholder="1-50"
+                  value={levelAdv || ""}
+                  onChange={(event) => {
+                    const newState = { levelAdv: event.target.value }
+                    this.setState(newState)
+                    this.props.onChange(newState)
+                  }}
+                />
+                <button
+                  onClick={() => {
+                    if (!levelAdv || !isLevelAdvValid(levelAdv)) return
+                    let newLevelAdv
+                    const parts = levelAdv!.split("-").map((s) => s.trim())
+                    if (parts.length === 1) {
+                      newLevelAdv = String(Math.min(50, Number(parts[0]) + 1))
+                    } else {
+                      if (parts[0] !== "") parts[0] = String(Math.min(50, Number(parts[0]) + 1))
+                      if (parts[1] !== "") parts[1] = String(Math.min(50, Number(parts[1]) + 1))
+                      newLevelAdv = parts.join("-")
+                    }
+                    const newState = { levelAdv: newLevelAdv }
+                    this.setState(newState)
+                    this.props.onChange(newState)
+                  }}
+                >
+                  <VscTriangleRight />
+                </button>
+              </div>
+            </div>
+          ) : levelMode === "sran" ? (
+            <div className={cx(styles.control, styles.subcontrol, styles.level)}>
+              <div className={cx(styles.flex, styles.selectWithIncDec)}>
+                <button
+                  onClick={() => {
+                    if (!sranLevelAdv || !isSranLevelAdvValid(sranLevelAdv)) return
+                    let newSranLevelAdv
+                    const parts = sranLevelAdv!.split("-").map((s) => s.trim())
+                    if (parts.length === 1) {
+                      newSranLevelAdv = String(Math.max(1, Number(parts[0]) - 1))
+                    } else {
+                      if (parts[0] !== "") parts[0] = String(Math.max(1, Number(parts[0]) - 1))
+                      if (parts[1] !== "") parts[1] = String(Math.max(1, Number(parts[1]) - 1))
+                      newSranLevelAdv = parts.join("-")
+                    }
+                    const newState = { sranLevelAdv: newSranLevelAdv }
+                    this.setState(newState)
+                    this.props.onChange(newState)
+                  }}
+                >
+                  <VscTriangleLeft />
+                </button>
+                <input
+                  className={
+                    sranLevelAdv
+                      ? isSranLevelAdvValid(sranLevelAdv)
+                        ? styles.changed
+                        : styles.invalid
+                      : ""
+                  }
+                  type="text"
+                  placeholder="1-19"
+                  value={sranLevelAdv || ""}
+                  onChange={(event) => {
+                    const newState = { sranLevelAdv: event.target.value }
+                    this.setState(newState)
+                    this.props.onChange(newState)
+                  }}
+                />
+                <button
+                  onClick={() => {
+                    if (!sranLevelAdv || !isSranLevelAdvValid(sranLevelAdv)) return
+                    let newSranLevelAdv
+                    const parts = sranLevelAdv!.split("-").map((s) => s.trim())
+                    if (parts.length === 1) {
+                      newSranLevelAdv = String(Math.min(19, Number(parts[0]) + 1))
+                    } else {
+                      if (parts[0] !== "") parts[0] = String(Math.min(19, Number(parts[0]) + 1))
+                      if (parts[1] !== "") parts[1] = String(Math.min(19, Number(parts[1]) + 1))
+                      newSranLevelAdv = parts.join("-")
+                    }
+                    const newState = { sranLevelAdv: newSranLevelAdv }
+                    this.setState(newState)
+                    this.props.onChange(newState)
+                  }}
+                >
+                  <VscTriangleRight />
+                </button>
+              </div>
+            </div>
+          ) : (
+            <>
+              <section className={cx(styles.control, styles.subcontrol)}>
+                <input
+                  id="weightedDistInput"
+                  className={
+                       parseWeightedDistInput(weightedDistInput)
+                        ? styles.changed
+                        : styles.invalid
+                  }
+                  type="text"
+                  style={{ width: "14rem" }}
+                  value={weightedDistInput}
+                  onChange={(event) => {
+                    const newState = { weightedDistInput: event.target.value }
+                    this.setState(newState)
+                    this.props.onChange(newState)
+                  }}
+                />
+              </section>
+              <section className={cx(styles.control, styles.info)}>
+                Comma separated list of <code>level:weight</code> pairs.
+              </section>
+              <section className={cx(styles.control, styles.info)}>
+                <code>level</code> cannot be repeated.
+              </section>
+              <section className={cx(styles.control, styles.info)}>
+                <code>weight</code> can be any positive integer.
+              </section>
+            </>
+          )}
 
           <section className={cx(styles.control, styles.includeDiffs)}>
             <span>Difficulties</span>
