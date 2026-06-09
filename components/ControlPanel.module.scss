@@ -85,15 +85,18 @@
 
 select {
   &.highcheers_2605 {
-    background: #eec;
+    background: #ffb;
+    border-color: #bb8;
   }
 
   &.jamfizz_0924 {
-    background: #fdd;
+    background: #fcc;
+    border-color: #b88;
   }
 
   &.unilab_0731 {
-    background: #def;
+    background: #cef;
+    border-color: #8ab;
   }
 }
 
@@ -158,10 +161,6 @@ select {
   &.hardestDiff {
     margin-top: -0.5rem;
     margin-left: 1rem;
-  }
-
-  &.folder.changed select {
-    background: $n-light;
   }
 
   &.notepad {
@@ -329,12 +328,19 @@ h5.header {
   }
 }
 
-.changed {
+label.changed,
+input.changed,
+select.changed,
+.control.folder.changed select {
   background: $n-light;
+  border-color: $n-bright;
 }
 
-.changed2 {
+label.changed2,
+input.changed2,
+select.changed2 {
   background: $n-bright;
+  border-color: $n-dark;
   color: white;
 }
 
