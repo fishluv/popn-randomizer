@@ -32,6 +32,10 @@
     scale: 0.8;
   }
 
+  &.protected {
+    scale: 1.08;
+  }
+
   .topInfoContainer {
     .topInfo {
       display: inline-block;

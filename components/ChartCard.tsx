@@ -27,16 +27,17 @@ function getSortChar(titleOrGenre: string, sortChar: string) {
   }
 }
 
+type CardState = "default" | "vetoed" | "protected"
+
 interface ChartCardProps {
   extraClass?: string
   chartData: Chart
-  isVetoed?: boolean
   chartDisplayOptions: ChartDisplayOptions
   showSranLevel: boolean
 }
 
 interface ChartCardState {
-  isVetoed: boolean
+  cardState: CardState
 }
 
 /**
@@ -49,14 +50,23 @@ export default class ChartCard extends React.Component<
   constructor(props: ChartCardProps) {
     super(props)
     this.state = {
-      isVetoed: props.isVetoed ?? false,
+      cardState: "default",
     }
   }
 
   onClick = () => {
-    this.setState((prevState) => ({
-      isVetoed: !prevState.isVetoed,
-    }))
+    const { chartDisplayOptions: { displayStyle } } = this.props
+    this.setState((prevState) => {
+      if (displayStyle === "compact") {
+        return { cardState: prevState.cardState === "vetoed" ? "default" : "vetoed" }
+      }
+      const cycle: Record<CardState, CardState> = {
+        default: "vetoed",
+        vetoed: "protected",
+        protected: "default",
+      }
+      return { cardState: cycle[prevState.cardState] }
+    })
   }
 
   renderDiffLevel() {
@@ -241,7 +251,7 @@ export default class ChartCard extends React.Component<
       chartData: { difficulty, bpm, notes, holdNotes },
     } = this.props
 
-    const { isVetoed } = this.state
+    const { cardState } = this.state
 
     const diffStyle = styles[difficulty]
 
@@ -251,7 +261,8 @@ export default class ChartCard extends React.Component<
       styles.normal,
       diffStyle,
       {
-        [styles.vetoed]: isVetoed,
+        [styles.vetoed]: cardState === "vetoed",
+        [styles.protected]: cardState === "protected",
       },
     )
 
@@ -304,7 +315,7 @@ export default class ChartCard extends React.Component<
       extraClass,
       chartData: { difficulty },
     } = this.props
-    const { isVetoed } = this.state
+    const { cardState } = this.state
 
     const diffStyle = styles[difficulty]
 
@@ -316,7 +327,7 @@ export default class ChartCard extends React.Component<
     )
 
     const bannerClass = cx(styles.banner, {
-      [styles.vetoed]: isVetoed,
+      [styles.vetoed]: cardState === "vetoed",
     })
 
     return (
