@@ -4,7 +4,7 @@ import {
   Chart,
   Unilab0731,
   JamFizz0924,
-  HighCheers2605,
+  HighCheers2607,
   VersionFolder,
   BemaniFolder,
 } from "popn-db-js"
@@ -136,7 +136,8 @@ export function getDatabase(gameVersion: string) {
       return JamFizz0924
     // versions without extras
     case "highcheers_2605":
-      return HighCheers2605
+    case "highcheers_2607":
+      return HighCheers2607
     case "kaimei_0613":
     case "unilab_0411":
     case "unilab_0731":
@@ -190,8 +191,8 @@ export default class RandomizerApp extends React.Component<
     setStorageItemIfNull("weightedDistInput", "")
     setStorageItemIfNull("levelMode", "normal")
 
-    if (!["highcheers_2605", "jamfizz_0924", "unilab_0731"].includes(getStorageString("gameVersion"))) {
-      setStorageItem("gameVersion", "highcheers_2605")
+    if (!["highcheers_2607", "jamfizz_0924", "unilab_0731"].includes(getStorageString("gameVersion"))) {
+      setStorageItem("gameVersion", "highcheers_2607")
     }
 
     // Display options

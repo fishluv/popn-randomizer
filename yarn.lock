@@ -4415,10 +4415,10 @@ pkg-dir@^4.1.0:
   dependencies:
     find-up "^4.0.0"
 
-popn-db-js@0.21.1:
-  version "0.21.1"
-  resolved "https://registry.yarnpkg.com/popn-db-js/-/popn-db-js-0.21.1.tgz#67f5399ce85afa9261748d1a749d3e89d0c08fcb"
-  integrity sha512-SQ37LYIovZ1N8WSEi0YiXlURyBuC/XjzEhv1GPg5nzs7pjSGyKfTPF5kD2sbtxj1sGCrUl+fsLg7zzKKCZBynA==
+popn-db-js@0.22.0:
+  version "0.22.0"
+  resolved "https://registry.yarnpkg.com/popn-db-js/-/popn-db-js-0.22.0.tgz#db019545548b9bbddddad59a38efbc494222bb68"
+  integrity sha512-cnQkTvLQyVITuN3jompUtce0vNOQyEuHK/JM5QY6HGM0ltwZ3TA5fDWnjtY6oPMwnWKba9Zx2LCp9T5EHnktew==
 
 possible-typed-array-names@^1.0.0:
   version "1.1.0"

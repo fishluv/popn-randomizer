@@ -296,7 +296,7 @@ export default class ControlPanel extends React.Component<
       naRemovals: naRemovals ?? "include",
       weightedDistInput: weightedDistInput ?? "",
       levelMode: levelMode ?? "normal",
-      gameVersion: gameVersion || "highcheers_2605",
+      gameVersion: gameVersion || "highcheers_2607",
       // Display options
       preferGenre: preferGenre ?? false,
       displayStyle: displayStyle ?? "normal",
@@ -643,7 +643,7 @@ export default class ControlPanel extends React.Component<
       }
     }
 
-    if (gameVersion === "highcheers_2605") {
+    if (gameVersion === "highcheers_2607") {
       if (unlocks === "only") {
         querySegments.push("unlock")
       }
@@ -1494,7 +1494,7 @@ export default class ControlPanel extends React.Component<
               value={gameVersion}
               onChange={this.onSelectChange}
             >
-              <option value="highcheers_2605">High☆Cheers!!</option>
+              <option value="highcheers_2607">High☆Cheers!!</option>
               <option value="jamfizz_0924">Jam&Fizz 0924 + extras</option>
               <option value="unilab_0731">UniLab 0731</option>
             </select>
@@ -1540,7 +1540,7 @@ export default class ControlPanel extends React.Component<
             </>
           )}
 
-          {gameVersion === "highcheers_2605" && (
+          {gameVersion === "highcheers_2607" && (
             <>
               <section className={styles.control}>
                 <select
