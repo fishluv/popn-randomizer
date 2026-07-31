@@ -35,15 +35,30 @@
   &.protected {
     position: relative;
     scale: 1.08;
-    @include diff-bg-colors(light);
+    @include diff-color-vars;
 
     &::after {
       content: "";
       position: absolute;
       z-index: 10;
       inset: 0;
-      box-shadow: 0 0 12px 4px var(--bg-color);
+      background: linear-gradient(
+        to bottom,
+        transparent,
+        var(--diff-color-bright) 200%
+      );
+      mix-blend-mode: color;
+      box-shadow: 0 0 12px 4px var(--diff-color-light);
       pointer-events: none;
+    }
+
+    .protectedStar {
+      position: absolute;
+      z-index: 5;
+      top: 0.25rem;
+      right: 0.125rem;
+      color: var(--diff-color-bright);
+      filter: drop-shadow(0 0 2px var(--diff-color-bright));
     }
   }
 

@@ -5,6 +5,7 @@ import styles from "./ChartCard.module.scss"
 import { Chart, VersionFolder, BemaniFolder } from "popn-db-js"
 import FolderPill from "./FolderPill"
 import { BsStopwatch } from "react-icons/bs"
+import { FaRegStar as FaStar } from "react-icons/fa"
 import { LiaDrumSolid } from "react-icons/lia"
 import { LuMountain } from "react-icons/lu"
 import { IoMusicalNotesOutline } from "react-icons/io5"
@@ -306,6 +307,10 @@ export default class ChartCard extends React.Component<
             <span>{this.formatRating()}</span>
           </span>
         </div>
+
+        {cardState === "protected" && (
+          <FaStar className={cx(styles.protectedStar, diffStyle)} size="2.5rem" />
+        )}
       </div>
     )
   }
