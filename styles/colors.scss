@@ -80,6 +80,7 @@ $diff-color-map: (
 @mixin diff-bg-colors($shade) {
   @each $diff in e, n, h, ex {
     &.#{$diff} {
+      --bg-color: #{diff-color($diff, $shade)};
       background-color: diff-color($diff, $shade);
     }
   }

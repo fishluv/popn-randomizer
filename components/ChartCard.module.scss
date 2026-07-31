@@ -33,7 +33,18 @@
   }
 
   &.protected {
+    position: relative;
     scale: 1.08;
+    @include diff-bg-colors(light);
+
+    &::after {
+      content: "";
+      position: absolute;
+      z-index: 10;
+      inset: 0;
+      box-shadow: 0 0 12px 4px var(--bg-color);
+      pointer-events: none;
+    }
   }
 
   .topInfoContainer {
