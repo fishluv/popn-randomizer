@@ -34,7 +34,7 @@
 
   &.protected {
     position: relative;
-    scale: 1.08;
+    scale: 1.04 1.08;
     @include diff-color-vars;
 
     &::after {
