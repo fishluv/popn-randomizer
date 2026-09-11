@@ -17,9 +17,9 @@ yarn dev
 
 ## Deploy
 
+Automatic deploys via Vercel.
+
 ```sh
+# To validate build locally before pushing to Github
 yarn build
-yarn export
-yarn deploy:dev
-yarn deploy
 ```
